@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2e4a11c0264e462e81a46dec188d3ce6" Name="Diagram1">
+        <EntityTypeShape EntityType="dtbTimtableModel.Audiences" Width="1.5" PointX="1.5" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Availability" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Disciplines" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Employees" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Employees_Disciplines" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Groups" Width="1.5" PointX="1.5" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Sessions" Width="1.5" PointX="3.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.Specialities" Width="1.5" PointX="1.5" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.StudyPlan" Width="1.5" PointX="3.75" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.StudyPlan_Disciplines" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dtbTimtableModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Audiences_Groups" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Employees_Availability" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Disciplines_Employees_Disciplines" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Disciplines_StudyPlan_Disciplines" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Employees_Disciplines_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Employees_StudyPlan_Disciplines" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Groups_Sessions" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Groups_Specialities" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_Groups_StudyPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="dtbTimtableModel.FK_StudyPlan_StudyPlan_Disciplines" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
