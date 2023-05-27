@@ -1,7 +1,8 @@
 # thesis
 
 notebook
-<add name="dtbTimetableEntities" connectionString="Data Source=DIKHNICHHONOR\SQLEXPRESS;Initial Catalog=dtbTimtable;Integrated Security=True;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
-
+	<add name="TimetableEntities" connectionString="metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=DIKHNICHHONOR\SQLEXPRESS;initial catalog=Timetable;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+  
 desktop
-<add name="dtbTimetableEntities" connectionString="Data Source=KOMPUTER\SQLEXPRESS;Initial Catalog=dtbTimtable;Integrated Security=True;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
+
+	<add name="TimetableEntities" connectionString="metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=KOMPUTER\SQLEXPRESS;initial catalog=Timetable;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
