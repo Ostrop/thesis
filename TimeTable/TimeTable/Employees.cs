@@ -27,10 +27,9 @@ namespace TimeTable
         public string Name { get; set; }
         public string Patronymic { get; set; }
         public string Post { get; set; }
-        public Nullable<int> FreeDay { get; set; }
         public string PhoneNumber { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
+        public byte[] Password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Availability> Availability { get; set; }

@@ -14,7 +14,7 @@ namespace TimeTable
     
     public partial class Employees_Disciplines
     {
-        public int Employees_Disciplines1 { get; set; }
+        public int Employees_DisciplinesId { get; set; }
         public int DisciplineId { get; set; }
         public int EmployeeId { get; set; }
     

@@ -1,12 +1,15 @@
-﻿<Window x:Class="TimeTable.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TimeTable"
-        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+﻿<Page x:Class="TimeTable.WPF.Pages.EducWorkerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TimeTable.WPF"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Title="Страница работника учебной части"
+      Background="#ffdadada">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="517*"/>
@@ -49,4 +52,4 @@
         <Button Content="Отчет расписания по предметам" Height="NaN" Width="NaN" Margin="40,227,214,169" Click="Button_Click"/>
 
     </Grid>
-</Window>
+</Page>

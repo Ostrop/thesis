@@ -12,11 +12,13 @@ namespace TimeTable
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
-    public partial class dtbTimtableEntities : DbContext
+    public partial class TimetableEntities : DbContext
     {
-        public dtbTimtableEntities()
-            : base("name=dtbTimtableEntities")
+        public TimetableEntities()
+            : base("name=TimetableEntities")
         {
         }
     
@@ -35,6 +37,31 @@ namespace TimeTable
         public virtual DbSet<Specialities> Specialities { get; set; }
         public virtual DbSet<StudyPlan> StudyPlan { get; set; }
         public virtual DbSet<StudyPlan_Disciplines> StudyPlan_Disciplines { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+    
+        public virtual ObjectResult<CheckUser_Result> CheckUser(string login, string password)
+        {
+            var loginParameter = login != null ?
+                new ObjectParameter("login", login) :
+                new ObjectParameter("login", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckUser_Result>("CheckUser", loginParameter, passwordParameter);
+        }
+    
+        public virtual int SearchByAllFields(string tableName, string searchText)
+        {
+            var tableNameParameter = tableName != null ?
+                new ObjectParameter("tableName", tableName) :
+                new ObjectParameter("tableName", typeof(string));
+    
+            var searchTextParameter = searchText != null ?
+                new ObjectParameter("searchText", searchText) :
+                new ObjectParameter("searchText", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SearchByAllFields", tableNameParameter, searchTextParameter);
+        }
     }
 }

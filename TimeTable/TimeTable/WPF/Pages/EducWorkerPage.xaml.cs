@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,27 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TimeTable
+namespace TimeTable.WPF.Pages
 {
-    public class Phone
-    {
-        public string Title { get; set; }
-        public string buf1 { get; set; }
-        public string buf2 { get; set; }
-        public string buf3 { get; set; }
-        public string buf4 { get; set; }
-        public string buf5 { get; set; }
-        public string buf6 { get; set; }
-    }
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для EducWorkerPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EducWorkerPage : Page
     {
-        public MainWindow()
+        public EducWorkerPage()
         {
             InitializeComponent();
-            //MessageBox.Show("Вы уверены, что хотите выйти?", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Stop);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

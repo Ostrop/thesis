@@ -1,0 +1,26 @@
+﻿<Window x:Class="TimeTable.WPF.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="АСР Протокол" Height="720" Width="1280">
+    <Grid Cursor="">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="50 20 50 20" >
+                <TextBlock  x:Name="DateTimeBox" FontSize="20" HorizontalAlignment="Left" Margin="0 0 30 0"/>
+                <TextBlock x:Name="UserNameTextBlock" FontSize="20" HorizontalAlignment="Right"/>
+            <Button Width="Auto" x:Name="AuthorizationButton" Click="AuthorizationButton_Click" Content="Войти в кабинет" HorizontalAlignment="Right"/>
+        </Grid>
+        <Frame Grid.Row="1" x:Name="contentFrame" NavigationUIVisibility="Hidden"/>
+        <StackPanel Grid.Row="2" x:Name="notificationContainer" VerticalAlignment="Bottom" Margin="10"/>
+    </Grid>
+</Window>

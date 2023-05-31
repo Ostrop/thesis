@@ -81,6 +81,10 @@
     <Compile Include="Availability.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="CheckUser_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\dtbCommunication.cs" />
     <Compile Include="Disciplines.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -120,32 +124,56 @@
     <Compile Include="StudyPlan_Disciplines.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagrams.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+    <Compile Include="WPF\Pages\AdminPage.xaml.cs">
+      <DependentUpon>AdminPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
+    <Compile Include="WPF\Pages\AuthPage.xaml.cs">
+      <DependentUpon>AuthPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPF\AuthorizationWindow.xaml.cs">
-      <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
+    <Compile Include="WPF\Pages\EducWorkerPage.xaml.cs">
+      <DependentUpon>EducWorkerPage.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <Compile Include="WPF\Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="WPF\Controllers\NotificationControl.xaml.cs">
+      <DependentUpon>NotificationControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="Window1.xaml">
+    <Compile Include="WPF\Pages\TeacherPage.xaml.cs">
+      <DependentUpon>TeacherPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Pages\UnauthorizedPage.xaml.cs">
+      <DependentUpon>UnauthorizedPage.xaml</DependentUpon>
+    </Compile>
+    <Page Include="WPF\Pages\AdminPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPF\AuthorizationWindow.xaml">
+    <Page Include="WPF\Pages\AuthPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\EducWorkerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Windows\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controllers\NotificationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\TeacherPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\UnauthorizedPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -185,24 +213,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Закрытый.png" />
+    <Resource Include="Resources\Открытый.png" />
+    <Resource Include="Resources\Авторизация.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model.Context.cs</LastGenOutput>
       <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
-    <Resource Include="Resources\Авторизация.png" />
-    <Resource Include="Resources\Закрытый.png" />
-    <Resource Include="Resources\Открытый.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

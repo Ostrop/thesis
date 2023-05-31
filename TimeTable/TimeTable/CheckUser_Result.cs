@@ -10,14 +10,16 @@
 namespace TimeTable
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class CheckUser_Result
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int EmployeeId { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Patronymic { get; set; }
+        public string Post { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Login { get; set; }
+        public byte[] Password { get; set; }
     }
 }

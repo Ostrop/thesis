@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище dtbTimtableModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище TimetableModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Audiences">
           <Key>
             <PropertyRef Name="AudienceId" />
@@ -40,16 +40,15 @@
           <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="Patronymic" Type="varchar" MaxLength="50" />
           <Property Name="Post" Type="varchar" MaxLength="50" />
-          <Property Name="FreeDay" Type="int" />
           <Property Name="PhoneNumber" Type="char" MaxLength="15" />
           <Property Name="Login" Type="varchar" MaxLength="10" />
-          <Property Name="Password" Type="varchar(max)" />
+          <Property Name="Password" Type="varbinary" MaxLength="64" />
         </EntityType>
         <EntityType Name="Employees_Disciplines">
           <Key>
-            <PropertyRef Name="Employees_Disciplines" />
+            <PropertyRef Name="Employees_DisciplinesId" />
           </Key>
-          <Property Name="Employees_Disciplines" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Employees_DisciplinesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DisciplineId" Type="int" Nullable="false" />
           <Property Name="EmployeeId" Type="int" Nullable="false" />
         </EntityType>
@@ -71,7 +70,7 @@
           <Property Name="AudienceId" Type="int" />
           <Property Name="GroupId" Type="int" Nullable="false" />
           <Property Name="Date" Type="date" />
-          <Property Name="SessioNumbern" Type="int" />
+          <Property Name="SessioNumber" Type="int" />
         </EntityType>
         <EntityType Name="Specialities">
           <Key>
@@ -101,16 +100,6 @@
           <Property Name="HoursOfLaboratory" Type="int" />
           <Property Name="HoursOfLaboratoryWithComputers" Type="int" />
           <Property Name="RequiredNumberOfHours" Type="int" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_Audiences_Groups">
           <End Role="Audiences" Type="Self.Audiences" Multiplicity="0..1" />
@@ -232,10 +221,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="CheckUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="login" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="HashPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varbinary">
           <Parameter Name="inputString" Type="nvarchar" Mode="In" />
         </Function>
-        <EntityContainer Name="Хранилище dtbTimtableModelContainer">
+        <Function Name="SearchByAllFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tableName" Type="nvarchar" Mode="In" />
+          <Parameter Name="searchText" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="Хранилище TimetableModelContainer">
           <EntitySet Name="Audiences" EntityType="Self.Audiences" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Availability" EntityType="Self.Availability" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Disciplines" EntityType="Self.Disciplines" Schema="dbo" store:Type="Tables" />
@@ -246,7 +243,6 @@
           <EntitySet Name="Specialities" EntityType="Self.Specialities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudyPlan" EntityType="Self.StudyPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudyPlan_Disciplines" EntityType="Self.StudyPlan_Disciplines" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Audiences_Groups" Association="Self.FK_Audiences_Groups">
             <End Role="Audiences" EntitySet="Audiences" />
             <End Role="Sessions" EntitySet="Sessions" />
@@ -288,11 +284,10 @@
             <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="dtbTimtableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="TimetableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Audiences">
           <Key>
             <PropertyRef Name="AudienceId" />
@@ -332,19 +327,18 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FreeDay" Type="Int32" />
           <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
           <Property Name="Login" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="Binary" MaxLength="64" FixedLength="false" />
           <NavigationProperty Name="Availability" Relationship="Self.FK_Employees_Availability" FromRole="Employees" ToRole="Availability" />
           <NavigationProperty Name="Employees_Disciplines" Relationship="Self.FK_Employees_Disciplines_Employees" FromRole="Employees" ToRole="Employees_Disciplines" />
           <NavigationProperty Name="StudyPlan_Disciplines" Relationship="Self.FK_Employees_StudyPlan_Disciplines" FromRole="Employees" ToRole="StudyPlan_Disciplines" />
         </EntityType>
         <EntityType Name="Employees_Disciplines">
           <Key>
-            <PropertyRef Name="Employees_Disciplines1" />
+            <PropertyRef Name="Employees_DisciplinesId" />
           </Key>
-          <Property Name="Employees_Disciplines1" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Employees_DisciplinesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DisciplineId" Type="Int32" Nullable="false" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Disciplines" Relationship="Self.FK_Disciplines_Employees_Disciplines" FromRole="Employees_Disciplines" ToRole="Disciplines" />
@@ -371,7 +365,7 @@
           <Property Name="AudienceId" Type="Int32" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="SessioNumbern" Type="Int32" />
+          <Property Name="SessioNumber" Type="Int32" />
           <NavigationProperty Name="Audiences" Relationship="Self.FK_Audiences_Groups" FromRole="Sessions" ToRole="Audiences" />
           <NavigationProperty Name="Groups" Relationship="Self.FK_Groups_Sessions" FromRole="Sessions" ToRole="Groups" />
         </EntityType>
@@ -409,16 +403,6 @@
           <NavigationProperty Name="Disciplines" Relationship="Self.FK_Disciplines_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Disciplines" />
           <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Employees" />
           <NavigationProperty Name="StudyPlan" Relationship="Self.FK_StudyPlan_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="StudyPlan" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_Audiences_Groups">
           <End Role="Audiences" Type="Self.Audiences" Multiplicity="0..1" />
@@ -540,7 +524,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="dtbTimtableEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="TimetableEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Audiences" EntityType="Self.Audiences" />
           <EntitySet Name="Availability" EntityType="Self.Availability" />
           <EntitySet Name="Disciplines" EntityType="Self.Disciplines" />
@@ -551,7 +535,6 @@
           <EntitySet Name="Specialities" EntityType="Self.Specialities" />
           <EntitySet Name="StudyPlan" EntityType="Self.StudyPlan" />
           <EntitySet Name="StudyPlan_Disciplines" EntityType="Self.StudyPlan_Disciplines" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <AssociationSet Name="FK_Audiences_Groups" Association="Self.FK_Audiences_Groups">
             <End Role="Audiences" EntitySet="Audiences" />
             <End Role="Sessions" EntitySet="Sessions" />
@@ -592,15 +575,33 @@
             <End Role="StudyPlan" EntitySet="StudyPlan" />
             <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
           </AssociationSet>
+          <FunctionImport Name="CheckUser" ReturnType="Collection(TimetableModel.CheckUser_Result)">
+            <Parameter Name="login" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchByAllFields">
+            <Parameter Name="tableName" Mode="In" Type="String" />
+            <Parameter Name="searchText" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="CheckUser_Result">
+          <Property Type="Int32" Name="EmployeeId" Nullable="false" />
+          <Property Type="String" Name="Surname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Patronymic" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Post" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Login" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="Password" Nullable="true" MaxLength="64" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище dtbTimtableModelContainer" CdmEntityContainer="dtbTimtableEntities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TimetableModelContainer" CdmEntityContainer="TimetableEntities">
           <EntitySetMapping Name="Audiences">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Audiences">
+            <EntityTypeMapping TypeName="TimetableModel.Audiences">
               <MappingFragment StoreEntitySet="Audiences">
                 <ScalarProperty Name="AudienceId" ColumnName="AudienceId" />
                 <ScalarProperty Name="Computers" ColumnName="Computers" />
@@ -609,7 +610,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Availability">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Availability">
+            <EntityTypeMapping TypeName="TimetableModel.Availability">
               <MappingFragment StoreEntitySet="Availability">
                 <ScalarProperty Name="AvailabilityId" ColumnName="AvailabilityId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
@@ -618,7 +619,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Disciplines">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Disciplines">
+            <EntityTypeMapping TypeName="TimetableModel.Disciplines">
               <MappingFragment StoreEntitySet="Disciplines">
                 <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
                 <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
@@ -629,14 +630,13 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Employees">
+            <EntityTypeMapping TypeName="TimetableModel.Employees">
               <MappingFragment StoreEntitySet="Employees">
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
                 <ScalarProperty Name="Post" ColumnName="Post" />
-                <ScalarProperty Name="FreeDay" ColumnName="FreeDay" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
@@ -644,16 +644,16 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employees_Disciplines">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Employees_Disciplines">
+            <EntityTypeMapping TypeName="TimetableModel.Employees_Disciplines">
               <MappingFragment StoreEntitySet="Employees_Disciplines">
-                <ScalarProperty Name="Employees_Disciplines1" ColumnName="Employees_Disciplines" />
+                <ScalarProperty Name="Employees_DisciplinesId" ColumnName="Employees_DisciplinesId" />
                 <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Groups">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Groups">
+            <EntityTypeMapping TypeName="TimetableModel.Groups">
               <MappingFragment StoreEntitySet="Groups">
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
@@ -664,18 +664,18 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Sessions">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Sessions">
+            <EntityTypeMapping TypeName="TimetableModel.Sessions">
               <MappingFragment StoreEntitySet="Sessions">
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="AudienceId" ColumnName="AudienceId" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="SessioNumbern" ColumnName="SessioNumbern" />
+                <ScalarProperty Name="SessioNumber" ColumnName="SessioNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Specialities">
-            <EntityTypeMapping TypeName="dtbTimtableModel.Specialities">
+            <EntityTypeMapping TypeName="TimetableModel.Specialities">
               <MappingFragment StoreEntitySet="Specialities">
                 <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
                 <ScalarProperty Name="SpecialityInfo" ColumnName="SpecialityInfo" />
@@ -683,7 +683,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="StudyPlan">
-            <EntityTypeMapping TypeName="dtbTimtableModel.StudyPlan">
+            <EntityTypeMapping TypeName="TimetableModel.StudyPlan">
               <MappingFragment StoreEntitySet="StudyPlan">
                 <ScalarProperty Name="StudyPlanId" ColumnName="StudyPlanId" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
@@ -692,7 +692,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="StudyPlan_Disciplines">
-            <EntityTypeMapping TypeName="dtbTimtableModel.StudyPlan_Disciplines">
+            <EntityTypeMapping TypeName="TimetableModel.StudyPlan_Disciplines">
               <MappingFragment StoreEntitySet="StudyPlan_Disciplines">
                 <ScalarProperty Name="StudyPlan_DisciplinesId" ColumnName="StudyPlan_DisciplinesId" />
                 <ScalarProperty Name="StudyPlanId" ColumnName="StudyPlanId" />
@@ -706,17 +706,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="dtbTimtableModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CheckUser" FunctionName="Хранилище TimetableModel.CheckUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.CheckUser_Result">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SearchByAllFields" FunctionName="Хранилище TimetableModel.SearchByAllFields" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

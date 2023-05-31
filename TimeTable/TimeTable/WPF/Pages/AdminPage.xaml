@@ -1,0 +1,238 @@
+﻿<Page x:Class="TimeTable.WPF.Pages.AdminPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="1200"
+      Title="Страница Администратора">
+    
+    <Grid Background="#ffdadada">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Верхняя часть содержимого с фиксированной высотой -->
+            <RowDefinition Height="*"/>
+            <!-- Оставшаяся часть с прокруткой -->
+            <RowDefinition Height="Auto"/>
+            <!-- Оповещения внизу с фиксированной высотой -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="70 20 0 20">
+            <TextBlock FontSize="15" Text="Сущности"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="70 20 70 20">
+            <TextBlock FontSize="15" Text="Поиск: "/>
+            <TextBox x:Name="SearchTB" TextChanged="SearchBox_TextChanged" Width="200" HorizontalAlignment="Right"/>
+        </StackPanel>
+        <materialDesign:Card Grid.Row="1" >
+            <TabControl SelectionChanged="TabControl_SelectionChanged" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" Style="{StaticResource MaterialDesignFilledTabControl}">
+                <TabItem Tag="Audiences" Header="Аудитории">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Audiences_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="Номер аудитории" Binding="{Binding AudienceId}" />
+                                    <DataGridCheckBoxColumn Header="Компьютеры" Binding="{Binding Computers}" />
+                                    <DataGridCheckBoxColumn Header="Лаборатория" Binding="{Binding Laboratory}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Sessions" Header="Занятия">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Sessions_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID занятия" Binding="{Binding SessionId}" />
+                                    <DataGridTextColumn Header="Номер аудитории" Binding="{Binding AudienceId}" />
+                                    <DataGridTextColumn Header="ID группы" Binding="{Binding GroupId}" />
+                                    <DataGridTextColumn Header="Дата" Binding="{Binding Date}" />
+                                    <DataGridTextColumn Header="Номер занятия" Binding="{Binding SessionNumber}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Groups" Header="Группы">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Groups_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID группы" Binding="{Binding GroupId}"/>
+                                    <DataGridTextColumn Header="Номер специальности" Binding="{Binding SpecialityId}" />
+                                    <DataGridTextColumn Header="Курс" Binding="{Binding Course}" />
+                                    <DataGridTextColumn Header="Номер группы" Binding="{Binding GroupNumber}" />
+                                    <DataGridTextColumn Header="Дата возникновения" Binding="{Binding BeginDate}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Specialities" Header="Специальности">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Specialities_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="Номер специальности" Binding="{Binding SpecialityId}" />
+                                    <DataGridTextColumn Header="Информация по специальности" Binding="{Binding SpecialInfo}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="StudyPlan" Header="Учебный план">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="StudyPlan_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID учебного плана" Binding="{Binding StudyPlanId}" />
+                                    <DataGridTextColumn Header="ID группы" Binding="{Binding GroupId}" />
+                                    <DataGridTextColumn Header="Номер семестра" Binding="{Binding SemesterNumber}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="StudyPlan_Disciplines" Header="Учебный план _ Дисциплины">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="StudyPlan_Disciplines_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID учебного плана _ дисциплины" Binding="{Binding StudyPlan_DisciplinesId}" />
+                                    <DataGridTextColumn Header="ID учебного плана" Binding="{Binding StudyPlanId}" />
+                                    <DataGridTextColumn Header="ID дисциплины" Binding="{Binding DisciplineId}" />
+                                    <DataGridTextColumn Header="Общее количество часов" Binding="{Binding TotalNumberOfHours}" />
+                                    <DataGridTextColumn Header="Часы (лекции)" Binding="{Binding HoursOfLectures}" />
+                                    <DataGridTextColumn Header="Часы (лабораторные)" Binding="{Binding HoursOfLaboratory}" />
+                                    <DataGridTextColumn Header="Часы (лабораторные, ВЦ)" Binding="{Binding HoursOfLaboratoryWithComputers}" />
+                                    <DataGridTextColumn Header="Проведённое кол-во часов" Binding="{Binding RequiredNumberOfHours}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Disciplines" Header="Дисциплины">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Disciplines_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID дисциплины" Binding="{Binding DisciplineId}" />
+                                    <DataGridTextColumn Header="Наименование дисциплины" Binding="{Binding NameOfDiscipline}" />
+                                    <DataGridTextColumn Header="Сокращенное наименования" Binding="{Binding AbbreviatedName}" />
+                                    <DataGridCheckBoxColumn Header="Практика" Binding="{Binding Practice}" />
+                                    <DataGridCheckBoxColumn Header="Экзамен" Binding="{Binding Exam}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Employees_Disciplines" Header="Сотрудники _ Дисциплины">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Employees_Disciplines_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID сотрудника _ дисциплины" Binding="{Binding Employees_Disciplines }" />
+                                    <DataGridTextColumn Header="ID дисциплины" Binding="{Binding DisciplineId }" />
+                                    <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeId }" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Employees" Header="Сотрудники">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Employees_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID сотрудника" Binding="{Binding EmployeeId}" />
+                                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" />
+                                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+                                    <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" />
+                                    <DataGridTextColumn Header="Должность" Binding="{Binding Post}" />
+                                    <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" />
+                                    <DataGridTextColumn Header="Логин" Binding="{Binding Login}" />
+                                    <DataGridTextColumn Header="Пароль" Binding="{Binding Password}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="Availability" Header="Доступность">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="Availability_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID правила" Binding="{Binding AvailabilityId}" />
+                                    <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeId}" />
+                                    <DataGridTextColumn Header="Число" Binding="{Binding Date}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="20" HorizontalAlignment="Center" Content="Сохранить" Click="SaveButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Добавить" Click="AddButton_Click" />
+            <Button Margin="20" HorizontalAlignment="Center" Content="Удалить" Click="DeleteButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Обновить" Click="ReloadButton_Click" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0 0 40 0">
+            <Button  Margin="20" HorizontalAlignment="Center" Content="Выйти" Click="EscapeButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Page>
