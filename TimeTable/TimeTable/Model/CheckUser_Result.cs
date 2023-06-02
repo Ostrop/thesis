@@ -7,20 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Sessions
+    public partial class CheckUser_Result
     {
-        public int SessionId { get; set; }
-        public Nullable<int> AudienceId { get; set; }
-        public int GroupId { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> SessioNumber { get; set; }
-    
-        public virtual Audiences Audiences { get; set; }
-        public virtual Groups Groups { get; set; }
+        public int EmployeeId { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Patronymic { get; set; }
+        public string Post { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Login { get; set; }
+        public byte[] Password { get; set; }
     }
 }

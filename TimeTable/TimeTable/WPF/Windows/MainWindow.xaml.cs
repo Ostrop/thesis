@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using TimeTable.WPF.Controllers;
 using TimeTable.WPF.Pages;
+using TimeTable.Model;
 
 namespace TimeTable.WPF.Windows
 {

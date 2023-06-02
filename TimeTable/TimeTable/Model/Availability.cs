@@ -7,25 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class StudyPlan_Disciplines
+    public partial class Availability
     {
-        public int StudyPlan_DisciplinesId { get; set; }
-        public int StudyPlanId { get; set; }
-        public int DisciplineId { get; set; }
+        public int AvailabilityId { get; set; }
         public int EmployeeId { get; set; }
-        public Nullable<int> TotalNumberOfHours { get; set; }
-        public Nullable<int> HoursOfLectures { get; set; }
-        public Nullable<int> HoursOfLaboratory { get; set; }
-        public Nullable<int> HoursOfLaboratoryWithComputers { get; set; }
-        public Nullable<int> RequiredNumberOfHours { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
     
-        public virtual Disciplines Disciplines { get; set; }
         public virtual Employees Employees { get; set; }
-        public virtual StudyPlan StudyPlan { get; set; }
     }
 }

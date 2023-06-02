@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Data.Entity;

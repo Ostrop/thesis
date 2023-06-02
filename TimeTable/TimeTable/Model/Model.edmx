@@ -4,12 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Хранилище TimetableModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище TimetableModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Audiences">
           <Key>
             <PropertyRef Name="AudienceId" />
           </Key>
-          <Property Name="AudienceId" Type="int" Nullable="false" />
+          <Property Name="AudienceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AudienceNumber" Type="int" Nullable="false" />
           <Property Name="Computers" Type="bit" />
           <Property Name="Laboratory" Type="bit" />
         </EntityType>
@@ -284,7 +285,8 @@
             <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TimetableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -292,7 +294,8 @@
           <Key>
             <PropertyRef Name="AudienceId" />
           </Key>
-          <Property Name="AudienceId" Type="Int32" Nullable="false" />
+          <Property Name="AudienceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AudienceNumber" Type="Int32" Nullable="false" />
           <Property Name="Computers" Type="Boolean" />
           <Property Name="Laboratory" Type="Boolean" />
           <NavigationProperty Name="Sessions" Relationship="Self.FK_Audiences_Groups" FromRole="Audiences" ToRole="Sessions" />
@@ -604,6 +607,7 @@
             <EntityTypeMapping TypeName="TimetableModel.Audiences">
               <MappingFragment StoreEntitySet="Audiences">
                 <ScalarProperty Name="AudienceId" ColumnName="AudienceId" />
+                <ScalarProperty Name="AudienceNumber" ColumnName="AudienceNumber" />
                 <ScalarProperty Name="Computers" ColumnName="Computers" />
                 <ScalarProperty Name="Laboratory" ColumnName="Laboratory" />
               </MappingFragment>

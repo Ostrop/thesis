@@ -7,23 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Specialities
+    public partial class Sessions
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Specialities()
-        {
-            this.Groups = new HashSet<Groups>();
-        }
+        public int SessionId { get; set; }
+        public Nullable<int> AudienceId { get; set; }
+        public int GroupId { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<int> SessioNumber { get; set; }
     
-        public int SpecialityId { get; set; }
-        public string SpecialityInfo { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Groups> Groups { get; set; }
+        public virtual Audiences Audiences { get; set; }
+        public virtual Groups Groups { get; set; }
     }
 }

@@ -17,6 +17,8 @@
             <RowDefinition Height="Auto"/>
             <!-- Оповещения внизу с фиксированной высотой -->
             <RowDefinition Height="Auto"/>
+            <!-- Оповещения внизу с фиксированной высотой -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="70 20 0 20">
@@ -38,7 +40,8 @@
                                     </Style>
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn IsReadOnly="True" Header="Номер аудитории" Binding="{Binding AudienceId}" />
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID аудитории" Binding="{Binding AudienceId}" />
+                                    <DataGridTextColumn Header="Номер аудитории" Binding="{Binding AudienceNumber}" />
                                     <DataGridCheckBoxColumn Header="Компьютеры" Binding="{Binding Computers}" />
                                     <DataGridCheckBoxColumn Header="Лаборатория" Binding="{Binding Laboratory}" />
                                 </DataGrid.Columns>
@@ -225,13 +228,22 @@
                 </TabItem>
             </TabControl>
         </materialDesign:Card>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+        
+        <DataGrid Grid.Row="2" x:Name="AddDataGrid" Margin="10" HorizontalAlignment="Center" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер аудитории" Binding="{Binding AudienceNumber}" />
+                <DataGridCheckBoxColumn Header="Компьютеры" Binding="{Binding Computers}" />
+                <DataGridCheckBoxColumn Header="Лаборатория" Binding="{Binding Laboratory}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="20" HorizontalAlignment="Center" Content="Сохранить" Click="SaveButton_Click" />
             <Button HorizontalAlignment="Center" Content="Добавить" Click="AddButton_Click" />
             <Button Margin="20" HorizontalAlignment="Center" Content="Удалить" Click="DeleteButton_Click" />
             <Button HorizontalAlignment="Center" Content="Обновить" Click="ReloadButton_Click" />
         </StackPanel>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0 0 40 0">
+        <StackPanel Grid.Row="3" HorizontalAlignment="Right" Margin="0 0 40 0">
             <Button  Margin="20" HorizontalAlignment="Center" Content="Выйти" Click="EscapeButton_Click"/>
         </StackPanel>
     </Grid>

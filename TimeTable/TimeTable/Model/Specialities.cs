@@ -7,18 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Employees_Disciplines
+    public partial class Specialities
     {
-        public int Employees_DisciplinesId { get; set; }
-        public int DisciplineId { get; set; }
-        public int EmployeeId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Specialities()
+        {
+            this.Groups = new HashSet<Groups>();
+        }
     
-        public virtual Disciplines Disciplines { get; set; }
-        public virtual Employees Employees { get; set; }
+        public int SpecialityId { get; set; }
+        public string SpecialityInfo { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Groups> Groups { get; set; }
     }
 }

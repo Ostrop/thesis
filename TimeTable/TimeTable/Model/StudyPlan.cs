@@ -7,34 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Employees
+    public partial class StudyPlan
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Employees()
+        public StudyPlan()
         {
-            this.Availability = new HashSet<Availability>();
-            this.Employees_Disciplines = new HashSet<Employees_Disciplines>();
             this.StudyPlan_Disciplines = new HashSet<StudyPlan_Disciplines>();
         }
     
-        public int EmployeeId { get; set; }
-        public string Surname { get; set; }
-        public string Name { get; set; }
-        public string Patronymic { get; set; }
-        public string Post { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Login { get; set; }
-        public byte[] Password { get; set; }
+        public int StudyPlanId { get; set; }
+        public int GroupId { get; set; }
+        public int SemesterNumber { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Availability> Availability { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employees_Disciplines> Employees_Disciplines { get; set; }
+        public virtual Groups Groups { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudyPlan_Disciplines> StudyPlan_Disciplines { get; set; }
     }

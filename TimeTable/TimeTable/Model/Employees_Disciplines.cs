@@ -7,19 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class CheckUser_Result
+    public partial class Employees_Disciplines
     {
+        public int Employees_DisciplinesId { get; set; }
+        public int DisciplineId { get; set; }
         public int EmployeeId { get; set; }
-        public string Surname { get; set; }
-        public string Name { get; set; }
-        public string Patronymic { get; set; }
-        public string Post { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Login { get; set; }
-        public byte[] Password { get; set; }
+    
+        public virtual Disciplines Disciplines { get; set; }
+        public virtual Employees Employees { get; set; }
     }
 }

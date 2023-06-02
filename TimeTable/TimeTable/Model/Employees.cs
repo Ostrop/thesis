@@ -7,26 +7,32 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Disciplines
+    public partial class Employees
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Disciplines()
+        public Employees()
         {
+            this.Availability = new HashSet<Availability>();
             this.Employees_Disciplines = new HashSet<Employees_Disciplines>();
             this.StudyPlan_Disciplines = new HashSet<StudyPlan_Disciplines>();
         }
     
-        public int DisciplineId { get; set; }
-        public string NameOfDiscipline { get; set; }
-        public string AbbreviatedName { get; set; }
-        public Nullable<bool> Practice { get; set; }
-        public Nullable<bool> Exam { get; set; }
+        public int EmployeeId { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Patronymic { get; set; }
+        public string Post { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Login { get; set; }
+        public byte[] Password { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Availability> Availability { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employees_Disciplines> Employees_Disciplines { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

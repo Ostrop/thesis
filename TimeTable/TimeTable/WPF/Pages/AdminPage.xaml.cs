@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TimeTable.Classes;
+using TimeTable.Model;
 using TimeTable.WPF.Controllers;
 using TimeTable.WPF.Windows;
 
@@ -134,7 +135,7 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         /// <param name="sender">Выбранная вкладка</param>
         /// <param name="e"></param>
-        private async void TabControl_SelectionChanged(Object sender, SelectionChangedEventArgs e)
+        private void TabControl_SelectionChanged(Object sender, SelectionChangedEventArgs e)
         {
             TabControl tabControl = (TabControl)sender;
 
@@ -143,46 +144,47 @@ namespace TimeTable.WPF.Pages
 
             selectedTabItem = (TabItem)tabControl.SelectedItem;
             DataGridQualifier();
-            await FillDataGrid();
+            FillDataGrid();
             entityType = selectedDataGrid.ItemsSource.GetType().GetGenericArguments().FirstOrDefault();
             SelectedRow = null;
+            SearchTB.Text = string.Empty;
         }
         /// <summary>
         /// Метод загрузки данных в DataGrid
         /// </summary>
-        private async Task FillDataGrid()
+        private void FillDataGrid()
         {
             switch (selectedTabItem.Tag.ToString())
             {
                 case "Audiences":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetAudiencesToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetAudiencesToList();
                     break;
                 case "Sessions":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetSessionsToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetSessionsToList();
                     break;
                 case "Groups":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetGroupsToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetGroupsToList();
                     break;
                 case "Specialities":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetSpecialitiesToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetSpecialitiesToList();
                     break;
                 case "StudyPlan":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetStudyPlanToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetStudyPlanToList();
                     break;
                 case "StudyPlan_Disciplines":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetStudyPlan_DisciplinesToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetStudyPlan_DisciplinesToList();
                     break;
                 case "Disciplines":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetDisciplinesToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetDisciplinesToList();
                     break;
                 case "Employees_Disciplines":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetEmployees_DisciplinesToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetEmployees_DisciplinesToList();
                     break;
                 case "Employees":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetEmployeesToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetEmployeesToList();
                     break;
                 case "Availability":
-                    selectedDataGrid.ItemsSource = await dtbCommunication.GetAvailabilityToList();
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetAvailabilityToList();
                     break;
             }
         }
@@ -251,11 +253,11 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                await dtbCommunication.SaveChanges();
+                dtbCommunication.SaveChanges();
                 window.ShowNotification("Данные сохранены", TimeSpan.FromSeconds(3), Brushes.LightGreen);
             }
             catch (Exception ex)
@@ -286,14 +288,14 @@ namespace TimeTable.WPF.Pages
             {
                 if (SelectedRow == null)
                     window.ShowNotification("Выберите строку для удаления", TimeSpan.FromSeconds(5), Brushes.IndianRed);
-
                 else
                 {
                     DeleteRow();
                     selectedDataGrid.SelectedIndex = -1;
                     SelectedRow.Visibility = Visibility.Collapsed;
                     SelectedRow = null;
-                    window.ShowNotification("Строка помечена на удаление. Для подтверждения нажмите кнопку \"Сохранить\".", TimeSpan.FromSeconds(5), Brushes.LightGreen);
+                    dtbCommunication.SaveChanges();
+                    window.ShowNotification("Строка удалена. Данные обновлены.", TimeSpan.FromSeconds(5), Brushes.LightGreen);
                 }
             }
             catch (Exception ex)
@@ -308,47 +310,48 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         private void DeleteRow()
         {
+            int id;
             switch (selectedTabItem.Tag.ToString())
             {
                 case "Audiences":
-                    Audiences AudiencesselectedItem = (Audiences)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(AudiencesselectedItem);
+                    id = (SelectedRow.DataContext as Audiences)?.AudienceId ?? 0;
+                    dtbCommunication.RemoveRowAudiences(id);
                     break;
                 case "Sessions":
-                    Sessions SessionsselectedItem = (Sessions)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(SessionsselectedItem);
+                    id = (SelectedRow.DataContext as Sessions)?.SessionId ?? 0;
+                    dtbCommunication.RemoveRowSessions(id);
                     break;
                 case "Groups":
-                    Groups GroupsselectedItem = (Groups)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(GroupsselectedItem);
+                    id = (SelectedRow.DataContext as Groups)?.GroupId ?? 0;
+                    dtbCommunication.RemoveRowGroups(id);
                     break;
                 case "Specialities":
-                    Specialities SpecialitiesselectedItem = (Specialities)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(SpecialitiesselectedItem);
+                    id = (SelectedRow.DataContext as Specialities)?.SpecialityId ?? 0;
+                    dtbCommunication.RemoveRowSpecialities(id);
                     break;
                 case "StudyPlan":
-                    StudyPlan StudyPlanselectedItem = (StudyPlan)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(StudyPlanselectedItem);
+                    id = (SelectedRow.DataContext as StudyPlan)?.StudyPlanId ?? 0;
+                    dtbCommunication.RemoveRowStudyPlan(id);
                     break;
                 case "StudyPlan_Disciplines":
-                    StudyPlan_Disciplines StudyPlan_DisciplinesselectedItem = (StudyPlan_Disciplines)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(StudyPlan_DisciplinesselectedItem);
+                    id = (SelectedRow.DataContext as StudyPlan_Disciplines)?.StudyPlan_DisciplinesId ?? 0;
+                    dtbCommunication.RemoveRowStudyPlan_Disciplines(id);
                     break;
                 case "Disciplines":
-                    Disciplines DisciplinesselectedItem = (Disciplines)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(DisciplinesselectedItem);
+                    id = (SelectedRow.DataContext as Disciplines)?.DisciplineId ?? 0;
+                    dtbCommunication.RemoveRowDisciplines(id);
                     break;
                 case "Employees_Disciplines":
-                    Employees_Disciplines Employees_DisciplinesselectedItem = (Employees_Disciplines)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(Employees_DisciplinesselectedItem);
+                    id = (SelectedRow.DataContext as Employees_Disciplines)?.Employees_DisciplinesId ?? 0;
+                    dtbCommunication.RemoveRowEmployees_Disciplines(id);
                     break;
                 case "Employees":
-                    Employees EmployeesselectedItem = (Employees)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(EmployeesselectedItem);
+                    id = (SelectedRow.DataContext as Employees)?.EmployeeId ?? 0;
+                    dtbCommunication.RemoveRowEmployees(id);
                     break;
                 case "Availability":
-                    Availability AvailabilityselectedItem = (Availability)SelectedRow.Item;
-                    dtbCommunication.RemoveRow(AvailabilityselectedItem);
+                    id = (SelectedRow.DataContext as Availability)?.AvailabilityId ?? 0;
+                    dtbCommunication.RemoveRowAvailability(id);
                     break;
             }
         }
@@ -358,13 +361,13 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ReloadButton_Click(object sender, RoutedEventArgs e)
+        private void ReloadButton_Click(object sender, RoutedEventArgs e)
         {
             SearchTB.Text = string.Empty;
             try
             {
                 dtbCommunication.RejectChanges();
-                await FillDataGrid();
+                FillDataGrid();
                 window.ShowNotification("Данные обновлены", TimeSpan.FromSeconds(3), Brushes.LightGreen);
             }
             catch (Exception ex)

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media.Animation;
+using TimeTable.Model;
 
 
 namespace TimeTable.Classes
@@ -18,17 +19,18 @@ namespace TimeTable.Classes
     public class dtbCommunication
     {
         static TimetableEntities context = new TimetableEntities();
+
         /// <summary>
         /// Авторизация пользователя
         /// </summary>
         /// <param name="login"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static async Task<Employees> GetUserByLogAndPass(string login, string password)
+        public static Employees GetUserByLogAndPass(string login, string password)
         {
             try
             {
-                var result = await Task.Run(() => context.CheckUser(login, password).FirstOrDefault());
+                var result = context.CheckUser(login, password).FirstOrDefault();
                 if (result != null)
                 {
                     var employee = new Employees
@@ -51,6 +53,7 @@ namespace TimeTable.Classes
                 return null;
             }
         }
+
         /// <summary>
         /// Метод фильтрации данных
         /// </summary>
@@ -61,7 +64,7 @@ namespace TimeTable.Classes
         public static async Task<List<dynamic>> SearchByAllField(string tableName, string searchQuery, Type entityType)
         {
             var query = $"EXEC [dbo].[SearchByAllFields] @tableName = '{tableName}', @searchText = '{searchQuery}'";
-            var results = await context.Database.SqlQuery(entityType, query).ToListAsync();
+            var results = await context.Set(entityType).SqlQuery(query).ToListAsync();
             return results.Select(x => (dynamic)x).ToList();
         }
 
@@ -70,9 +73,9 @@ namespace TimeTable.Classes
         /// <summary>
         /// Метод сохранения изменений в БД
         /// </summary>
-        public static async Task SaveChanges()
+        public static void SaveChanges()
         {
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         /// <summary>
@@ -85,176 +88,225 @@ namespace TimeTable.Classes
                 entry.Reload();
             }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Audiences audiences)
+        /// <param name="audiences"></param>
+        public static void RemoveRowAudiences(int id)
         {
-            context.Audiences.Remove(audiences);
+            var row = context.Audiences.Find(id);
+            if (row != null)
+            {
+                context.Audiences.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Availability availability)
+        /// <param name="availability"></param>
+        public static void RemoveRowAvailability(int id)
         {
-            context.Availability.Remove(availability);
+            var row = context.Availability.Find(id);
+            if (row != null)
+            {
+                context.Availability.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Disciplines disciplines)
+        /// <param name="disciplines"></param>
+        public static void RemoveRowDisciplines(int id)
         {
-            context.Disciplines.Remove(disciplines);
+            var row = context.Disciplines.Find(id);
+            if (row != null)
+            {
+                context.Disciplines.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Employees employees)
+        /// <param name="employees"></param>
+        public static void RemoveRowEmployees(int id)
         {
-            context.Employees.Remove(employees);
+            var row = context.Employees.Find(id);
+            if (row != null)
+            {
+                context.Employees.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Groups groups)
+        /// <param name="groups"></param>
+        public static void RemoveRowGroups(int id)
         {
-            context.Groups.Remove(groups);
+            var row = context.Groups.Find(id);
+            if (row != null)
+            {
+                context.Groups.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Employees_Disciplines employees)
+        /// <param name="employees"></param>
+        public static void RemoveRowEmployees_Disciplines(int id)
         {
-            context.Employees_Disciplines.Remove(employees);
+            var row = context.Employees_Disciplines.Find(id);
+            if (row != null)
+            {
+                context.Employees_Disciplines.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Sessions sessions)
+        /// <param name="sessions"></param>
+        public static void RemoveRowSessions(int id)
         {
-            context.Sessions.Remove(sessions);
+            var row = context.Sessions.Find(id);
+            if (row != null)
+            {
+                context.Sessions.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(Specialities specialities)
+        /// <param name="specialities"></param>
+        public static void RemoveRowSpecialities(int id)
         {
-            context.Specialities.Remove(specialities);
+            var row = context.Specialities.Find(id);
+            if (row != null)
+            {
+                context.Specialities.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(StudyPlan studyPlan)
+        /// <param name="studyPlan"></param>
+        public static void RemoveRowStudyPlan(int id)
         {
-            context.StudyPlan.Remove(studyPlan);
+            var row = context.StudyPlan.Find(id);
+            if (row != null)
+            {
+                context.StudyPlan.Remove(row);
+            }
         }
+
         /// <summary>
         /// Функция удаления строки из сущности
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="stroke"></param>
-        public static void RemoveRow(StudyPlan_Disciplines studyPlan)
+        /// <param name="studyPlan"></param>
+        public static void RemoveRowStudyPlan_Disciplines(int id)
         {
-            context.StudyPlan_Disciplines.Remove(studyPlan);
+            var row = context.StudyPlan_Disciplines.Find(id);
+            if (row != null)
+            {
+                context.StudyPlan_Disciplines.Remove(row);
+            }
         }
 
         /// <summary>
         /// Получение сущности Аудитории
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Audiences>> GetAudiencesToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Audiences> GetAudiencesToList()
         {
-            return await context.Audiences.ToListAsync();
+            return context.Audiences.ToList();
         }
+
         /// <summary>
         /// Получение сущности Доступность
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Availability>> GetAvailabilityToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Availability> GetAvailabilityToList()
         {
-            return await context.Availability.ToListAsync();
+            return context.Availability.ToList();
         }
+
         /// <summary>
         /// Получение сущности Дисциплины
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Disciplines>> GetDisciplinesToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Disciplines> GetDisciplinesToList()
         {
-            return await context.Disciplines.ToListAsync();
+            return context.Disciplines.ToList();
         }
+
         /// <summary>
         /// Получение сущности Сотрудники
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Employees>> GetEmployeesToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Employees> GetEmployeesToList()
         {
-            return await context.Employees.ToListAsync();
+            return context.Employees.ToList();
         }
+
         /// <summary>
         /// Получение сущности Сотрудники _ Дисциплины
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Employees_Disciplines>> GetEmployees_DisciplinesToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Employees_Disciplines> GetEmployees_DisciplinesToList()
         {
-            return await context.Employees_Disciplines.ToListAsync();
+            return context.Employees_Disciplines.ToList();
         }
+
         /// <summary>
         /// Получение сущности Группы
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Groups>> GetGroupsToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Groups> GetGroupsToList()
         {
-            return await context.Groups.ToListAsync();
+            return context.Groups.ToList();
         }
+
         /// <summary>
         /// Получение сущности Занятия
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Sessions>> GetSessionsToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Sessions> GetSessionsToList()
         {
-            return await context.Sessions.ToListAsync();
+            return context.Sessions.ToList();
         }
+
         /// <summary>
         /// Получение сущности Специальности
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<Specialities>> GetSpecialitiesToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<Specialities> GetSpecialitiesToList()
         {
-            return await context.Specialities.ToListAsync();
+            return context.Specialities.ToList();
         }
+
         /// <summary>
         /// Получение сущности Учебный план
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<StudyPlan>> GetStudyPlanToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<StudyPlan> GetStudyPlanToList()
         {
-            return await context.StudyPlan.ToListAsync();
+            return context.StudyPlan.ToList();
         }
+
         /// <summary>
         /// Получение сущности Учебный план _ дисциплины
         /// </summary>
-        /// <returns>Спимсок данных сущности</returns>
-        public static async Task<List<StudyPlan_Disciplines>> GetStudyPlan_DisciplinesToList()
+        /// <returns>Список данных сущности</returns>
+        public static List<StudyPlan_Disciplines> GetStudyPlan_DisciplinesToList()
         {
-            return await context.StudyPlan_Disciplines.ToListAsync();
+            return context.StudyPlan_Disciplines.ToList();
         }
     }
 }

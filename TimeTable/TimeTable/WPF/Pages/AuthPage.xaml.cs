@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TimeTable.Classes;
+using TimeTable.Model;
 using TimeTable.WPF.Windows;
 
 namespace TimeTable.WPF.Pages
@@ -37,14 +38,14 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void AuthEnter(object sender, RoutedEventArgs e)
+        private void AuthEnter(object sender, RoutedEventArgs e)
         {
             if (LoginBox.Text.ToString() == string.Empty || PasswordBox.Password.ToString() == string.Empty)
             {
                 window.ShowNotification("Заполните поля логина и пароля", TimeSpan.FromSeconds(3), Brushes.IndianRed);
                 return;
             }
-            currentemploye = await dtbCommunication.GetUserByLogAndPass(LoginBox.Text.ToString(), PasswordBox.Password.ToString());
+            currentemploye = dtbCommunication.GetUserByLogAndPass(LoginBox.Text.ToString(), PasswordBox.Password.ToString());
             if (currentemploye == null )
             {
                 window.ShowNotification("Неправльный логин или пароль", TimeSpan.FromSeconds(3), Brushes.IndianRed);

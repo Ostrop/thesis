@@ -7,30 +7,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeTable
+namespace TimeTable.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Groups
+    public partial class Audiences
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Groups()
+        public Audiences()
         {
             this.Sessions = new HashSet<Sessions>();
-            this.StudyPlan = new HashSet<StudyPlan>();
         }
     
-        public int GroupId { get; set; }
-        public Nullable<int> SpecialityId { get; set; }
-        public Nullable<int> Course { get; set; }
-        public Nullable<int> GroupNumber { get; set; }
-        public Nullable<System.DateTime> BeginDate { get; set; }
+        public int AudienceId { get; set; }
+        public int AudienceNumber { get; set; }
+        public Nullable<bool> Computers { get; set; }
+        public Nullable<bool> Laboratory { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sessions> Sessions { get; set; }
-        public virtual Specialities Specialities { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StudyPlan> StudyPlan { get; set; }
     }
 }
