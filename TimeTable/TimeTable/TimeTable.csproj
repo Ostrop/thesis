@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\dtbCommunication.cs" />
+    <Compile Include="Classes\GeneralStudyPlanClass.cs" />
     <Compile Include="Model\Audiences.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -92,6 +93,12 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Employees_Disciplines.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\GetAssignedDisciplinesByTeacher_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\GetUnassignedDisciplinesByTeacher_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Groups.cs">
@@ -133,6 +140,21 @@
     <Compile Include="WPF\Pages\EducWorkerPage.xaml.cs">
       <DependentUpon>EducWorkerPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Pages\PageDisciplines.xaml.cs">
+      <DependentUpon>PageDisciplines.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Pages\PageSpecialities.xaml.cs">
+      <DependentUpon>PageSpecialities.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Pages\PageStudyPlan.xaml.cs">
+      <DependentUpon>PageStudyPlan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Pages\PageTeachers.xaml.cs">
+      <DependentUpon>PageTeachers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Windows\AddEntityWindow.xaml.cs">
+      <DependentUpon>AddEntityWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -142,9 +164,6 @@
     </Compile>
     <Compile Include="WPF\Controllers\NotificationControl.xaml.cs">
       <DependentUpon>NotificationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF\Pages\TeacherPage.xaml.cs">
-      <DependentUpon>TeacherPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\Pages\UnauthorizedPage.xaml.cs">
       <DependentUpon>UnauthorizedPage.xaml</DependentUpon>
@@ -161,15 +180,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WPF\Pages\PageDisciplines.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\PageSpecialities.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\PageStudyPlan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\PageTeachers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Windows\AddEntityWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF\Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controllers\NotificationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF\Pages\TeacherPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,14 +248,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Закрытый.png" />
-    <Resource Include="Resources\Открытый.png" />
     <Resource Include="Resources\Авторизация.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\СтрелкаВлево.png" />
+    <Resource Include="Resources\СтрелкаВправо.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\СтрелкаВверх.png" />
+    <Resource Include="Resources\СтрелкаВниз.png" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Model\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

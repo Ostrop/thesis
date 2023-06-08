@@ -4,17 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="23a590c809eb496cbf85e9d0d5c830b5" Name="Diagram1">
-        <EntityTypeShape EntityType="TimetableModel.Audiences" Width="1.5" PointX="1.5" PointY="15" IsExpanded="true" />
+      <Diagram DiagramId="56a74e5ef9c147ec8658cdcfcf938c12" Name="Diagram1">
+        <EntityTypeShape EntityType="TimetableModel.Audiences" Width="1.5" PointX="1.5" PointY="15.25" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.Availability" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.Disciplines" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.Employees" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.Employees_Disciplines" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="TimetableModel.Groups" Width="1.5" PointX="1.5" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TimetableModel.Sessions" Width="1.5" PointX="3.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TimetableModel.Specialities" Width="1.5" PointX="1.5" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TimetableModel.StudyPlan" Width="1.5" PointX="3.75" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="TimetableModel.StudyPlan_Disciplines" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TimetableModel.Groups" Width="1.5" PointX="1.5" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="TimetableModel.Sessions" Width="1.5" PointX="3.75" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="TimetableModel.Specialities" Width="1.5" PointX="3.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TimetableModel.StudyPlan" Width="1.5" PointX="3.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TimetableModel.StudyPlan_Disciplines" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
         <AssociationConnector Association="TimetableModel.FK_Audiences_Groups" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Employees_Availability" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Disciplines_Employees_Disciplines" ManuallyRouted="false" />
@@ -22,8 +22,8 @@
         <AssociationConnector Association="TimetableModel.FK_Employees_Disciplines_Employees" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Employees_StudyPlan_Disciplines" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Groups_Sessions" ManuallyRouted="false" />
-        <AssociationConnector Association="TimetableModel.FK_Groups_Specialities" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Groups_StudyPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="TimetableModel.FK_Specialities_StudyPlan_Disciplines" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_StudyPlan_StudyPlan_Disciplines" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

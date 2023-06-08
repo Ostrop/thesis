@@ -1,0 +1,43 @@
+﻿<Page x:Class="TimeTable.WPF.Pages.PageDisciplines"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TimeTable.WPF.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Title="PageDisciplines">
+
+    <Grid Background="#ffdadada">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="70 20 70 20">
+            <TextBlock FontSize="15" Text="Поиск: "/>
+            <TextBox x:Name="SearchTB" TextChanged="SearchBox_TextChanged" Width="200" VerticalAlignment="Top"/>
+        </StackPanel>
+        <DataGrid Margin="20, 0, 20, 0" Grid.Row="1" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="DataGrid_SelectionChanged" x:Name="Disciplines_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID дисциплины" Binding="{Binding DisciplineId}" Visibility="Collapsed" />
+                <DataGridTextColumn Header="Наименование дисциплины" Binding="{Binding NameOfDiscipline}" />
+                <DataGridTextColumn Header="Сокращенное наименования" Binding="{Binding AbbreviatedName}" />
+                <DataGridCheckBoxColumn Header="Практика" Binding="{Binding Practice}" />
+                <DataGridCheckBoxColumn Header="Экзамен" Binding="{Binding Exam}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="20" HorizontalAlignment="Center" Content="Сохранить" Click="SaveButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Добавить" Click="AddButton_Click" />
+            <Button Margin="20" HorizontalAlignment="Center" Content="Удалить" Click="DeleteButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Обновить" Click="ReloadButton_Click" />
+        </StackPanel>
+    </Grid>
+</Page>

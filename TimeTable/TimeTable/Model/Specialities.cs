@@ -17,13 +17,14 @@ namespace TimeTable.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Specialities()
         {
-            this.Groups = new HashSet<Groups>();
+            this.StudyPlan_Disciplines = new HashSet<StudyPlan_Disciplines>();
         }
     
         public int SpecialityId { get; set; }
+        public Nullable<int> SpecialityNumber { get; set; }
         public string SpecialityInfo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Groups> Groups { get; set; }
+        public virtual ICollection<StudyPlan_Disciplines> StudyPlan_Disciplines { get; set; }
     }
 }

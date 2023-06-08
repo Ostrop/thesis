@@ -21,6 +21,7 @@
           <Property Name="AvailabilityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeId" Type="int" Nullable="false" />
           <Property Name="Date" Type="date" />
+          <Property Name="SessionNumber" Type="int" />
         </EntityType>
         <EntityType Name="Disciplines">
           <Key>
@@ -58,10 +59,10 @@
             <PropertyRef Name="GroupId" />
           </Key>
           <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SpecialityId" Type="int" />
-          <Property Name="Course" Type="int" />
-          <Property Name="GroupNumber" Type="int" />
-          <Property Name="BeginDate" Type="date" />
+          <Property Name="SpecialityId" Type="int" Nullable="false" />
+          <Property Name="Course" Type="int" Nullable="false" />
+          <Property Name="GroupNumber" Type="int" Nullable="false" />
+          <Property Name="BeginDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Sessions">
           <Key>
@@ -71,13 +72,14 @@
           <Property Name="AudienceId" Type="int" />
           <Property Name="GroupId" Type="int" Nullable="false" />
           <Property Name="Date" Type="date" />
-          <Property Name="SessioNumber" Type="int" />
+          <Property Name="SessionNumber" Type="int" />
         </EntityType>
         <EntityType Name="Specialities">
           <Key>
             <PropertyRef Name="SpecialityId" />
           </Key>
-          <Property Name="SpecialityId" Type="int" Nullable="false" />
+          <Property Name="SpecialityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SpecialityNumber" Type="int" />
           <Property Name="SpecialityInfo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="StudyPlan">
@@ -96,11 +98,13 @@
           <Property Name="StudyPlanId" Type="int" Nullable="false" />
           <Property Name="DisciplineId" Type="int" Nullable="false" />
           <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="SpecialityId" Type="int" Nullable="false" />
           <Property Name="TotalNumberOfHours" Type="int" />
           <Property Name="HoursOfLectures" Type="int" />
           <Property Name="HoursOfLaboratory" Type="int" />
           <Property Name="HoursOfLaboratoryWithComputers" Type="int" />
           <Property Name="RequiredNumberOfHours" Type="int" />
+          <Property Name="IsIndividual" Type="bit" />
         </EntityType>
         <Association Name="FK_Audiences_Groups">
           <End Role="Audiences" Type="Self.Audiences" Multiplicity="0..1" />
@@ -186,18 +190,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Groups_Specialities">
-          <End Role="Specialities" Type="Self.Specialities" Multiplicity="0..1" />
-          <End Role="Groups" Type="Self.Groups" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Specialities">
-              <PropertyRef Name="SpecialityId" />
-            </Principal>
-            <Dependent Role="Groups">
-              <PropertyRef Name="SpecialityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Groups_StudyPlan">
           <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
           <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="*" />
@@ -207,6 +199,18 @@
             </Principal>
             <Dependent Role="StudyPlan">
               <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Specialities_StudyPlan_Disciplines">
+          <End Role="Specialities" Type="Self.Specialities" Multiplicity="1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialities">
+              <PropertyRef Name="SpecialityId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="SpecialityId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -225,6 +229,14 @@
         <Function Name="CheckUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="login" Type="nvarchar" Mode="In" />
           <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetAssignedDisciplinesByTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TeacherId" Type="int" Mode="In" />
+          <Parameter Name="SearchTerm" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetUnassignedDisciplinesByTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TeacherId" Type="int" Mode="In" />
+          <Parameter Name="SearchTerm" Type="varchar" Mode="In" />
         </Function>
         <Function Name="HashPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varbinary">
           <Parameter Name="inputString" Type="nvarchar" Mode="In" />
@@ -272,13 +284,13 @@
             <End Role="Groups" EntitySet="Groups" />
             <End Role="Sessions" EntitySet="Sessions" />
           </AssociationSet>
-          <AssociationSet Name="FK_Groups_Specialities" Association="Self.FK_Groups_Specialities">
-            <End Role="Specialities" EntitySet="Specialities" />
-            <End Role="Groups" EntitySet="Groups" />
-          </AssociationSet>
           <AssociationSet Name="FK_Groups_StudyPlan" Association="Self.FK_Groups_StudyPlan">
             <End Role="Groups" EntitySet="Groups" />
             <End Role="StudyPlan" EntitySet="StudyPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Specialities_StudyPlan_Disciplines" Association="Self.FK_Specialities_StudyPlan_Disciplines">
+            <End Role="Specialities" EntitySet="Specialities" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
           </AssociationSet>
           <AssociationSet Name="FK_StudyPlan_StudyPlan_Disciplines" Association="Self.FK_StudyPlan_StudyPlan_Disciplines">
             <End Role="StudyPlan" EntitySet="StudyPlan" />
@@ -307,6 +319,7 @@
           <Property Name="AvailabilityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="SessionNumber" Type="Int32" />
           <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Availability" FromRole="Availability" ToRole="Employees" />
         </EntityType>
         <EntityType Name="Disciplines">
@@ -352,12 +365,11 @@
             <PropertyRef Name="GroupId" />
           </Key>
           <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SpecialityId" Type="Int32" />
-          <Property Name="Course" Type="Int32" />
-          <Property Name="GroupNumber" Type="Int32" />
-          <Property Name="BeginDate" Type="DateTime" Precision="0" />
+          <Property Name="SpecialityId" Type="Int32" Nullable="false" />
+          <Property Name="Course" Type="Int32" Nullable="false" />
+          <Property Name="GroupNumber" Type="Int32" Nullable="false" />
+          <Property Name="BeginDate" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Sessions" Relationship="Self.FK_Groups_Sessions" FromRole="Groups" ToRole="Sessions" />
-          <NavigationProperty Name="Specialities" Relationship="Self.FK_Groups_Specialities" FromRole="Groups" ToRole="Specialities" />
           <NavigationProperty Name="StudyPlan" Relationship="Self.FK_Groups_StudyPlan" FromRole="Groups" ToRole="StudyPlan" />
         </EntityType>
         <EntityType Name="Sessions">
@@ -368,7 +380,7 @@
           <Property Name="AudienceId" Type="Int32" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="SessioNumber" Type="Int32" />
+          <Property Name="SessionNumber" Type="Int32" />
           <NavigationProperty Name="Audiences" Relationship="Self.FK_Audiences_Groups" FromRole="Sessions" ToRole="Audiences" />
           <NavigationProperty Name="Groups" Relationship="Self.FK_Groups_Sessions" FromRole="Sessions" ToRole="Groups" />
         </EntityType>
@@ -376,9 +388,10 @@
           <Key>
             <PropertyRef Name="SpecialityId" />
           </Key>
-          <Property Name="SpecialityId" Type="Int32" Nullable="false" />
+          <Property Name="SpecialityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SpecialityNumber" Type="Int32" />
           <Property Name="SpecialityInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Groups" Relationship="Self.FK_Groups_Specialities" FromRole="Specialities" ToRole="Groups" />
+          <NavigationProperty Name="StudyPlan_Disciplines" Relationship="Self.FK_Specialities_StudyPlan_Disciplines" FromRole="Specialities" ToRole="StudyPlan_Disciplines" />
         </EntityType>
         <EntityType Name="StudyPlan">
           <Key>
@@ -398,13 +411,16 @@
           <Property Name="StudyPlanId" Type="Int32" Nullable="false" />
           <Property Name="DisciplineId" Type="Int32" Nullable="false" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="SpecialityId" Type="Int32" Nullable="false" />
           <Property Name="TotalNumberOfHours" Type="Int32" />
           <Property Name="HoursOfLectures" Type="Int32" />
           <Property Name="HoursOfLaboratory" Type="Int32" />
           <Property Name="HoursOfLaboratoryWithComputers" Type="Int32" />
           <Property Name="RequiredNumberOfHours" Type="Int32" />
+          <Property Name="IsIndividual" Type="Boolean" />
           <NavigationProperty Name="Disciplines" Relationship="Self.FK_Disciplines_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Disciplines" />
           <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Employees" />
+          <NavigationProperty Name="Specialities" Relationship="Self.FK_Specialities_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Specialities" />
           <NavigationProperty Name="StudyPlan" Relationship="Self.FK_StudyPlan_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="StudyPlan" />
         </EntityType>
         <Association Name="FK_Audiences_Groups">
@@ -491,18 +507,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Groups_Specialities">
-          <End Role="Specialities" Type="Self.Specialities" Multiplicity="0..1" />
-          <End Role="Groups" Type="Self.Groups" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Specialities">
-              <PropertyRef Name="SpecialityId" />
-            </Principal>
-            <Dependent Role="Groups">
-              <PropertyRef Name="SpecialityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Groups_StudyPlan">
           <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
           <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="*" />
@@ -512,6 +516,18 @@
             </Principal>
             <Dependent Role="StudyPlan">
               <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Specialities_StudyPlan_Disciplines">
+          <End Role="Specialities" Type="Self.Specialities" Multiplicity="1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialities">
+              <PropertyRef Name="SpecialityId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="SpecialityId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -566,13 +582,13 @@
             <End Role="Groups" EntitySet="Groups" />
             <End Role="Sessions" EntitySet="Sessions" />
           </AssociationSet>
-          <AssociationSet Name="FK_Groups_Specialities" Association="Self.FK_Groups_Specialities">
-            <End Role="Specialities" EntitySet="Specialities" />
-            <End Role="Groups" EntitySet="Groups" />
-          </AssociationSet>
           <AssociationSet Name="FK_Groups_StudyPlan" Association="Self.FK_Groups_StudyPlan">
             <End Role="Groups" EntitySet="Groups" />
             <End Role="StudyPlan" EntitySet="StudyPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Specialities_StudyPlan_Disciplines" Association="Self.FK_Specialities_StudyPlan_Disciplines">
+            <End Role="Specialities" EntitySet="Specialities" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
           </AssociationSet>
           <AssociationSet Name="FK_StudyPlan_StudyPlan_Disciplines" Association="Self.FK_StudyPlan_StudyPlan_Disciplines">
             <End Role="StudyPlan" EntitySet="StudyPlan" />
@@ -581,6 +597,14 @@
           <FunctionImport Name="CheckUser" ReturnType="Collection(TimetableModel.CheckUser_Result)">
             <Parameter Name="login" Mode="In" Type="String" />
             <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetAssignedDisciplinesByTeacher" ReturnType="Collection(TimetableModel.GetAssignedDisciplinesByTeacher_Result)">
+            <Parameter Name="TeacherId" Mode="In" Type="Int32" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetUnassignedDisciplinesByTeacher" ReturnType="Collection(TimetableModel.GetUnassignedDisciplinesByTeacher_Result)">
+            <Parameter Name="TeacherId" Mode="In" Type="Int32" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SearchByAllFields">
             <Parameter Name="tableName" Mode="In" Type="String" />
@@ -596,6 +620,20 @@
           <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="15" />
           <Property Type="String" Name="Login" Nullable="true" MaxLength="10" />
           <Property Type="Binary" Name="Password" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetAssignedDisciplinesByTeacher_Result">
+          <Property Type="Int32" Name="DisciplineId" Nullable="false" />
+          <Property Type="String" Name="NameOfDiscipline" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AbbreviatedName" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Practice" Nullable="true" />
+          <Property Type="Boolean" Name="Exam" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetUnassignedDisciplinesByTeacher_Result">
+          <Property Type="Int32" Name="DisciplineId" Nullable="false" />
+          <Property Type="String" Name="NameOfDiscipline" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AbbreviatedName" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Practice" Nullable="true" />
+          <Property Type="Boolean" Name="Exam" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -619,6 +657,7 @@
                 <ScalarProperty Name="AvailabilityId" ColumnName="AvailabilityId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="SessionNumber" ColumnName="SessionNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -674,7 +713,7 @@
                 <ScalarProperty Name="AudienceId" ColumnName="AudienceId" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="SessioNumber" ColumnName="SessioNumber" />
+                <ScalarProperty Name="SessionNumber" ColumnName="SessionNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -682,6 +721,7 @@
             <EntityTypeMapping TypeName="TimetableModel.Specialities">
               <MappingFragment StoreEntitySet="Specialities">
                 <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
+                <ScalarProperty Name="SpecialityNumber" ColumnName="SpecialityNumber" />
                 <ScalarProperty Name="SpecialityInfo" ColumnName="SpecialityInfo" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -702,11 +742,13 @@
                 <ScalarProperty Name="StudyPlanId" ColumnName="StudyPlanId" />
                 <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
                 <ScalarProperty Name="TotalNumberOfHours" ColumnName="TotalNumberOfHours" />
                 <ScalarProperty Name="HoursOfLectures" ColumnName="HoursOfLectures" />
                 <ScalarProperty Name="HoursOfLaboratory" ColumnName="HoursOfLaboratory" />
                 <ScalarProperty Name="HoursOfLaboratoryWithComputers" ColumnName="HoursOfLaboratoryWithComputers" />
                 <ScalarProperty Name="RequiredNumberOfHours" ColumnName="RequiredNumberOfHours" />
+                <ScalarProperty Name="IsIndividual" ColumnName="IsIndividual" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -721,6 +763,28 @@
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAssignedDisciplinesByTeacher" FunctionName="Хранилище TimetableModel.GetAssignedDisciplinesByTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.GetAssignedDisciplinesByTeacher_Result">
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="AbbreviatedName" ColumnName="AbbreviatedName" />
+                <ScalarProperty Name="Practice" ColumnName="Practice" />
+                <ScalarProperty Name="Exam" ColumnName="Exam" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetUnassignedDisciplinesByTeacher" FunctionName="Хранилище TimetableModel.GetUnassignedDisciplinesByTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.GetUnassignedDisciplinesByTeacher_Result">
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="AbbreviatedName" ColumnName="AbbreviatedName" />
+                <ScalarProperty Name="Practice" ColumnName="Practice" />
+                <ScalarProperty Name="Exam" ColumnName="Exam" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

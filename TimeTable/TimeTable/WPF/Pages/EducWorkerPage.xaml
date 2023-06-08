@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:TimeTable.WPF"
+      xmlns:local="clr-namespace:TimeTable.WPF.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
@@ -11,45 +11,67 @@
       Background="#ffdadada">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="517*"/>
-            <ColumnDefinition Width="283*"/>
-        </Grid.ColumnDefinitions>
-        <TabControl Grid.ColumnSpan="2" Height="NaN" Width="NaN" SelectionChanged="TabControl_SelectionChanged">
-            <TabItem Header="Главная страница">
-                <!--<Label Height="NaN" Content="Добро пожаловать, Козлова Ирина Никлоаевна" Margin="10,39,216,369" Width="NaN"/>
-                <Label Height="NaN" Content="13.05.2023 13:07" Margin="165,39,18,369" Width="NaN" Grid.Column="1"/>
-                <Button Content="Справочники" Height="NaN" Width="NaN" Margin="29,132,338,264"/>
-                <Button Content="Учебный план" Height="NaN" Width="NaN" Margin="29,198,338,198" Click="Button_Click"/>
-                <Button Content="Расписание" Height="NaN" Width="NaN" Margin="29,266,338,130" Click="Button_Click"/>
-                <Button Content="Отчеты" Height="NaN" Width="NaN" Margin="29,329,338,67" Click="Button_Click"/>
-                <Button Content="Справка" Height="NaN" Width="NaN" Margin="93,127,40,269" Click="Button_Click" Grid.Column="1"/>-->
-            </TabItem>
-            <TabItem Header="Справочники">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Учебный план">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Расписание">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Отчеты">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Справка">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Выход">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-        </TabControl>
-        <Label Height="NaN" Content="Добро пожаловать, Козлова Ирина Николаевна" Margin="10,39,216,369" Width="NaN"/>
-        <Label Height="NaN" Content="13.05.2023 13:17" Margin="165,39,18,369" Width="NaN" Grid.Column="1"/>
-
-        <Button Content="Отчет расписания по преподавателям" Height="NaN" Width="NaN" Margin="40,164,214,232" Click="Button_Click"/>
-        <Button Content="Отчет расписания по группам" Height="NaN" Width="NaN" Margin="40,102,214,294" Click="Button_Click"/>
-        <Button Content="Отчет расписания по предметам" Height="NaN" Width="NaN" Margin="40,227,214,169" Click="Button_Click"/>
-
+        <materialDesign:Card Background="#FFE5E5E5">
+            <TabControl x:Name="MainTabItem" Style="{StaticResource MaterialDesignFilledTabControl}" SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="Главная страница">
+                    <TabItem.Content>
+                        <Grid>
+                            <StackPanel Orientation="Vertical" Margin="40,40,40,40">
+                                <Button MinHeight="40" Content="Справочники" Margin="20" Click="Books_ButtonClick"/>
+                                <Button MinHeight="40" Content="Учебный план" Margin="20" Click="StudyPlane_ButtonClick"/>
+                                <Button MinHeight="40" Content="Расписание" Margin="20" Click="Schedule_ButtonClick"/>
+                                <Button MinHeight="40" Content="Отчеты" Margin="20" Click="Reports_ButtonClick"/>
+                                <Button MinHeight="40" Content="Справка" Margin="20" Click="Help_ButtonClick"/>
+                                <Button MinHeight="40" HorizontalAlignment="Right" Content="Выход" Margin="20" Click="Escape"/>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Header="Справочники">
+                    <TabItem.Content>
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Top" Grid.RowSpan="2">
+                                <ComboBox SelectionChanged="SelectEntity_SelectionChanged" x:Name="SelectEntity" Margin="40,10,20,10" HorizontalAlignment="Left">
+                                    <TextBlock>Преподаватели</TextBlock>
+                                    <TextBlock>Дисциплины</TextBlock>
+                                    <TextBlock>Специальности</TextBlock>
+                                    <TextBlock>Группы</TextBlock>
+                                    <TextBlock>Аудитории</TextBlock>
+                                </ComboBox>
+                                <Button Click="Reload_ButtonClick">
+                                    <materialDesign:PackIcon Kind="Reload" />
+                                </Button>
+                            </StackPanel>
+                            <Frame Margin="20,50,20,0" Grid.Row="1" x:Name="BookFrame" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Header="Учебный план">
+                    <Grid Background="#FFE5E5E5">
+                        <Frame Margin="20,0,20,0" x:Name="StudyPlan_Frame" NavigationUIVisibility="Hidden"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Расписание">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="Отчеты">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="Справка">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="Выход" PreviewMouseDown="Escape">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
     </Grid>
 </Page>

@@ -218,8 +218,11 @@ namespace TimeTable.WPF.Pages
                 selectedDataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
                 foreach (DataGridColumn column in dataGrid.Columns)
                 {
-                    DataGridCell cell = column.GetCellContent(selectedRow).Parent as DataGridCell;
-                    cell.IsSelected = false; // Снять выделение для каждой ячейки в строке
+                    if (column.GetCellContent(selectedRow) != null)
+                    {
+                        DataGridCell cell = column.GetCellContent(selectedRow).Parent as DataGridCell;
+                        cell.IsSelected = false; // Снять выделение для каждой ячейки в строке
+                    }
                 }
                 selectedDataGrid.SelectionUnit = DataGridSelectionUnit.FullRow;
                 selectedRow.Background = Brushes.LightBlue;
@@ -276,7 +279,18 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            var AddEntity = new AddEntityWindow(entityType, window);
+            AddEntity.ShowDialog();
+            if (window.isNewRowAdded == true)
+            {
+                FillDataGrid();
+                SelectedRow = null;
+                SearchTB.Text = string.Empty;
+                window.ShowNotification("Строка добавлена. Данные обновлены.", TimeSpan.FromSeconds(3), Brushes.LightGreen);
+                window.isNewRowAdded = false;
+            }
         }
+
         /// <summary>
         /// Обработчик кнопки "Удалить"
         /// </summary>
@@ -291,10 +305,10 @@ namespace TimeTable.WPF.Pages
                 else
                 {
                     DeleteRow();
+                    dtbCommunication.SaveChanges();
                     selectedDataGrid.SelectedIndex = -1;
                     SelectedRow.Visibility = Visibility.Collapsed;
                     SelectedRow = null;
-                    dtbCommunication.SaveChanges();
                     window.ShowNotification("Строка удалена. Данные обновлены.", TimeSpan.FromSeconds(5), Brushes.LightGreen);
                 }
             }
@@ -302,6 +316,7 @@ namespace TimeTable.WPF.Pages
             {
                 // Обработка исключения
                 // Вывод ошибки, логирование, откат изменений и т.д.
+                dtbCommunication.RejectChanges();
                 window.ShowNotification("Произошла ошибка: " + ex.Message, TimeSpan.FromSeconds(5), Brushes.IndianRed);
             }
         }
@@ -363,9 +378,9 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void ReloadButton_Click(object sender, RoutedEventArgs e)
         {
-            SearchTB.Text = string.Empty;
             try
             {
+                SearchTB.Text = string.Empty;
                 dtbCommunication.RejectChanges();
                 FillDataGrid();
                 window.ShowNotification("Данные обновлены", TimeSpan.FromSeconds(3), Brushes.LightGreen);

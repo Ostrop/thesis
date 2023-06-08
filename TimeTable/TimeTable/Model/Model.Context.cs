@@ -51,6 +51,32 @@ namespace TimeTable.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckUser_Result>("CheckUser", loginParameter, passwordParameter);
         }
     
+        public virtual ObjectResult<GetAssignedDisciplinesByTeacher_Result> GetAssignedDisciplinesByTeacher(Nullable<int> teacherId, string searchTerm)
+        {
+            var teacherIdParameter = teacherId.HasValue ?
+                new ObjectParameter("TeacherId", teacherId) :
+                new ObjectParameter("TeacherId", typeof(int));
+    
+            var searchTermParameter = searchTerm != null ?
+                new ObjectParameter("SearchTerm", searchTerm) :
+                new ObjectParameter("SearchTerm", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAssignedDisciplinesByTeacher_Result>("GetAssignedDisciplinesByTeacher", teacherIdParameter, searchTermParameter);
+        }
+    
+        public virtual ObjectResult<GetUnassignedDisciplinesByTeacher_Result> GetUnassignedDisciplinesByTeacher(Nullable<int> teacherId, string searchTerm)
+        {
+            var teacherIdParameter = teacherId.HasValue ?
+                new ObjectParameter("TeacherId", teacherId) :
+                new ObjectParameter("TeacherId", typeof(int));
+    
+            var searchTermParameter = searchTerm != null ?
+                new ObjectParameter("SearchTerm", searchTerm) :
+                new ObjectParameter("SearchTerm", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUnassignedDisciplinesByTeacher_Result>("GetUnassignedDisciplinesByTeacher", teacherIdParameter, searchTermParameter);
+        }
+    
         public virtual int SearchByAllFields(string tableName, string searchText)
         {
             var tableNameParameter = tableName != null ?

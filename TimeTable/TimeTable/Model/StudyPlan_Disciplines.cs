@@ -18,14 +18,17 @@ namespace TimeTable.Model
         public int StudyPlanId { get; set; }
         public int DisciplineId { get; set; }
         public int EmployeeId { get; set; }
+        public int SpecialityId { get; set; }
         public Nullable<int> TotalNumberOfHours { get; set; }
         public Nullable<int> HoursOfLectures { get; set; }
         public Nullable<int> HoursOfLaboratory { get; set; }
         public Nullable<int> HoursOfLaboratoryWithComputers { get; set; }
         public Nullable<int> RequiredNumberOfHours { get; set; }
+        public Nullable<bool> IsIndividual { get; set; }
     
         public virtual Disciplines Disciplines { get; set; }
         public virtual Employees Employees { get; set; }
+        public virtual Specialities Specialities { get; set; }
         public virtual StudyPlan StudyPlan { get; set; }
     }
 }

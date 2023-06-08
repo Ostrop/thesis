@@ -7,17 +7,13 @@
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
       Title="Страница Администратора">
-    
+
     <Grid Background="#ffdadada">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Верхняя часть содержимого с фиксированной высотой -->
             <RowDefinition Height="*"/>
-            <!-- Оставшаяся часть с прокруткой -->
             <RowDefinition Height="Auto"/>
-            <!-- Оповещения внизу с фиксированной высотой -->
             <RowDefinition Height="Auto"/>
-            <!-- Оповещения внизу с фиксированной высотой -->
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -99,7 +95,8 @@
                                     </Style>
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn IsReadOnly="True" Header="Номер специальности" Binding="{Binding SpecialityId}" />
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID специальности" Binding="{Binding SpecialityId}" />
+                                    <DataGridTextColumn Header="Номер специальности" Binding="{Binding SpecialityNumber}" />
                                     <DataGridTextColumn Header="Информация по специальности" Binding="{Binding SpecialInfo}" />
                                 </DataGrid.Columns>
                             </DataGrid>
@@ -142,6 +139,7 @@
                                     <DataGridTextColumn Header="Часы (лабораторные)" Binding="{Binding HoursOfLaboratory}" />
                                     <DataGridTextColumn Header="Часы (лабораторные, ВЦ)" Binding="{Binding HoursOfLaboratoryWithComputers}" />
                                     <DataGridTextColumn Header="Проведённое кол-во часов" Binding="{Binding RequiredNumberOfHours}" />
+                                    <DataGridCheckBoxColumn Header="Индивидуальный план" Binding="{Binding IsIndividual}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -177,7 +175,7 @@
                                     </Style>
                                 </DataGrid.Resources>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn IsReadOnly="True" Header="ID сотрудника _ дисциплины" Binding="{Binding Employees_Disciplines }" />
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID сотрудника _ дисциплины" Binding="{Binding Employees_DisciplinesId }" />
                                     <DataGridTextColumn Header="ID дисциплины" Binding="{Binding DisciplineId }" />
                                     <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeId }" />
                                 </DataGrid.Columns>
@@ -202,7 +200,7 @@
                                     <DataGridTextColumn Header="Должность" Binding="{Binding Post}" />
                                     <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" />
                                     <DataGridTextColumn Header="Логин" Binding="{Binding Login}" />
-                                    <DataGridTextColumn Header="Пароль" Binding="{Binding Password}" />
+                                    <DataGridTextColumn Visibility="Collapsed" Header="Пароль" Binding="{Binding Password}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -221,6 +219,7 @@
                                     <DataGridTextColumn IsReadOnly="True" Header="ID правила" Binding="{Binding AvailabilityId}" />
                                     <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeId}" />
                                     <DataGridTextColumn Header="Число" Binding="{Binding Date}" />
+                                    <DataGridTextColumn Header="Номер занятия" Binding="{Binding SessionNumber}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -228,15 +227,13 @@
                 </TabItem>
             </TabControl>
         </materialDesign:Card>
-        
-        <DataGrid Grid.Row="2" x:Name="AddDataGrid" Margin="10" HorizontalAlignment="Center" AutoGenerateColumns="False" >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Номер аудитории" Binding="{Binding AudienceNumber}" />
-                <DataGridCheckBoxColumn Header="Компьютеры" Binding="{Binding Computers}" />
-                <DataGridCheckBoxColumn Header="Лаборатория" Binding="{Binding Laboratory}" />
-            </DataGrid.Columns>
-        </DataGrid>
 
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="20" HorizontalAlignment="Center" Content="Сохранить" Click="SaveButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Добавить" Click="AddButton_Click" />
+            <Button Margin="20" HorizontalAlignment="Center" Content="Удалить" Click="DeleteButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Обновить" Click="ReloadButton_Click" />
+        </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="20" HorizontalAlignment="Center" Content="Сохранить" Click="SaveButton_Click" />
             <Button HorizontalAlignment="Center" Content="Добавить" Click="AddButton_Click" />

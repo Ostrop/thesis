@@ -18,7 +18,7 @@ namespace TimeTable.Model
         public Nullable<int> AudienceId { get; set; }
         public int GroupId { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> SessioNumber { get; set; }
+        public Nullable<int> SessionNumber { get; set; }
     
         public virtual Audiences Audiences { get; set; }
         public virtual Groups Groups { get; set; }

@@ -30,6 +30,7 @@ namespace TimeTable.WPF.Pages
         {
             InitializeComponent();
             window = (Application.Current.MainWindow as MainWindow);
+            LoginBox.Focus();
         }
 
 

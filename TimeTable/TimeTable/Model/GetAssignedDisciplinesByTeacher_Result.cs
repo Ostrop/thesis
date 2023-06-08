@@ -10,15 +10,13 @@
 namespace TimeTable.Model
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Availability
+    public partial class GetAssignedDisciplinesByTeacher_Result
     {
-        public int AvailabilityId { get; set; }
-        public int EmployeeId { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> SessionNumber { get; set; }
-    
-        public virtual Employees Employees { get; set; }
+        public int DisciplineId { get; set; }
+        public string NameOfDiscipline { get; set; }
+        public string AbbreviatedName { get; set; }
+        public Nullable<bool> Practice { get; set; }
+        public Nullable<bool> Exam { get; set; }
     }
 }

@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using TimeTable.WPF.Controllers;
 using TimeTable.WPF.Pages;
 using TimeTable.Model;
+using TimeTable.Classes;
 
 namespace TimeTable.WPF.Windows
 {
@@ -27,6 +28,7 @@ namespace TimeTable.WPF.Windows
     public partial class MainWindow : Window
     {
 
+        public bool isNewRowAdded = false;
         /// <summary>
         /// Объект класса авторизованного работника
         /// </summary>
@@ -34,7 +36,7 @@ namespace TimeTable.WPF.Windows
         public MainWindow()
         {
             InitializeComponent();
-            this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             contentFrame.Navigate(new UnauthorizedPage());
         }
 
@@ -112,6 +114,7 @@ namespace TimeTable.WPF.Windows
             AuthorizationButton.Content = "Войти в кабинет";
             contentFrame.Navigate(new UnauthorizedPage());
             UserNameTextBlock.Text = string.Empty;
+            dtbCommunication.RejectChanges();
         }
 
         /// <summary>
@@ -122,7 +125,7 @@ namespace TimeTable.WPF.Windows
             switch (current_employe.Post)
             {
                 case "Преподаватель":
-                    contentFrame.Navigate(new TeacherPage());
+                    //contentFrame.Navigate(new TeacherPage());
                     break;
                 case "Админ":
                     contentFrame.Navigate(new AdminPage());
