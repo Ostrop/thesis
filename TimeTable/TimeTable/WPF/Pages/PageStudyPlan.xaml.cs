@@ -40,7 +40,7 @@ namespace TimeTable.WPF.Pages
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await FillSpecialities();
-            //await FillGroups();
+            await FillGroups();
             DisciplineNames = dtbCommunication.getDisciplineNames();
 
             generalStudyPlan = new ObservableCollection<GeneralStudyPlan>();
@@ -107,6 +107,53 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void Groups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Проверяем, что в DataGrid есть выбранный элемент
+            if (sender is DataGrid dataGrid && dataGrid.SelectedItem != null)
+            {
+                StudyPlan_DataGrid.IsReadOnly = false;
+                // Получаем выбранную строку
+                DataGridRow selectedRow = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromItem(dataGrid.SelectedItem);
+                // Окрашиваем выбранную строку
+                selectedRow.Background = Brushes.LightBlue;
+
+                // Снимаем выделение с предыдущей выбранной строки
+                if (SelectedSpecialitiesRow != null)
+                {
+                    SelectedSpecialitiesRow.Background = Brushes.Transparent;
+                }
+
+                dynamic selectedspeciality = (dynamic)dataGrid.SelectedItem;
+                speciality = dtbCommunication.GetSpecialityById(selectedspeciality.SpecialityId);
+                dataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
+                foreach (DataGridColumn column in dataGrid.Columns)
+                {
+                    if (column.GetCellContent(selectedRow) != null)
+                    {
+                        DataGridCell cell = column.GetCellContent(selectedRow).Parent as DataGridCell;
+                        cell.IsSelected = false; // Снять выделение для каждой ячейки в строке
+                    }
+                }
+                dataGrid.SelectionUnit = DataGridSelectionUnit.FullRow;
+                // Обновляем переменную текущей выбранной строки
+                SelectedSpecialitiesRow = selectedRow;
+                selectedRow.Background = Brushes.LightBlue;
+                Specialities_TabControl.IsEnabled = false;
+                IndividualSP.IsEnabled = true;
+                StudyPlan_DataGrid.IsEnabled = true;
+                EditButtons.IsEnabled = true;
+                DeleteButton.IsEnabled = true;
+                FillStudyPlan();
+                AmountHoursTB.Visibility = Visibility.Visible;
+                LoadAmountHours();
+            }
+        }
+        /// <summary>
+        /// Обработчик окрашивания выбранной строки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Specialities_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Проверяем, что в DataGrid есть выбранный элемент
@@ -140,8 +187,9 @@ namespace TimeTable.WPF.Pages
                 selectedRow.Background = Brushes.LightBlue;
                 Specialities_TabControl.IsEnabled = false;
                 StudyPlan_DataGrid.IsEnabled = true;
-                SaveButton.IsEnabled = true;
+                EditButtons.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
+                FillStudyPlan();
                 AmountHoursTB.Visibility = Visibility.Visible;
                 LoadAmountHours();
             }
@@ -221,7 +269,7 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void Specialities_TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch(Specialities_TabControl.SelectedIndex)
+            switch (Specialities_TabControl.SelectedIndex)
             {
                 case 0: IndividualSP.Visibility = Visibility.Hidden; break;
                 case 1: IndividualSP.Visibility = Visibility.Visible; break;
@@ -243,8 +291,9 @@ namespace TimeTable.WPF.Pages
                 window.ShowNotification("Данные сохранены", TimeSpan.FromSeconds(3), Brushes.LightGreen);
                 Specialities_TabControl.IsEnabled = true;
                 StudyPlan_DataGrid.IsEnabled = false;
-                SaveButton.IsEnabled = false;
+                EditButtons.IsEnabled = false;
                 DeleteButton.IsEnabled = false;
+                IndividualSP.IsEnabled = false;
                 AmountHoursTB.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -254,6 +303,19 @@ namespace TimeTable.WPF.Pages
                 window.ShowNotification("Произошла ошибка: " + ex.Message, TimeSpan.FromSeconds(4), Brushes.IndianRed);
                 dtbCommunication.RejectChanges();
             }
+        }/// <summary>
+         /// Обработчик кнопки "Отмена"
+         /// </summary>
+         /// <param name="sender"></param>
+         /// <param name="e"></param>
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Specialities_TabControl.IsEnabled = true;
+            StudyPlan_DataGrid.IsEnabled = false;
+            EditButtons.IsEnabled = false;
+            DeleteButton.IsEnabled = false;
+            IndividualSP.IsEnabled = false;
+            AmountHoursTB.Visibility = Visibility.Hidden;
         }
         /// <summary>
         /// Обработчик кнопки удалить
@@ -279,14 +341,21 @@ namespace TimeTable.WPF.Pages
         /// </summary>
         private async Task FillSpecialities()
         {
-            Specialities_DataGrid.ItemsSource = await dtbCommunication.SearchByAllField("Specialities", SearchTBSpecialities.Text, typeof(Specialities));
+            Specialities_DataGrid.ItemsSource = await dtbCommunication.GetSpecialitiesWithNumberStudyPlan(SearchTBGroups.Text);
+        }
+        /// <summary>
+        /// Метод заполнения таблицы учебного плана
+        /// </summary>
+        private async Task FillStudyPlan()
+        {
+            //StudyPlan_DataGrid.ItemsSource = await dtbCommunication
         }
         /// <summary>
         /// Метод заполнения таблицы Специальности
         /// </summary>
         private async Task FillGroups()
         {
-            Specialities_DataGrid.ItemsSource = await dtbCommunication.GetGroupsWithSpecialities(SearchTBGroups.Text);
+            Groups_DataGrid.ItemsSource = await dtbCommunication.GetGroupsWithSpecialities(SearchTBGroups.Text);
         }
         /// <summary>
         /// Обработка №п/п

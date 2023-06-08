@@ -45,6 +45,7 @@
                                 <DataGridTextColumn Visibility="Collapsed" Header="ID" Width="Auto" Binding="{Binding SpecialityId}"/>
                                 <DataGridTextColumn Header="Специальность" Width="Auto" Binding="{Binding SpecialityNumber}"/>
                                 <DataGridTextColumn Header="Инф. о спец." Width="Auto" Binding="{Binding SpecialityInfo}"/>
+                            <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding SemesterNumber}"/> 
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -63,7 +64,7 @@
                             <materialDesign:PackIcon Kind="Reload" />
                         </Button>
                     </StackPanel>
-                    <DataGrid Grid.Row="1" IsReadOnly="True" SelectionChanged="Specialities_SelectionChanged" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" >
+                    <DataGrid Grid.Row="1" IsReadOnly="True" SelectionChanged="Groups_SelectionChanged" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" >
                         <DataGrid.Resources>
                             <Style TargetType="DataGridRow">
                                 <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
@@ -71,11 +72,13 @@
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Visibility="Collapsed" Header="ID" Width="Auto" Binding="{Binding GroupsId}"/>
+                            <DataGridTextColumn Visibility="Collapsed" Header="ID" Width="Auto" Binding="{Binding SpeecialityId}"/>
                             <DataGridTextColumn Header="Инф. о спец." Width="Auto" Binding="{Binding SpecialityInfo}"/>
                             <DataGridTextColumn Header="Курс" Width="Auto" Binding="{Binding Course}"/>
                             <DataGridTextColumn Header="Специальность" Width="Auto" Binding="{Binding SpecialityNumber}"/>
                             <DataGridTextColumn Header="№ группы" Width="Auto" Binding="{Binding GroupNumber}"/>
                             <DataGridTextColumn Header="Год возникновения" Width="Auto" Binding="{Binding BeginDate}"/>
+                            <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding SemesterNumber}"/> 
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -125,11 +128,14 @@
                 <TextBlock FontSize="15" Text="Общее кол-во часов: "/>
                 <TextBlock Visibility="Hidden" Margin="10 0 0 0" FontSize="15" x:Name="AmountHoursTB"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"  Grid.Row="2" Margin="10" HorizontalAlignment="Center">
-                <Button IsEnabled="False" x:Name="SaveButton" Click="SaveButton_Click" Margin="0 0 20 0">
+            <StackPanel IsEnabled="false" Orientation="Horizontal" x:Name="EditButtons" Grid.Row="2" Margin="10" HorizontalAlignment="Center" Cursor="">
+                <Button Click="SaveButton_Click" Margin="0 0 20 0">
                     <materialDesign:PackIcon Kind="CheckBold" />
                 </Button>
-                <Button IsEnabled="False" x:Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click" />
+                <Button Click="BackButton_Click" Margin="0 0 20 0">
+                    <materialDesign:PackIcon Kind="CloseCircle" />
+                </Button>
+                <Button x:Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click" />
             </StackPanel>
         </Grid>
     </Grid>

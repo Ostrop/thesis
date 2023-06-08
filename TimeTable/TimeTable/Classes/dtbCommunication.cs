@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeTable.Model;
@@ -54,31 +52,57 @@ namespace TimeTable.Classes
         /// <returns>Уникальная коллекция данных дисциплин и названия специальности</returns>
         public static async Task<List<dynamic>> GetGroupsWithSpecialities(string searchText)
         {
-            var result = SearchByAllField("Disciplines", searchText, typeof(Disciplines));
+            var result = SearchByAllField("Groups", searchText, typeof(Groups));
 
             var query = from r in await result
                         join s in context.Specialities on r.SpecialityId equals s.SpecialityId
+                        join q in context.StudyPlan on r.GroupId equals q.GroupId
                         select new
                         {
                             r.GroupId,
+                            r.SpecialityId,
                             s.SpecialityInfo,
                             r.Course,
                             s.SpecialityNumber,
                             r.GroupNumber,
-                            r.BeginDate
+                            r.BeginDate,
+                            q.SemesterNumber
                         };
 
             return query.ToList<dynamic>();
         }
-            /// <summary>
-            /// Метод выборки всех названий дисциплин
-            /// </summary>
-            /// <returns>Коллекция названий дисциплин</returns>
-            public static ObservableCollection<string> getDisciplineNames()
+        /// <summary>
+        /// Метод фильтрации специальностей по семестрам
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns>Уникальная коллекция данных дисциплин и названия специальности</returns>
+        public static async Task<List<dynamic>> GetSpecialitiesWithNumberStudyPlan(string searchText)
+        {
+            var result = SearchByAllField("Specialities", searchText, typeof(Specialities));
+
+            var query = (from r in await result
+                         join s in context.Groups on r.SpecialityId equals s.SpecialityId
+                         join q in context.StudyPlan on s.GroupId equals q.GroupId
+                         select new
+                         {
+                             r.SpecialityId,
+                             r.SpecialityInfo,
+                             r.SpecialityNumber,
+                             q.SemesterNumber
+                         }).Distinct();
+
+
+            return query.ToList<dynamic>();
+        }
+        /// <summary>
+        /// Метод выборки всех названий дисциплин
+        /// </summary>
+        /// <returns>Коллекция названий дисциплин</returns>
+        public static ObservableCollection<string> getDisciplineNames()
         {
             return new ObservableCollection<string>(context.Disciplines.Select(d => d.NameOfDiscipline).ToList());
         }
-            
+
         /// <summary>
         /// Метод хэширования пароля
         /// </summary>
@@ -86,7 +110,7 @@ namespace TimeTable.Classes
         /// <returns>Захэшированный пароль</returns>
         public static byte[] GetHashedPass(string password)
         {
-            var query = $"SELECT dbo.HashPass('{password}')"; 
+            var query = $"SELECT dbo.HashPass('{password}')";
             return context.Database.SqlQuery<byte[]>(query).Single();
         }
 
