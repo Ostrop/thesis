@@ -116,6 +116,8 @@
                                     <DataGridTextColumn IsReadOnly="True" Header="ID учебного плана" Binding="{Binding StudyPlanId}" />
                                     <DataGridTextColumn Header="ID группы" Binding="{Binding GroupId}" />
                                     <DataGridTextColumn Header="Номер семестра" Binding="{Binding SemesterNumber}" />
+                                    <DataGridCheckBoxColumn Header="Индивидуальный план" Binding="{Binding IsIndividual}" />
+                                    <DataGridCheckBoxColumn Header="Курс" Binding="{Binding Course}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -139,7 +141,27 @@
                                     <DataGridTextColumn Header="Часы (лабораторные)" Binding="{Binding HoursOfLaboratory}" />
                                     <DataGridTextColumn Header="Часы (лабораторные, ВЦ)" Binding="{Binding HoursOfLaboratoryWithComputers}" />
                                     <DataGridTextColumn Header="Проведённое кол-во часов" Binding="{Binding RequiredNumberOfHours}" />
-                                    <DataGridCheckBoxColumn Header="Индивидуальный план" Binding="{Binding IsIndividual}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Tag="StudyPlan_DisciplinesByWeek" Header="Учебный план _ Дисциплины _ по неделям">
+                    <TabItem.Content>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid CanUserAddRows="False" SelectionMode="Single" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectionChanged="DataGrid_SelectionChanged" x:Name="StudyPlan_DisciplinesByWeek_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="ID учебного плана _ дисциплины _ по неделям" Binding="{Binding StudyPlan_DisciplinesByWeekId}" />
+                                    <DataGridTextColumn Header="ID учебного плана _ дисциплины" Binding="{Binding StudyPlan_DisciplinesId}" />
+                                    <DataGridTextColumn Header="Часов (лекции)" Binding="{Binding HoursOfLectures}" />
+                                    <DataGridTextColumn Header="Часы (лабораторные)" Binding="{Binding HoursOfLaboratory}" />
+                                    <DataGridTextColumn Header="Часы (лабораторные, ВЦ)" Binding="{Binding HoursOfLaboratoryWithComputers}" />
+                                    <DataGridTextColumn Header="Понедельник недели" Binding="{Binding MondayOfWeek}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -220,6 +242,7 @@
                                     <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeId}" />
                                     <DataGridTextColumn Header="Число" Binding="{Binding Date}" />
                                     <DataGridTextColumn Header="Номер занятия" Binding="{Binding SessionNumber}" />
+                                    <DataGridTextColumn Header="Правило" Binding="{Binding Rule}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>

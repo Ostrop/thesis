@@ -4,11 +4,17 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TimeTable.WPF.Pages"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
       mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="PageTeachers">
-
+    <Page.Resources>
+        <Style x:Key="CenteredHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="95" />
+        </Style>
+    </Page.Resources>
     <Grid Background="#ffdadada">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -98,12 +104,230 @@
                 </TabItem>
                 <TabItem Header="Доступность (неделя)">
                     <TabItem.Content>
-                        <Grid>
-
+                        <Grid Margin="0 15 0 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <DataGrid Grid.Row="0" SelectionChanged="TimetableWeek_DataGrid_SelectionChanged" AutoGenerateColumns="False" x:Name="TimetableWeek_DataGrid" IsReadOnly="True" ItemsSource="{Binding timetableWeek}" CanUserAddRows="False">
+                                <DataGrid.Resources>
+                                    <Style x:Key="TimetableButtonStyle" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource Self}}" Value="Предпочтение">
+                                                <Setter Property="Background" Value="LightGreen" />
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="CheckBold" />
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource Self}}" Value="Запрет">
+                                                <Setter Property="Background" Value="IndianRed" />
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="Cancel" />
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource Self}}" Value="Все равно">
+                                                <Setter Property="Background" Value="LightYellow" />
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="Minus" />
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Время" Binding="{Binding Time}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTemplateColumn Header="Понедельник" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Monday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Вторник" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Tuesday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Среда" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Wednesday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Четверг" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Thursday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Пятница" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Friday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Суббота" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Saturday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="20">
+                                <materialDesign:PackIcon Kind="CheckBold" VerticalAlignment="Center" Background="LightGreen"/>
+                                <Label Content=" - Предпочтение" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Cancel" VerticalAlignment="Center" Margin="20 0 0 0" Background="IndianRed"/>
+                                <Label Content=" - Запрещено" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Minus" VerticalAlignment="Center" Margin="20 0 0 0" Background="LightYellow"/>
+                                <Label Content=" - Допустимо" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Button Grid.Row="2" Content="Сохранить" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0 20 0 40" Click="Save_WeekSchedule_ButtonClick"/>
                         </Grid>
                     </TabItem.Content>
                 </TabItem>
-                <TabItem Header="Доступность (общая)">
+                <TabItem Header="Доступность (день)">
+                    <TabItem.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock FontSize="15" Text="Выбор недели: " Margin="20"/>
+                                <DatePicker x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"  ToolTip="Несохранённые данные при изменении будут утеряны"/>
+                            </StackPanel>
+                            <DataGrid Grid.Row="1" SelectionChanged="TimetableWeek_DataGrid_SelectionChanged" AutoGenerateColumns="False" x:Name="TimetableYear_DataGrid" IsReadOnly="True" ItemsSource="{Binding timetableYear}" CanUserAddRows="False">
+                                <DataGrid.Resources>
+                                    <Style x:Key="TimetableButtonStyle" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource Self}}" Value="Предпочтение">
+                                                <Setter Property="Background" Value="LightGreen" />
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="CheckBold" />
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource Self}}" Value="Запрет">
+                                                <Setter Property="Background" Value="IndianRed" />
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="Cancel" />
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource Self}}" Value="Все равно">
+                                                <Setter Property="Background" Value="LightYellow" />
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="Minus" />
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Время" Binding="{Binding Time}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTemplateColumn x:Name="MondayTimetable" Header="Понедельник" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Monday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn x:Name="TuesdayTimetable" Header="Вторник" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Tuesday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn x:Name="WednesdayTimetable" Header="Среда" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Wednesday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn x:Name="ThursdayTimetable" Header="Четверг" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Thursday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn x:Name="FridayTimetable" Header="Пятница" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Friday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn x:Name="SaturdayTimetable" Header="Суббота" HeaderStyle="{StaticResource CenteredHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="CellButton_Click" Content="{Binding Saturday}" Style="{StaticResource TimetableButtonStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="20">
+                                <materialDesign:PackIcon Kind="CheckBold" VerticalAlignment="Center" Background="LightGreen"/>
+                                <Label Content=" - Предпочтение" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Cancel" VerticalAlignment="Center" Margin="20 0 0 0" Background="IndianRed"/>
+                                <Label Content=" - Запрещено" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Minus" VerticalAlignment="Center" Margin="20 0 0 0" Background="LightYellow"/>
+                                <Label Content=" - Допустимо" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Button Grid.Row="3" Content="Сохранить" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0 20 0 40" Click="Save_YearSchedule_ButtonClick"/>
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Header="Группы">
                     <TabItem.Content>
                         <Grid>
 

@@ -107,6 +107,13 @@ namespace TimeTable.WPF.Windows
                     fieldNames.Add("Логин: ");
                     fieldNames.Add("Пароль: ");
                     break;
+                case "TimeTable.Model.StudyPlan_DisciplinesByWeek":
+                    this.Title += "ID учебного плана _ дисциплины";
+                    fieldNames.Add("Часов лекции: ");
+                    fieldNames.Add("Часов лабораторных: ");
+                    fieldNames.Add("Часов лабораторных (ВЦ): ");
+                    fieldNames.Add("Понедельник недели: ");
+                    break;
             }
 
             foreach (var fieldName in fieldNames)
@@ -125,7 +132,7 @@ namespace TimeTable.WPF.Windows
                 {
                     // Создание TextBox для второго столбца
                     TextBox textBox = new TextBox();
-                    textBox.VerticalAlignment = VerticalAlignment.Top;
+                    //textBox.VerticalAlignment = VerticalAlignment.Top;
                     textBoxes.Add(textBox);
                     Grid.SetColumn(textBox, 1);
                     Grid.SetRow(textBox, rowCounter);
@@ -142,7 +149,7 @@ namespace TimeTable.WPF.Windows
             }
         }
         /// <summary>
-        /// ///////////////////////////////////////////////////////////////////////////////////////////
+        /// Обработчик кнопки "Добавить"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -267,6 +274,18 @@ namespace TimeTable.WPF.Windows
                             SessionNumber = Convert.ToInt32(strings[2])
                         };
                         dtbCommunication.AddAvailability(availability);
+                        break;
+                    case "TimeTable.Model.StudyPlan_DisciplinesByWeek":
+                        // Добавление новой строки в таблицу Availability
+                        StudyPlan_DisciplinesByWeek studyPlan_DisciplinesByWeek = new StudyPlan_DisciplinesByWeek
+                        {
+                            StudyPlan_DisciplinesId = Convert.ToInt32(strings[0]),
+                            HoursOfLectures = Convert.ToInt32(strings[1]),
+                            HoursOfLaboratory = Convert.ToInt32(strings[2]),
+                            HoursOfLaboratoryWithComputers = Convert.ToInt32(strings[3]),
+                            MondayOfWeek = Convert.ToDateTime(strings[4])
+                        };
+                        dtbCommunication.AddStudyPlan_DisciplinesByWeek(studyPlan_DisciplinesByWeek);
                         break;
                 }
                 dtbCommunication.SaveChanges();

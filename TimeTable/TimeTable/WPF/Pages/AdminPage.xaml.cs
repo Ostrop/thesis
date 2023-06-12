@@ -127,6 +127,9 @@ namespace TimeTable.WPF.Pages
                 case "Availability":
                     selectedDataGrid = Availability_dataGrid;
                     break;
+                case "StudyPlan_DisciplinesByWeek":
+                    selectedDataGrid = StudyPlan_DisciplinesByWeek_dataGrid;
+                    break;
             }
         }
 
@@ -185,6 +188,9 @@ namespace TimeTable.WPF.Pages
                     break;
                 case "Availability":
                     selectedDataGrid.ItemsSource = dtbCommunication.GetAvailabilityToList();
+                    break;
+                case "StudyPlan_DisciplinesByWeek":
+                    selectedDataGrid.ItemsSource = dtbCommunication.GetStudyPlan_DisciplinesByWeekToList();
                     break;
             }
         }

@@ -21,7 +21,6 @@
                                 <Button MinHeight="40" Content="Учебный план" Margin="20" Click="StudyPlane_ButtonClick"/>
                                 <Button MinHeight="40" Content="Расписание" Margin="20" Click="Schedule_ButtonClick"/>
                                 <Button MinHeight="40" Content="Отчеты" Margin="20" Click="Reports_ButtonClick"/>
-                                <Button MinHeight="40" Content="Справка" Margin="20" Click="Help_ButtonClick"/>
                                 <Button MinHeight="40" HorizontalAlignment="Right" Content="Выход" Margin="20" Click="Escape"/>
                             </StackPanel>
                         </Grid>
@@ -63,9 +62,6 @@
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
                 <TabItem Header="Отчеты">
-                    <Grid Background="#FFE5E5E5"/>
-                </TabItem>
-                <TabItem Header="Справка">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
                 <TabItem Header="Выход" PreviewMouseDown="Escape">

@@ -1,0 +1,936 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище TimetableModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Audiences">
+          <Key>
+            <PropertyRef Name="AudienceId" />
+          </Key>
+          <Property Name="AudienceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AudienceNumber" Type="int" Nullable="false" />
+          <Property Name="Computers" Type="bit" />
+          <Property Name="Laboratory" Type="bit" />
+        </EntityType>
+        <EntityType Name="Availability">
+          <Key>
+            <PropertyRef Name="AvailabilityId" />
+          </Key>
+          <Property Name="AvailabilityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Time" Type="time" Precision="7" />
+          <Property Name="SessionNumber" Type="int" />
+          <Property Name="Rule" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Disciplines">
+          <Key>
+            <PropertyRef Name="DisciplineId" />
+          </Key>
+          <Property Name="DisciplineId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameOfDiscipline" Type="varchar" MaxLength="100" />
+          <Property Name="AbbreviatedName" Type="varchar" MaxLength="20" />
+          <Property Name="Practice" Type="bit" />
+          <Property Name="Exam" Type="bit" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Patronymic" Type="varchar" MaxLength="50" />
+          <Property Name="Post" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="char" MaxLength="15" />
+          <Property Name="Login" Type="varchar" MaxLength="10" />
+          <Property Name="Password" Type="varbinary" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="Employees_Disciplines">
+          <Key>
+            <PropertyRef Name="Employees_DisciplinesId" />
+          </Key>
+          <Property Name="Employees_DisciplinesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DisciplineId" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Groups">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SpecialityId" Type="int" Nullable="false" />
+          <Property Name="Course" Type="int" Nullable="false" />
+          <Property Name="GroupNumber" Type="int" Nullable="false" />
+          <Property Name="BeginDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sessions">
+          <Key>
+            <PropertyRef Name="SessionId" />
+          </Key>
+          <Property Name="SessionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AudienceId" Type="int" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="SessionNumber" Type="int" />
+        </EntityType>
+        <EntityType Name="Specialities">
+          <Key>
+            <PropertyRef Name="SpecialityId" />
+          </Key>
+          <Property Name="SpecialityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SpecialityNumber" Type="int" />
+          <Property Name="SpecialityInfo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="StudyPlan">
+          <Key>
+            <PropertyRef Name="StudyPlanId" />
+          </Key>
+          <Property Name="StudyPlanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="SpecialityId" Type="int" Nullable="false" />
+          <Property Name="SemesterNumber" Type="int" Nullable="false" />
+          <Property Name="IsIndividual" Type="bit" Nullable="false" />
+          <Property Name="Course" Type="int" />
+        </EntityType>
+        <EntityType Name="StudyPlan_Disciplines">
+          <Key>
+            <PropertyRef Name="StudyPlan_DisciplinesId" />
+          </Key>
+          <Property Name="StudyPlan_DisciplinesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudyPlanId" Type="int" Nullable="false" />
+          <Property Name="DisciplineId" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="TotalNumberOfHours" Type="int" />
+          <Property Name="HoursOfLectures" Type="int" />
+          <Property Name="HoursOfLaboratory" Type="int" />
+          <Property Name="HoursOfLaboratoryWithComputers" Type="int" />
+          <Property Name="RequiredNumberOfHours" Type="int" />
+        </EntityType>
+        <EntityType Name="StudyPlan_DisciplinesByWeek">
+          <Key>
+            <PropertyRef Name="StudyPlan_DisciplinesByWeekId" />
+          </Key>
+          <Property Name="StudyPlan_DisciplinesByWeekId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudyPlan_DisciplinesId" Type="int" Nullable="false" />
+          <Property Name="HoursOfLectures" Type="int" />
+          <Property Name="HoursOfLaboratory" Type="int" />
+          <Property Name="HoursOfLaboratoryWithComputers" Type="int" />
+          <Property Name="MondayOfWeek" Type="date" />
+        </EntityType>
+        <Association Name="FK_Audiences_Groups">
+          <End Role="Audiences" Type="Self.Audiences" Multiplicity="0..1" />
+          <End Role="Sessions" Type="Self.Sessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Audiences">
+              <PropertyRef Name="AudienceId" />
+            </Principal>
+            <Dependent Role="Sessions">
+              <PropertyRef Name="AudienceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Disciplines_Employees_Disciplines">
+          <End Role="Disciplines" Type="Self.Disciplines" Multiplicity="1" />
+          <End Role="Employees_Disciplines" Type="Self.Employees_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Principal>
+            <Dependent Role="Employees_Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Disciplines_StudyPlan_Disciplines">
+          <End Role="Disciplines" Type="Self.Disciplines" Multiplicity="1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Availability">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Availability" Type="Self.Availability" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Availability">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Disciplines_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="Employees_Disciplines" Type="Self.Employees_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Employees_Disciplines">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_StudyPlan_Disciplines">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Groups_Sessions">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
+          <End Role="Sessions" Type="Self.Sessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="Sessions">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Groups_Specialities">
+          <End Role="Specialities" Type="Self.Specialities" Multiplicity="1" />
+          <End Role="Groups" Type="Self.Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialities">
+              <PropertyRef Name="SpecialityId" />
+            </Principal>
+            <Dependent Role="Groups">
+              <PropertyRef Name="SpecialityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Groups_StudyPlan">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="StudyPlan">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Specialities_StudyPlan">
+          <End Role="Specialities" Type="Self.Specialities" Multiplicity="1" />
+          <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialities">
+              <PropertyRef Name="SpecialityId" />
+            </Principal>
+            <Dependent Role="StudyPlan">
+              <PropertyRef Name="SpecialityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek">
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="1" />
+          <End Role="StudyPlan_DisciplinesByWeek" Type="Self.StudyPlan_DisciplinesByWeek" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudyPlan_Disciplines">
+              <PropertyRef Name="StudyPlan_DisciplinesId" />
+            </Principal>
+            <Dependent Role="StudyPlan_DisciplinesByWeek">
+              <PropertyRef Name="StudyPlan_DisciplinesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudyPlan_StudyPlan_Disciplines">
+          <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudyPlan">
+              <PropertyRef Name="StudyPlanId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="StudyPlanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CheckUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="login" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetAssignedDisciplinesByTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TeacherId" Type="int" Mode="In" />
+          <Parameter Name="SearchTerm" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetUnassignedDisciplinesByTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TeacherId" Type="int" Mode="In" />
+          <Parameter Name="SearchTerm" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="HashPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varbinary">
+          <Parameter Name="inputString" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SearchByAllFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tableName" Type="nvarchar" Mode="In" />
+          <Parameter Name="searchText" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="Хранилище TimetableModelContainer">
+          <EntitySet Name="Audiences" EntityType="Self.Audiences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Availability" EntityType="Self.Availability" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Disciplines" EntityType="Self.Disciplines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees_Disciplines" EntityType="Self.Employees_Disciplines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Groups" EntityType="Self.Groups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sessions" EntityType="Self.Sessions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Specialities" EntityType="Self.Specialities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudyPlan" EntityType="Self.StudyPlan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudyPlan_Disciplines" EntityType="Self.StudyPlan_Disciplines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudyPlan_DisciplinesByWeek" EntityType="Self.StudyPlan_DisciplinesByWeek" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Audiences_Groups" Association="Self.FK_Audiences_Groups">
+            <End Role="Audiences" EntitySet="Audiences" />
+            <End Role="Sessions" EntitySet="Sessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Disciplines_Employees_Disciplines" Association="Self.FK_Disciplines_Employees_Disciplines">
+            <End Role="Disciplines" EntitySet="Disciplines" />
+            <End Role="Employees_Disciplines" EntitySet="Employees_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Disciplines_StudyPlan_Disciplines" Association="Self.FK_Disciplines_StudyPlan_Disciplines">
+            <End Role="Disciplines" EntitySet="Disciplines" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Availability" Association="Self.FK_Employees_Availability">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Availability" EntitySet="Availability" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Disciplines_Employees" Association="Self.FK_Employees_Disciplines_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees_Disciplines" EntitySet="Employees_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_StudyPlan_Disciplines" Association="Self.FK_Employees_StudyPlan_Disciplines">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Groups_Sessions" Association="Self.FK_Groups_Sessions">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="Sessions" EntitySet="Sessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Groups_Specialities" Association="Self.FK_Groups_Specialities">
+            <End Role="Specialities" EntitySet="Specialities" />
+            <End Role="Groups" EntitySet="Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Groups_StudyPlan" Association="Self.FK_Groups_StudyPlan">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="StudyPlan" EntitySet="StudyPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Specialities_StudyPlan" Association="Self.FK_Specialities_StudyPlan">
+            <End Role="Specialities" EntitySet="Specialities" />
+            <End Role="StudyPlan" EntitySet="StudyPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek" Association="Self.FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek">
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+            <End Role="StudyPlan_DisciplinesByWeek" EntitySet="StudyPlan_DisciplinesByWeek" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudyPlan_StudyPlan_Disciplines" Association="Self.FK_StudyPlan_StudyPlan_Disciplines">
+            <End Role="StudyPlan" EntitySet="StudyPlan" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TimetableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Audiences">
+          <Key>
+            <PropertyRef Name="AudienceId" />
+          </Key>
+          <Property Name="AudienceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AudienceNumber" Type="Int32" Nullable="false" />
+          <Property Name="Computers" Type="Boolean" />
+          <Property Name="Laboratory" Type="Boolean" />
+          <NavigationProperty Name="Sessions" Relationship="Self.FK_Audiences_Groups" FromRole="Audiences" ToRole="Sessions" />
+        </EntityType>
+        <EntityType Name="Availability">
+          <Key>
+            <PropertyRef Name="AvailabilityId" />
+          </Key>
+          <Property Name="AvailabilityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Time" Type="Time" Precision="7" />
+          <Property Name="SessionNumber" Type="Int32" />
+          <Property Name="Rule" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Availability" FromRole="Availability" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Disciplines">
+          <Key>
+            <PropertyRef Name="DisciplineId" />
+          </Key>
+          <Property Name="DisciplineId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameOfDiscipline" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AbbreviatedName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Practice" Type="Boolean" />
+          <Property Name="Exam" Type="Boolean" />
+          <NavigationProperty Name="Employees_Disciplines" Relationship="Self.FK_Disciplines_Employees_Disciplines" FromRole="Disciplines" ToRole="Employees_Disciplines" />
+          <NavigationProperty Name="StudyPlan_Disciplines" Relationship="Self.FK_Disciplines_StudyPlan_Disciplines" FromRole="Disciplines" ToRole="StudyPlan_Disciplines" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="Login" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="Binary" MaxLength="64" FixedLength="false" />
+          <NavigationProperty Name="Availability" Relationship="Self.FK_Employees_Availability" FromRole="Employees" ToRole="Availability" />
+          <NavigationProperty Name="Employees_Disciplines" Relationship="Self.FK_Employees_Disciplines_Employees" FromRole="Employees" ToRole="Employees_Disciplines" />
+          <NavigationProperty Name="StudyPlan_Disciplines" Relationship="Self.FK_Employees_StudyPlan_Disciplines" FromRole="Employees" ToRole="StudyPlan_Disciplines" />
+        </EntityType>
+        <EntityType Name="Employees_Disciplines">
+          <Key>
+            <PropertyRef Name="Employees_DisciplinesId" />
+          </Key>
+          <Property Name="Employees_DisciplinesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DisciplineId" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Disciplines" Relationship="Self.FK_Disciplines_Employees_Disciplines" FromRole="Employees_Disciplines" ToRole="Disciplines" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Disciplines_Employees" FromRole="Employees_Disciplines" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Groups">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SpecialityId" Type="Int32" Nullable="false" />
+          <Property Name="Course" Type="Int32" Nullable="false" />
+          <Property Name="GroupNumber" Type="Int32" Nullable="false" />
+          <Property Name="BeginDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Sessions" Relationship="Self.FK_Groups_Sessions" FromRole="Groups" ToRole="Sessions" />
+          <NavigationProperty Name="Specialities" Relationship="Self.FK_Groups_Specialities" FromRole="Groups" ToRole="Specialities" />
+          <NavigationProperty Name="StudyPlan" Relationship="Self.FK_Groups_StudyPlan" FromRole="Groups" ToRole="StudyPlan" />
+        </EntityType>
+        <EntityType Name="Sessions">
+          <Key>
+            <PropertyRef Name="SessionId" />
+          </Key>
+          <Property Name="SessionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AudienceId" Type="Int32" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="SessionNumber" Type="Int32" />
+          <NavigationProperty Name="Audiences" Relationship="Self.FK_Audiences_Groups" FromRole="Sessions" ToRole="Audiences" />
+          <NavigationProperty Name="Groups" Relationship="Self.FK_Groups_Sessions" FromRole="Sessions" ToRole="Groups" />
+        </EntityType>
+        <EntityType Name="Specialities">
+          <Key>
+            <PropertyRef Name="SpecialityId" />
+          </Key>
+          <Property Name="SpecialityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SpecialityNumber" Type="Int32" />
+          <Property Name="SpecialityInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Groups" Relationship="Self.FK_Groups_Specialities" FromRole="Specialities" ToRole="Groups" />
+          <NavigationProperty Name="StudyPlan" Relationship="Self.FK_Specialities_StudyPlan" FromRole="Specialities" ToRole="StudyPlan" />
+        </EntityType>
+        <EntityType Name="StudyPlan">
+          <Key>
+            <PropertyRef Name="StudyPlanId" />
+          </Key>
+          <Property Name="StudyPlanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="SpecialityId" Type="Int32" Nullable="false" />
+          <Property Name="SemesterNumber" Type="Int32" Nullable="false" />
+          <Property Name="IsIndividual" Type="Boolean" Nullable="false" />
+          <Property Name="Course" Type="Int32" />
+          <NavigationProperty Name="Groups" Relationship="Self.FK_Groups_StudyPlan" FromRole="StudyPlan" ToRole="Groups" />
+          <NavigationProperty Name="Specialities" Relationship="Self.FK_Specialities_StudyPlan" FromRole="StudyPlan" ToRole="Specialities" />
+          <NavigationProperty Name="StudyPlan_Disciplines" Relationship="Self.FK_StudyPlan_StudyPlan_Disciplines" FromRole="StudyPlan" ToRole="StudyPlan_Disciplines" />
+        </EntityType>
+        <EntityType Name="StudyPlan_Disciplines">
+          <Key>
+            <PropertyRef Name="StudyPlan_DisciplinesId" />
+          </Key>
+          <Property Name="StudyPlan_DisciplinesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudyPlanId" Type="Int32" Nullable="false" />
+          <Property Name="DisciplineId" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="TotalNumberOfHours" Type="Int32" />
+          <Property Name="HoursOfLectures" Type="Int32" />
+          <Property Name="HoursOfLaboratory" Type="Int32" />
+          <Property Name="HoursOfLaboratoryWithComputers" Type="Int32" />
+          <Property Name="RequiredNumberOfHours" Type="Int32" />
+          <NavigationProperty Name="Disciplines" Relationship="Self.FK_Disciplines_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Disciplines" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="Employees" />
+          <NavigationProperty Name="StudyPlan" Relationship="Self.FK_StudyPlan_StudyPlan_Disciplines" FromRole="StudyPlan_Disciplines" ToRole="StudyPlan" />
+          <NavigationProperty Name="StudyPlan_DisciplinesByWeek" Relationship="Self.FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek" FromRole="StudyPlan_Disciplines" ToRole="StudyPlan_DisciplinesByWeek" />
+        </EntityType>
+        <EntityType Name="StudyPlan_DisciplinesByWeek">
+          <Key>
+            <PropertyRef Name="StudyPlan_DisciplinesByWeekId" />
+          </Key>
+          <Property Name="StudyPlan_DisciplinesByWeekId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudyPlan_DisciplinesId" Type="Int32" Nullable="false" />
+          <Property Name="HoursOfLectures" Type="Int32" />
+          <Property Name="HoursOfLaboratory" Type="Int32" />
+          <Property Name="HoursOfLaboratoryWithComputers" Type="Int32" />
+          <Property Name="MondayOfWeek" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="StudyPlan_Disciplines" Relationship="Self.FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek" FromRole="StudyPlan_DisciplinesByWeek" ToRole="StudyPlan_Disciplines" />
+        </EntityType>
+        <Association Name="FK_Audiences_Groups">
+          <End Role="Audiences" Type="Self.Audiences" Multiplicity="0..1" />
+          <End Role="Sessions" Type="Self.Sessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Audiences">
+              <PropertyRef Name="AudienceId" />
+            </Principal>
+            <Dependent Role="Sessions">
+              <PropertyRef Name="AudienceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Availability">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Availability" Type="Self.Availability" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Availability">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Disciplines_Employees_Disciplines">
+          <End Role="Disciplines" Type="Self.Disciplines" Multiplicity="1" />
+          <End Role="Employees_Disciplines" Type="Self.Employees_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Principal>
+            <Dependent Role="Employees_Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Disciplines_StudyPlan_Disciplines">
+          <End Role="Disciplines" Type="Self.Disciplines" Multiplicity="1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="DisciplineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Disciplines_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="Employees_Disciplines" Type="Self.Employees_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Employees_Disciplines">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_StudyPlan_Disciplines">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Groups_Sessions">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1" />
+          <End Role="Sessions" Type="Self.Sessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="Sessions">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Groups_Specialities">
+          <End Role="Specialities" Type="Self.Specialities" Multiplicity="1" />
+          <End Role="Groups" Type="Self.Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialities">
+              <PropertyRef Name="SpecialityId" />
+            </Principal>
+            <Dependent Role="Groups">
+              <PropertyRef Name="SpecialityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Groups_StudyPlan">
+          <End Role="Groups" Type="Self.Groups" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="StudyPlan">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Specialities_StudyPlan">
+          <End Role="Specialities" Type="Self.Specialities" Multiplicity="1" />
+          <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialities">
+              <PropertyRef Name="SpecialityId" />
+            </Principal>
+            <Dependent Role="StudyPlan">
+              <PropertyRef Name="SpecialityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudyPlan_StudyPlan_Disciplines">
+          <End Role="StudyPlan" Type="Self.StudyPlan" Multiplicity="1" />
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudyPlan">
+              <PropertyRef Name="StudyPlanId" />
+            </Principal>
+            <Dependent Role="StudyPlan_Disciplines">
+              <PropertyRef Name="StudyPlanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek">
+          <End Role="StudyPlan_Disciplines" Type="Self.StudyPlan_Disciplines" Multiplicity="1" />
+          <End Role="StudyPlan_DisciplinesByWeek" Type="Self.StudyPlan_DisciplinesByWeek" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudyPlan_Disciplines">
+              <PropertyRef Name="StudyPlan_DisciplinesId" />
+            </Principal>
+            <Dependent Role="StudyPlan_DisciplinesByWeek">
+              <PropertyRef Name="StudyPlan_DisciplinesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TimetableEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Audiences" EntityType="Self.Audiences" />
+          <EntitySet Name="Availability" EntityType="Self.Availability" />
+          <EntitySet Name="Disciplines" EntityType="Self.Disciplines" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" />
+          <EntitySet Name="Employees_Disciplines" EntityType="Self.Employees_Disciplines" />
+          <EntitySet Name="Groups" EntityType="Self.Groups" />
+          <EntitySet Name="Sessions" EntityType="Self.Sessions" />
+          <EntitySet Name="Specialities" EntityType="Self.Specialities" />
+          <EntitySet Name="StudyPlan" EntityType="Self.StudyPlan" />
+          <EntitySet Name="StudyPlan_Disciplines" EntityType="Self.StudyPlan_Disciplines" />
+          <EntitySet Name="StudyPlan_DisciplinesByWeek" EntityType="Self.StudyPlan_DisciplinesByWeek" />
+          <AssociationSet Name="FK_Audiences_Groups" Association="Self.FK_Audiences_Groups">
+            <End Role="Audiences" EntitySet="Audiences" />
+            <End Role="Sessions" EntitySet="Sessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Availability" Association="Self.FK_Employees_Availability">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Availability" EntitySet="Availability" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Disciplines_Employees_Disciplines" Association="Self.FK_Disciplines_Employees_Disciplines">
+            <End Role="Disciplines" EntitySet="Disciplines" />
+            <End Role="Employees_Disciplines" EntitySet="Employees_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Disciplines_StudyPlan_Disciplines" Association="Self.FK_Disciplines_StudyPlan_Disciplines">
+            <End Role="Disciplines" EntitySet="Disciplines" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Disciplines_Employees" Association="Self.FK_Employees_Disciplines_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees_Disciplines" EntitySet="Employees_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_StudyPlan_Disciplines" Association="Self.FK_Employees_StudyPlan_Disciplines">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Groups_Sessions" Association="Self.FK_Groups_Sessions">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="Sessions" EntitySet="Sessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Groups_Specialities" Association="Self.FK_Groups_Specialities">
+            <End Role="Specialities" EntitySet="Specialities" />
+            <End Role="Groups" EntitySet="Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Groups_StudyPlan" Association="Self.FK_Groups_StudyPlan">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="StudyPlan" EntitySet="StudyPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Specialities_StudyPlan" Association="Self.FK_Specialities_StudyPlan">
+            <End Role="Specialities" EntitySet="Specialities" />
+            <End Role="StudyPlan" EntitySet="StudyPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudyPlan_StudyPlan_Disciplines" Association="Self.FK_StudyPlan_StudyPlan_Disciplines">
+            <End Role="StudyPlan" EntitySet="StudyPlan" />
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek" Association="Self.FK_StudyPlan_Disciplines_StudyPlan_DisciplinesByWeek">
+            <End Role="StudyPlan_Disciplines" EntitySet="StudyPlan_Disciplines" />
+            <End Role="StudyPlan_DisciplinesByWeek" EntitySet="StudyPlan_DisciplinesByWeek" />
+          </AssociationSet>
+          <FunctionImport Name="CheckUser" ReturnType="Collection(TimetableModel.CheckUser_Result)">
+            <Parameter Name="login" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetAssignedDisciplinesByTeacher" ReturnType="Collection(TimetableModel.GetAssignedDisciplinesByTeacher_Result)">
+            <Parameter Name="TeacherId" Mode="In" Type="Int32" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetUnassignedDisciplinesByTeacher" ReturnType="Collection(TimetableModel.GetUnassignedDisciplinesByTeacher_Result)">
+            <Parameter Name="TeacherId" Mode="In" Type="Int32" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchByAllFields">
+            <Parameter Name="tableName" Mode="In" Type="String" />
+            <Parameter Name="searchText" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="CheckUser_Result">
+          <Property Type="Int32" Name="EmployeeId" Nullable="false" />
+          <Property Type="String" Name="Surname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Patronymic" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Post" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Login" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="Password" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetAssignedDisciplinesByTeacher_Result">
+          <Property Type="Int32" Name="DisciplineId" Nullable="false" />
+          <Property Type="String" Name="NameOfDiscipline" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AbbreviatedName" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Practice" Nullable="true" />
+          <Property Type="Boolean" Name="Exam" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetUnassignedDisciplinesByTeacher_Result">
+          <Property Type="Int32" Name="DisciplineId" Nullable="false" />
+          <Property Type="String" Name="NameOfDiscipline" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AbbreviatedName" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Practice" Nullable="true" />
+          <Property Type="Boolean" Name="Exam" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TimetableModelContainer" CdmEntityContainer="TimetableEntities">
+          <EntitySetMapping Name="Audiences">
+            <EntityTypeMapping TypeName="TimetableModel.Audiences">
+              <MappingFragment StoreEntitySet="Audiences">
+                <ScalarProperty Name="AudienceId" ColumnName="AudienceId" />
+                <ScalarProperty Name="AudienceNumber" ColumnName="AudienceNumber" />
+                <ScalarProperty Name="Computers" ColumnName="Computers" />
+                <ScalarProperty Name="Laboratory" ColumnName="Laboratory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Availability">
+            <EntityTypeMapping TypeName="TimetableModel.Availability">
+              <MappingFragment StoreEntitySet="Availability">
+                <ScalarProperty Name="AvailabilityId" ColumnName="AvailabilityId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="SessionNumber" ColumnName="SessionNumber" />
+                <ScalarProperty Name="Rule" ColumnName="Rule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Disciplines">
+            <EntityTypeMapping TypeName="TimetableModel.Disciplines">
+              <MappingFragment StoreEntitySet="Disciplines">
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="AbbreviatedName" ColumnName="AbbreviatedName" />
+                <ScalarProperty Name="Practice" ColumnName="Practice" />
+                <ScalarProperty Name="Exam" ColumnName="Exam" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="TimetableModel.Employees">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees_Disciplines">
+            <EntityTypeMapping TypeName="TimetableModel.Employees_Disciplines">
+              <MappingFragment StoreEntitySet="Employees_Disciplines">
+                <ScalarProperty Name="Employees_DisciplinesId" ColumnName="Employees_DisciplinesId" />
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Groups">
+            <EntityTypeMapping TypeName="TimetableModel.Groups">
+              <MappingFragment StoreEntitySet="Groups">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
+                <ScalarProperty Name="Course" ColumnName="Course" />
+                <ScalarProperty Name="GroupNumber" ColumnName="GroupNumber" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sessions">
+            <EntityTypeMapping TypeName="TimetableModel.Sessions">
+              <MappingFragment StoreEntitySet="Sessions">
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="AudienceId" ColumnName="AudienceId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="SessionNumber" ColumnName="SessionNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specialities">
+            <EntityTypeMapping TypeName="TimetableModel.Specialities">
+              <MappingFragment StoreEntitySet="Specialities">
+                <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
+                <ScalarProperty Name="SpecialityNumber" ColumnName="SpecialityNumber" />
+                <ScalarProperty Name="SpecialityInfo" ColumnName="SpecialityInfo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudyPlan">
+            <EntityTypeMapping TypeName="TimetableModel.StudyPlan">
+              <MappingFragment StoreEntitySet="StudyPlan">
+                <ScalarProperty Name="StudyPlanId" ColumnName="StudyPlanId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="SpecialityId" ColumnName="SpecialityId" />
+                <ScalarProperty Name="SemesterNumber" ColumnName="SemesterNumber" />
+                <ScalarProperty Name="IsIndividual" ColumnName="IsIndividual" />
+                <ScalarProperty Name="Course" ColumnName="Course" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudyPlan_Disciplines">
+            <EntityTypeMapping TypeName="TimetableModel.StudyPlan_Disciplines">
+              <MappingFragment StoreEntitySet="StudyPlan_Disciplines">
+                <ScalarProperty Name="StudyPlan_DisciplinesId" ColumnName="StudyPlan_DisciplinesId" />
+                <ScalarProperty Name="StudyPlanId" ColumnName="StudyPlanId" />
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="TotalNumberOfHours" ColumnName="TotalNumberOfHours" />
+                <ScalarProperty Name="HoursOfLectures" ColumnName="HoursOfLectures" />
+                <ScalarProperty Name="HoursOfLaboratory" ColumnName="HoursOfLaboratory" />
+                <ScalarProperty Name="HoursOfLaboratoryWithComputers" ColumnName="HoursOfLaboratoryWithComputers" />
+                <ScalarProperty Name="RequiredNumberOfHours" ColumnName="RequiredNumberOfHours" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudyPlan_DisciplinesByWeek">
+            <EntityTypeMapping TypeName="TimetableModel.StudyPlan_DisciplinesByWeek">
+              <MappingFragment StoreEntitySet="StudyPlan_DisciplinesByWeek">
+                <ScalarProperty Name="StudyPlan_DisciplinesByWeekId" ColumnName="StudyPlan_DisciplinesByWeekId" />
+                <ScalarProperty Name="StudyPlan_DisciplinesId" ColumnName="StudyPlan_DisciplinesId" />
+                <ScalarProperty Name="HoursOfLectures" ColumnName="HoursOfLectures" />
+                <ScalarProperty Name="HoursOfLaboratory" ColumnName="HoursOfLaboratory" />
+                <ScalarProperty Name="HoursOfLaboratoryWithComputers" ColumnName="HoursOfLaboratoryWithComputers" />
+                <ScalarProperty Name="MondayOfWeek" ColumnName="MondayOfWeek" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CheckUser" FunctionName="Хранилище TimetableModel.CheckUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.CheckUser_Result">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAssignedDisciplinesByTeacher" FunctionName="Хранилище TimetableModel.GetAssignedDisciplinesByTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.GetAssignedDisciplinesByTeacher_Result">
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="AbbreviatedName" ColumnName="AbbreviatedName" />
+                <ScalarProperty Name="Practice" ColumnName="Practice" />
+                <ScalarProperty Name="Exam" ColumnName="Exam" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetUnassignedDisciplinesByTeacher" FunctionName="Хранилище TimetableModel.GetUnassignedDisciplinesByTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.GetUnassignedDisciplinesByTeacher_Result">
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="AbbreviatedName" ColumnName="AbbreviatedName" />
+                <ScalarProperty Name="Practice" ColumnName="Practice" />
+                <ScalarProperty Name="Exam" ColumnName="Exam" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SearchByAllFields" FunctionName="Хранилище TimetableModel.SearchByAllFields" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

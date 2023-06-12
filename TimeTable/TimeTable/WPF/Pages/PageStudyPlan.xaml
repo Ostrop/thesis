@@ -5,12 +5,15 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TimeTable.WPF.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local1="clr-namespace:TimeTable.WPF.Controllers"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
       Background="#ffdadada"
       Loaded="Page_Loaded"
       Title="PageStudyPlan">
-
+    <Page.Resources>
+        <local1:RowIndexConverter x:Key="RowIndexConverter" />
+    </Page.Resources>
     <Grid Background="#ffdadada">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -42,10 +45,12 @@
                                 </Style>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
+                                <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding StudyPlanId}"/>
                                 <DataGridTextColumn Visibility="Collapsed" Header="ID" Width="Auto" Binding="{Binding SpecialityId}"/>
                                 <DataGridTextColumn Header="Специальность" Width="Auto" Binding="{Binding SpecialityNumber}"/>
                                 <DataGridTextColumn Header="Инф. о спец." Width="Auto" Binding="{Binding SpecialityInfo}"/>
-                            <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding SemesterNumber}"/> 
+                                <DataGridTextColumn Header="Курс" Width="Auto" Binding="{Binding Course}"/>
+                                <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding SemesterNumber}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -59,34 +64,43 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="15" Text="Поиск: "/>
-                        <TextBox x:Name="SearchTBGroups" TextChanged="SearchSpecialities_TextChanged" Width="150" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
+                        <TextBox x:Name="SearchTBGroups" TextChanged="SearchGroups_TextChanged" Width="150" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
                         <Button Click="Reload_ButtonClick" Margin="20 0 0 0">
                             <materialDesign:PackIcon Kind="Reload" />
                         </Button>
                     </StackPanel>
-                    <DataGrid Grid.Row="1" IsReadOnly="True" SelectionChanged="Groups_SelectionChanged" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" >
+                    <DataGrid Grid.Row="1" IsReadOnly="True" SelectionChanged="Specialities_SelectionChanged" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" >
                         <DataGrid.Resources>
                             <Style TargetType="DataGridRow">
                                 <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Visibility="Collapsed" Header="ID" Width="Auto" Binding="{Binding GroupsId}"/>
-                            <DataGridTextColumn Visibility="Collapsed" Header="ID" Width="Auto" Binding="{Binding SpeecialityId}"/>
+                            <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding StudyPlan_DisciplineId}"/>
+                            <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding GroupsId}"/>
+                            <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding StudyPlanId}"/>
+                            <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding SpeecialityId}"/>
                             <DataGridTextColumn Header="Инф. о спец." Width="Auto" Binding="{Binding SpecialityInfo}"/>
                             <DataGridTextColumn Header="Курс" Width="Auto" Binding="{Binding Course}"/>
                             <DataGridTextColumn Header="Специальность" Width="Auto" Binding="{Binding SpecialityNumber}"/>
                             <DataGridTextColumn Header="№ группы" Width="Auto" Binding="{Binding GroupNumber}"/>
-                            <DataGridTextColumn Header="Год возникновения" Width="Auto" Binding="{Binding BeginDate}"/>
-                            <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding SemesterNumber}"/> 
+                            <DataGridTextColumn Header="Год возникновения" Width="Auto" Binding="{Binding BeginDate, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                            <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding SemesterNumber}"/>
+                            <DataGridCheckBoxColumn Header="Индивидуальный" Binding="{Binding IsIndividual, Mode=OneWay}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>
+        <StackPanel IsEnabled="False" x:Name="GeneralSP" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="40 20 60 0">
+            <TextBlock FontSize="15" Text="Общий:" Margin="0 0 15 0"/>
+            <CheckBox PreviewMouseDown="GeneralCB_PreviewMouseDown" x:Name="GeneralCB" Unchecked="GeneralCB_Checked" Checked="GeneralCB_Checked"/>
+            <TextBlock FontSize="15" Text="Выбор недели: " Margin="40 0 20 0"/>
+            <DatePicker IsEnabled="False" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
+        </StackPanel>
         <StackPanel IsEnabled="False" Visibility="Hidden" x:Name="IndividualSP" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 20 60 0">
             <TextBlock FontSize="15" Text="Индивидуальный:" Margin="0 0 15 0"/>
-            <CheckBox x:Name="IndividualCB"/>
+            <CheckBox x:Name="IndividualCB" PreviewMouseDown="IndividualCB_PreviewMouseDown"/>
         </StackPanel>
         <Grid Grid.Column="1" Grid.Row="1" Margin="20 20 20 0">
             <Grid.RowDefinitions>
@@ -94,15 +108,24 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <DataGrid IsEnabled="False" AddingNewItem="StudyPlan_DataGrid_AddingNewItem" Grid.Row="0" x:Name="StudyPlan_DataGrid" SelectionChanged="StudyPlan_SelectionChanged" AutoGenerateColumns="False" ItemsSource="{Binding generalStudyPlan}">
+            <DataGrid CellEditEnding="StudyPlan_DataGrid_CellEditEnding" PreviewKeyUp="StudyPlan_DataGrid_PreviewKeyUp" CanUserAddRows="False" IsEnabled="False" Grid.Row="0" x:Name="StudyPlan_DataGrid" SelectionChanged="StudyPlan_SelectionChanged" AutoGenerateColumns="False" ItemsSource="{Binding generalStudyPlan}">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
                     </Style>
                 </DataGrid.Resources>
+                <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding StudyPlan_DisciplineId}"/>
+                <DataGridTextColumn Visibility="Collapsed" Width="Auto" Binding="{Binding StudyPlan_DisciplinesByWeekId}"/>
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True" Header="№&#x0a;п/п" Width="Auto" Binding="{Binding Number}"/>
-                    <DataGridComboBoxColumn Header="Наименование&#x0a;дисциплины" Width="Auto" SelectedItemBinding="{Binding DisciplineName}">
+                    <DataGridTextColumn Header="№&#x0a;п/п" Width="Auto" IsReadOnly="True">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource RowIndexConverter}">
+                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type DataGridRow}}" />
+                                <Binding ElementName="StudyPlan_DataGrid" Path="Items.Count" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridComboBoxColumn x:Name="DisciplineNameColumn" Header="Наименование&#x0a;дисциплины" Width="Auto" SelectedItemBinding="{Binding DisciplineName}">
                         <DataGridComboBoxColumn.ElementStyle>
                             <Style TargetType="ComboBox">
                                 <Setter Property="ItemsSource" Value="{Binding DataContext.DisciplineNames, RelativeSource={RelativeSource AncestorType=Page}}" />
@@ -113,12 +136,12 @@
                                 <Setter Property="ItemsSource" Value="{Binding DataContext.DisciplineNames, RelativeSource={RelativeSource AncestorType=Page}}" />
                                 <Setter Property="IsEditable" Value="True" />
                                 <Setter Property="IsTextSearchEnabled" Value="False" />
-                                <!-- Привязываем событие Loaded к обработчику в коде-behind -->
                                 <EventSetter Event="Loaded" Handler="ComboBox_Loaded" />
                             </Style>
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
-                    <DataGridTextColumn Header="Всего&#x0a;часов" Width="Auto" Binding="{Binding TotalNumberOfHours}"/>
+                    <DataGridTextColumn Header="Всего&#x0a;часов" Width="Auto" IsReadOnly="True" Binding="{Binding TotalNumberOfHours}"/>
+                    <DataGridTextColumn x:Name="RequiredHoursColumn" Visibility="Collapsed" Header="Осталось&#x0a;часов" Width="Auto" Binding="{Binding RequiredNumberOfHours}"/>
                     <DataGridTextColumn Header="Часы&#x0a;(Лекции)" Width="Auto" Binding="{Binding HoursOfLectures}"/>
                     <DataGridTextColumn Header="Часы&#x0a;(Лабораторные)" Width="Auto" Binding="{Binding HoursOfLaboratory}"/>
                     <DataGridTextColumn Header="Часы&#x0a;(Лабораторные,&#x0a;ВЦ)" Width="Auto" Binding="{Binding HoursOfLaboratoryWithComputers}"/>
@@ -126,7 +149,7 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal" Margin="10 10 10 10" Grid.Row="1">
                 <TextBlock FontSize="15" Text="Общее кол-во часов: "/>
-                <TextBlock Visibility="Hidden" Margin="10 0 0 0" FontSize="15" x:Name="AmountHoursTB"/>
+                <TextBlock Visibility="Hidden" Margin="10 0 0 0" FontSize="15" x:Name="AmountHoursTB" Text="{Binding TotalHours}"/>
             </StackPanel>
             <StackPanel IsEnabled="false" Orientation="Horizontal" x:Name="EditButtons" Grid.Row="2" Margin="10" HorizontalAlignment="Center" Cursor="">
                 <Button Click="SaveButton_Click" Margin="0 0 20 0">
