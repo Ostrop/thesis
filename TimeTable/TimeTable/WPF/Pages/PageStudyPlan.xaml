@@ -141,7 +141,6 @@
                         </DataGridComboBoxColumn.EditingElementStyle>
                     </DataGridComboBoxColumn>
                     <DataGridTextColumn Header="Всего&#x0a;часов" Width="Auto" IsReadOnly="True" Binding="{Binding TotalNumberOfHours}"/>
-                    <DataGridTextColumn x:Name="RequiredHoursColumn" Visibility="Collapsed" Header="Осталось&#x0a;часов" Width="Auto" Binding="{Binding RequiredNumberOfHours}"/>
                     <DataGridTextColumn Header="Часы&#x0a;(Лекции)" Width="Auto" Binding="{Binding HoursOfLectures}"/>
                     <DataGridTextColumn Header="Часы&#x0a;(Лабораторные)" Width="Auto" Binding="{Binding HoursOfLaboratory}"/>
                     <DataGridTextColumn Header="Часы&#x0a;(Лабораторные,&#x0a;ВЦ)" Width="Auto" Binding="{Binding HoursOfLaboratoryWithComputers}"/>
@@ -159,6 +158,7 @@
                     <materialDesign:PackIcon Kind="CloseCircle" />
                 </Button>
                 <Button x:Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click" />
+                <Button Margin="20 0 0 0" Content="Подогнать под общий" Click="AsOtherButton_Click" />
             </StackPanel>
         </Grid>
     </Grid>

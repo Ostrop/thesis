@@ -29,11 +29,14 @@ namespace TimeTable.WPF.Pages
         DataGridRow SelectedSpecialitiesRow = null;
         Specialities speciality;
         int _studyPlanId;
+        List<int> _studyPlanDisciplinesId;
         int TotalHours;
         public ObservableCollection<GeneralStudyPlan> generalStudyPlan { get; set; }
         public ObservableCollection<GeneralStudyPlan> generalStudyPlanByWeek { get; set; }
+        public ObservableCollection<GeneralStudyPlan> generalStudyPlanByWeekRed { get; set; }
         public ObservableCollection<string> DisciplineNames { get; set; }
         GeneralStudyPlan currentStroke = null;
+        ObservableCollection<GeneralStudyPlan> deletedstudyplan = new ObservableCollection<GeneralStudyPlan>();
 
         public PageStudyPlan()
         {
@@ -49,35 +52,6 @@ namespace TimeTable.WPF.Pages
             DataContext = this;
             GeneralCB.IsChecked = true;
         }
-        /// <summary>
-        /// Обработчик вывода общего кол-ва часов
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CalculateTotalHours(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            if (e.Column is DataGridTextColumn textColumn && e.EditingElement is TextBox textBox)
-            {
-                var dataItem = e.Row.DataContext as GeneralStudyPlan;
-
-                if (dataItem != null)
-                {
-                    // Получаем значения из других полей
-                    int? hoursOfLectures = dataItem.HoursOfLectures;
-                    int? hoursOfLaboratory = dataItem.HoursOfLaboratory;
-                    int? hoursOfLaboratoryWithComputers = dataItem.HoursOfLaboratoryWithComputers;
-
-                    // Вычисляем общее количество часов
-                    int? totalHours = hoursOfLectures + hoursOfLaboratory + hoursOfLaboratoryWithComputers;
-
-                    // Обновляем значение в ячейке
-                    textBox.Text = totalHours.ToString();
-                }
-            }
-        }
-
-
-
         /// <summary>
         /// Обработчик кнопки Справочники
         /// </summary>
@@ -185,6 +159,8 @@ namespace TimeTable.WPF.Pages
                 EditButtons.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
                 FillStudyPlan();
+                _studyPlanDisciplinesId = dtbCommunication.GetStudyPlanDisciplinesId(_studyPlanId);
+                FillStudyPlanByWeek();
                 StudyPlan_DataGrid.CanUserAddRows = true;
                 AmountHoursTB.Visibility = Visibility.Visible;
                 LoadAmountHours();
@@ -331,11 +307,18 @@ namespace TimeTable.WPF.Pages
             {
                 if (item.TotalNumberOfHours == null || item.DisciplineName == null)
                 {
-                    window.ShowNotification("Все строки должны быть заполнены либо удалите их", TimeSpan.FromSeconds(5), Brushes.IndianRed);
+                    window.ShowNotification("Все строки общего учебного плана должны быть заполнены либо удалите их", TimeSpan.FromSeconds(5), Brushes.IndianRed);
                     return false;
                 }
             }
-            dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, IndividualCB.IsChecked);
+            ObservableCollection<GeneralStudyPlan> generalStudyPlanByWeekbuf = new ObservableCollection<GeneralStudyPlan>();
+            foreach (var item in generalStudyPlanByWeek)
+            {
+                var newItem = item.Clone() as GeneralStudyPlan;
+                generalStudyPlanByWeekbuf.Add(newItem);
+            }
+            dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, IndividualCB.IsChecked, deletedstudyplan, false);
+            dtbCommunication.SaveStudyPlanByWeek(generalStudyPlanByWeekbuf, _studyPlanId, IndividualCB.IsChecked);
             return true;
         }
 
@@ -346,9 +329,9 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            StudyPlan_DataGrid.ItemsSource = null;
             Specialities_TabControl.IsEnabled = true;
             StudyPlan_DataGrid.IsEnabled = false;
+            StudyPlan_DataGrid.ItemsSource = null;
             EditButtons.IsEnabled = false;
             DeleteButton.IsEnabled = false;
             GeneralSP.IsEnabled = false;
@@ -358,23 +341,40 @@ namespace TimeTable.WPF.Pages
             AmountHoursTB.Visibility = Visibility.Hidden;
         }
         /// <summary>
+        /// Обработчик кнопки "Отмена"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AsOtherButton_Click(object sender, RoutedEventArgs e)
+        {
+            dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, IndividualCB.IsChecked, deletedstudyplan, true);
+            Page_Loaded(null, null);
+            window.ShowNotification("План подогнан", TimeSpan.FromSeconds(3), Brushes.LightGreen);
+        }
+        /// <summary>
         /// Обработчик кнопки удалить
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (currentStroke != null)
-            {
-                generalStudyPlan.Remove(currentStroke);
-                // Сбросить выбор элемента в DataGrid
-                StudyPlan_DataGrid.SelectedItem = null;
-                currentStroke = null;
-                LoadAmountHours();
-                window.ShowNotification("Строка удалена", TimeSpan.FromSeconds(3), Brushes.LightGreen);
-            }
+            if (GeneralCB.IsChecked == true)
+                if (currentStroke != null)
+                {
+                    currentStroke.isDeleted = true;
+                    // Сбросить выбор элемента в DataGrid
+                    StudyPlan_DataGrid.SelectedItem = null;
+                    // Скрытие строки
+                    deletedstudyplan.Add(currentStroke);
+                    generalStudyPlan.Remove(currentStroke);
+                    currentStroke = null;
+                    LoadAmountHours();
+                    window.ShowNotification("Строка удалена", TimeSpan.FromSeconds(3), Brushes.LightGreen);
+                }
+                else
+                    window.ShowNotification("Выберите строку для удаления", TimeSpan.FromSeconds(5), Brushes.IndianRed);
             else
-                window.ShowNotification("Выберите строку для удаления", TimeSpan.FromSeconds(5), Brushes.IndianRed);
+                window.ShowNotification("Удаление в режиме редактирования учебного плана не доступно", TimeSpan.FromSeconds(5), Brushes.IndianRed);
         }
         /// <summary>
         /// Метод заполнения таблицы Специальности
@@ -393,14 +393,25 @@ namespace TimeTable.WPF.Pages
             LoadAmountHours();
         }
         /// <summary>
+        /// Метод списка учебного плана по неделям
+        /// </summary>
+        private void FillStudyPlanByWeek()
+        {
+            generalStudyPlanByWeek = dtbCommunication.GetStudyPlan_DisciplinesByWeekToList(_studyPlanDisciplinesId);
+        }
+        /// <summary>
         /// Метод заполнения таблицы учебного плана по неделям
         /// </summary>
-        private void FillStudyPlanByWeek(DateTime date)
+        private void FillStudyPlanByWeekWithDate(DateTime date)
         {
-            ////////////////////////////////////////////////////////////////////////////////
-            generalStudyPlanByWeek = dtbCommunication.GetStudyPlan_DisciplinesByWeekToList();
-            StudyPlan_DataGrid.ItemsSource = generalStudyPlanByWeek;
-            //LoadAmountHours();
+            generalStudyPlanByWeekRed = new ObservableCollection<GeneralStudyPlan>();
+            foreach (var item in generalStudyPlanByWeek)
+            {
+                if (item.MondayOfWeek == date)
+                    generalStudyPlanByWeekRed.Add(item);
+            }
+            StudyPlan_DataGrid.ItemsSource = generalStudyPlanByWeekRed;
+
         }
         /// <summary>
         /// Метод заполнения таблицы По группам
@@ -455,14 +466,14 @@ namespace TimeTable.WPF.Pages
 
             if (checkBox.IsChecked == false)
             {
-                RequiredHoursColumn.Visibility = Visibility.Visible;
                 WeekDatePicker.IsEnabled = true;
                 WeekDatePicker.SelectedDate = WeekDatePicker.DisplayDateStart;
                 DisciplineNameColumn.IsReadOnly = true;
+                StudyPlan_DataGrid.CanUserAddRows = false;
             }
             else
             {
-                RequiredHoursColumn.Visibility = Visibility.Collapsed;
+                StudyPlan_DataGrid.CanUserAddRows = true;
                 DisciplineNameColumn.IsReadOnly = false;
                 WeekDatePicker.IsEnabled = false;
                 WeekDatePicker.Text = string.Empty;
@@ -485,21 +496,16 @@ namespace TimeTable.WPF.Pages
                 selectedDate = selectedDate.AddDays(-1);
                 dayOfWeek = selectedDate.DayOfWeek;
             }
-            FillStudyPlanByWeek(selectedDate);
+            FillStudyPlanByWeekWithDate(selectedDate);
         }
 
         private void GeneralCB_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (GeneralCB.IsChecked == true)
             {
-                foreach (var item in generalStudyPlan)
-                {
-                    if (item.TotalNumberOfHours == null || item.DisciplineName == null)
-                    {
-                        window.ShowNotification("Все строки должны быть заполнены либо удалите их", TimeSpan.FromSeconds(5), Brushes.IndianRed);
-                        e.Handled = true;
-                    }
-                }
+                MessageBoxResult result = MessageBox.Show("Перед изменением учебного плана по неделям, во избежания ошибок убедитесь, что сохранён общий. Продолжить?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                    GeneralCB.IsChecked = false;
             }
         }
     }

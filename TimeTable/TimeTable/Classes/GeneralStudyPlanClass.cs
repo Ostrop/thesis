@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace TimeTable.Classes
 {
-    public class GeneralStudyPlan : INotifyPropertyChanged
+    public class GeneralStudyPlan : INotifyPropertyChanged, ICloneable
     {
         private int? studyPlan_DisciplineId;
         public int? StudyPlan_DisciplineId
@@ -26,20 +26,53 @@ namespace TimeTable.Classes
                     UpdateTotalNumberOfHours();
                 }
             }
-        }private int? requiredNumberOfHours;
-        public int? RequiredNumberOfHours
+        }
+        private int? disciplineId;
+        public int? DisciplineId
         {
-            get { return requiredNumberOfHours; }
+            get { return disciplineId; }
             set
             {
-                if (requiredNumberOfHours != value)
+                if (disciplineId != value)
                 {
-                    requiredNumberOfHours = value;
-                    OnPropertyChanged(nameof(RequiredNumberOfHours));
+                    disciplineId = value;
+                    if (DisciplineName != dtbCommunication.GetDisciplineName(value))
+                        DisciplineName = dtbCommunication.GetDisciplineName(value);
+                    OnPropertyChanged(nameof(DisciplineId));
                     UpdateTotalNumberOfHours();
                 }
             }
         }
+        private DateTime? mondayOfWeek;
+        public DateTime? MondayOfWeek
+        {
+            get { return mondayOfWeek; }
+            set
+            {
+                if (mondayOfWeek != value)
+                {
+                    mondayOfWeek = value;
+                    OnPropertyChanged(nameof(MondayOfWeek));
+                    UpdateTotalNumberOfHours();
+                }
+            }
+        }
+        private int? studyPlan_DisciplinesByWeekId;
+        public int? StudyPlan_DisciplinesByWeekId
+        {
+            get { return studyPlan_DisciplinesByWeekId; }
+            set
+            {
+                if (studyPlan_DisciplinesByWeekId != value)
+                {
+                    studyPlan_DisciplinesByWeekId = value;
+                    OnPropertyChanged(nameof(StudyPlan_DisciplinesByWeekId));
+                    UpdateTotalNumberOfHours();
+                }
+            }
+        }
+        public bool isDeleted = false;
+        public bool isWeek = false;
 
         private string disciplineName;
         public string DisciplineName
@@ -50,7 +83,23 @@ namespace TimeTable.Classes
                 if (disciplineName != value)
                 {
                     disciplineName = value;
+                    if (DisciplineId != dtbCommunication.GetDisciplineId(value))
+                        DisciplineId = dtbCommunication.GetDisciplineId(value);
                     OnPropertyChanged(nameof(DisciplineName));
+                    UpdateTotalNumberOfHours();
+                }
+            }
+        }
+        private int? studyPlanId;
+        public int? StudyPlanId
+        {
+            get { return studyPlanId; }
+            set
+            {
+                if (studyPlanId != value)
+                {
+                    studyPlanId = value;
+                    OnPropertyChanged(nameof(StudyPlanId));
                     UpdateTotalNumberOfHours();
                 }
             }
@@ -117,9 +166,12 @@ namespace TimeTable.Classes
 
         private void UpdateTotalNumberOfHours()
         {
-            // Вычисление общего количества часов
-            int? totalHours = HoursOfLectures + HoursOfLaboratory + HoursOfLaboratoryWithComputers;
-            TotalNumberOfHours = totalHours;
+            if (isWeek == false)
+            {
+                // Вычисление общего количества часов
+                int? totalHours = HoursOfLectures + HoursOfLaboratory + HoursOfLaboratoryWithComputers;
+                TotalNumberOfHours = totalHours;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -127,6 +179,24 @@ namespace TimeTable.Classes
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public object Clone()
+        {
+            return new GeneralStudyPlan
+            {
+                StudyPlan_DisciplineId = this.StudyPlan_DisciplineId,
+                DisciplineId = this.DisciplineId,
+                MondayOfWeek = this.MondayOfWeek,
+                StudyPlan_DisciplinesByWeekId = this.StudyPlan_DisciplinesByWeekId,
+                isDeleted = this.isDeleted,
+                isWeek = this.isWeek,
+                DisciplineName = this.DisciplineName,
+                StudyPlanId = this.StudyPlanId,
+                TotalNumberOfHours = this.TotalNumberOfHours,
+                HoursOfLectures = this.HoursOfLectures,
+                HoursOfLaboratory = this.HoursOfLaboratory,
+                HoursOfLaboratoryWithComputers = this.HoursOfLaboratoryWithComputers
+            };
         }
     }
 }

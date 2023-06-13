@@ -1,11 +1,16 @@
-﻿using MaterialDesignThemes.Wpf.Converters.CircularProgressBar;
+﻿using MaterialDesignThemes.Wpf;
+using MaterialDesignThemes.Wpf.Converters.CircularProgressBar;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using TimeTable.Model;
 
 namespace TimeTable.Classes
@@ -207,7 +212,7 @@ namespace TimeTable.Classes
         {
             return context.Availability.Where(a => a.EmployeeId == teacherId && a.Date <= new DateTime(2001, 1, 8)).ToList();
         }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         /// <summary>
         /// Метод получения предпочтений преподавателя по неделям
         /// </summary>
@@ -225,15 +230,109 @@ namespace TimeTable.Classes
                 }
             return availabilities;
         }
+        /// <summary>
+        /// Сохранение учебного плана по неделям
+        /// </summary>
+        /// <param name="generalStudyPlanByWeek"></param>
+        /// <param name="studyplanid"></param>
+        /// <param name="individual"></param>
+        public static void SaveStudyPlanByWeek(ObservableCollection<GeneralStudyPlan> generalStudyPlanByWeek, int studyplanid, bool? individual)
+        {
 
+            if (individual == true)
+            {
+                var dtbscollection = context.StudyPlan_DisciplinesByWeek.ToList();
+
+                // Обновление записей
+                foreach (var item in generalStudyPlanByWeek)
+                {
+                    var studyPlanItem = dtbscollection.FirstOrDefault(x => x.StudyPlan_DisciplinesByWeekId == item.StudyPlan_DisciplinesByWeekId);
+                    if (studyPlanItem != null)
+                    {
+                        // Обновление существующей записи
+                        studyPlanItem.HoursOfLectures = item.HoursOfLectures;
+                        studyPlanItem.HoursOfLaboratory = item.HoursOfLaboratory;
+                        studyPlanItem.HoursOfLaboratoryWithComputers = item.HoursOfLaboratoryWithComputers;
+                    }
+                }
+            }
+            else if (individual == false)
+            {
+                var _studyPlan = context.StudyPlan.FirstOrDefault(sp => sp.StudyPlanId == studyplanid);
+                int specialityId = _studyPlan.SpecialityId;
+                int semesterNumber = _studyPlan.SemesterNumber;
+                int? course = _studyPlan.Course;
+                List<StudyPlan> StudyPlanCollection = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course).ToList();
+                List<StudyPlan_Disciplines> studyPlan_Disciplinescollection = context.StudyPlan_Disciplines.Include(sd => sd.StudyPlan_DisciplinesByWeek).ToList();
+
+                foreach (var studyPlan_Disciplines in studyPlan_Disciplinescollection)
+                {
+                    foreach (var item in generalStudyPlanByWeek)
+                    {
+                        var studyPlanItem = studyPlan_Disciplines.StudyPlan_DisciplinesByWeek.FirstOrDefault(x => x.DisciplineId == item.DisciplineId && x.MondayOfWeek == item.MondayOfWeek);
+                        if (studyPlanItem != null)
+                        {
+                            // Обновление существующей записи
+                            studyPlanItem.HoursOfLectures = item.HoursOfLectures;
+                            studyPlanItem.HoursOfLaboratory = item.HoursOfLaboratory;
+                            studyPlanItem.HoursOfLaboratoryWithComputers = item.HoursOfLaboratoryWithComputers;
+                        }
+                    }
+                }
+            }
+            // Сохранение изменений в базе данных
+            context.SaveChanges();
+        }
+        /// <summary>
+        /// Получение учебного плана по неделям
+        /// </summary>
+        /// <param name="studyplanid"></param>
+        /// <param name="individual"></param>
+        /// <returns></returns>
+        public static ObservableCollection<GeneralStudyPlan> GetStudyPlan_DisciplinesByWeekToList(List<int> studyplanDisciplinesid)
+        {
+            ObservableCollection<GeneralStudyPlan> generalStudyPlanByWeek = new ObservableCollection<GeneralStudyPlan>();
+
+            var query = context.StudyPlan_DisciplinesByWeek
+                .Where(s => studyplanDisciplinesid.Contains(s.StudyPlan_DisciplinesId))
+                .ToList();
+
+            foreach (var item in query)
+            {
+                var generalStudyPlan = new GeneralStudyPlan
+                {
+                    StudyPlan_DisciplinesByWeekId = item.StudyPlan_DisciplinesByWeekId,
+                    StudyPlanId = item.StudyPlanId,
+                    HoursOfLectures = item.HoursOfLectures,
+                    HoursOfLaboratory = item.HoursOfLaboratory,
+                    DisciplineId = item.DisciplineId,
+                    HoursOfLaboratoryWithComputers = item.HoursOfLaboratoryWithComputers,
+                    MondayOfWeek = item.MondayOfWeek,
+                    TotalNumberOfHours = item.TotalNumberOfHours,
+                    isWeek = true
+                };
+
+                generalStudyPlanByWeek.Add(generalStudyPlan);
+            }
+
+            return generalStudyPlanByWeek;
+        }
         /// <summary>
         /// Метод сохранения учебного плана
         /// </summary>
-        public static void SaveStudyPlan(ObservableCollection<GeneralStudyPlan> generalStudyPlan, int studyplanid, bool? individual)
+        public static void SaveStudyPlan(ObservableCollection<GeneralStudyPlan> generalStudyPlan, int studyplanid, bool? individual, ObservableCollection<GeneralStudyPlan> deleted, bool asother)
         {
             var dtbscollection = context.StudyPlan_Disciplines.ToList();
-            if (individual == true)
+            if (individual == true && asother == false)
             {
+                foreach (var item in dtbscollection)
+                {
+                    var studyPlanItem = generalStudyPlan.FirstOrDefault(x => x.StudyPlan_DisciplineId == item.StudyPlan_DisciplinesId);
+                    if (studyPlanItem == null)
+                    {
+                        context.StudyPlan_Disciplines.Remove(item);
+                    }
+                }
                 // Добавление или обновление записей
                 foreach (var item in generalStudyPlan)
                 {
@@ -269,35 +368,69 @@ namespace TimeTable.Classes
                 foreach (var studyPlan in studyPlansToUpdate)
                     studyPlan.IsIndividual = true;
             }
-            else if (individual == false)
+            else
             {
-                var _studyPlan = context.StudyPlan.FirstOrDefault(sp => sp.StudyPlanId == studyplanid && sp.IsIndividual == false);
+                var _studyPlan = context.StudyPlan.FirstOrDefault(sp => sp.StudyPlanId == studyplanid);
                 int specialityId = _studyPlan.SpecialityId;
                 int semesterNumber = _studyPlan.SemesterNumber;
                 int? course = _studyPlan.Course;
-                var studyPlansToUpdate = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course).ToList();
-                foreach (var studyPlan in studyPlansToUpdate)
+                if (_studyPlan.IsIndividual == true)
+                    _studyPlan.IsIndividual = false;
+                if (asother == true)
                 {
-                    //Удаление всех записей
-                    var studyPlanDisciplinesToDelete = context.StudyPlan_Disciplines.Where(spd => spd.StudyPlanId == studyPlan.StudyPlanId).ToList();
-                    context.StudyPlan_Disciplines.RemoveRange(studyPlanDisciplinesToDelete);
-
-                    // Добавление записей
-                    foreach (var item in generalStudyPlan)
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    foreach (var item in dtbscollection)
                     {
-                        var studyPlanItem = dtbscollection.FirstOrDefault(x => x.StudyPlan_DisciplinesId == item.StudyPlan_DisciplineId);
-                        // Создание новой записи
+                        var studyPlanItem = generalStudyPlan.FirstOrDefault(x => x.StudyPlan_DisciplineId == item.StudyPlan_DisciplinesId);
+                        if (studyPlanItem != null)
+                        {
+                            context.StudyPlan_Disciplines.Remove(item);
+                        }
+                    }
+                    var fromstudyplan = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course).Include(sd => sd.StudyPlan_Disciplines).FirstOrDefault();
+                    // Добавление или обновление записей
+                    foreach (var item in fromstudyplan.StudyPlan_Disciplines)
+                    {
                         var newStudyPlanItem = new StudyPlan_Disciplines()
                         {
-                            StudyPlanId = studyPlan.StudyPlanId,
+                            StudyPlanId = item.StudyPlanId,
                             // Присвоение остальных свойств из item
-                            DisciplineId = GetDisciplineId(item.DisciplineName),
+                            DisciplineId = item.DisciplineId,
                             TotalNumberOfHours = item.TotalNumberOfHours,
                             HoursOfLectures = item.HoursOfLectures,
                             HoursOfLaboratory = item.HoursOfLaboratory,
                             HoursOfLaboratoryWithComputers = item.HoursOfLaboratoryWithComputers
                         };
-                        context.StudyPlan_Disciplines.Add(newStudyPlanItem);
+                    }
+                    context.SaveChanges();
+                    return;
+                }
+                else
+                {
+                    var studyPlansToUpdate = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course).ToList();
+                    foreach (var studyPlan in studyPlansToUpdate)
+                    {
+                        //Удаление всех записей
+                        var studyPlanDisciplinesToDelete = context.StudyPlan_Disciplines.Where(spd => spd.StudyPlanId == studyPlan.StudyPlanId).ToList();
+                        context.StudyPlan_Disciplines.RemoveRange(studyPlanDisciplinesToDelete);
+
+                        // Добавление записей
+                        foreach (var item in generalStudyPlan)
+                        {
+                            var studyPlanItem = dtbscollection.FirstOrDefault(x => x.StudyPlan_DisciplinesId == item.StudyPlan_DisciplineId);
+                            // Создание новой записи
+                            var newStudyPlanItem = new StudyPlan_Disciplines()
+                            {
+                                StudyPlanId = studyPlan.StudyPlanId,
+                                // Присвоение остальных свойств из item
+                                DisciplineId = GetDisciplineId(item.DisciplineName),
+                                TotalNumberOfHours = item.TotalNumberOfHours,
+                                HoursOfLectures = item.HoursOfLectures,
+                                HoursOfLaboratory = item.HoursOfLaboratory,
+                                HoursOfLaboratoryWithComputers = item.HoursOfLaboratoryWithComputers
+                            };
+                            context.StudyPlan_Disciplines.Add(newStudyPlanItem);
+                        }
                     }
                 }
             }
@@ -318,6 +451,19 @@ namespace TimeTable.Classes
             }
             return -1;
         }
+        /// <summary>
+        /// Поиск дисциплин по ID
+        /// </summary>
+        /// <returns></returns>
+        public static string GetDisciplineName(int? id)
+        {
+            var discipline = context.Disciplines.FirstOrDefault(d => d.DisciplineId == id);
+            if (discipline != null)
+            {
+                return discipline.NameOfDiscipline;
+            }
+            return null;
+        }
 
         /// <summary>
         /// Метод получения учебного плана по ID специальности
@@ -331,6 +477,20 @@ namespace TimeTable.Classes
                          where s.SpecialityId == specid && s.IsIndividual == false &&
                          s.SemesterNumber == semnumber && s.Course == course
                          select s.StudyPlanId).FirstOrDefault();
+
+            return query;
+        }
+        /// <summary>
+        /// Метод получения ID учебного плана _ дисциплин по ID учбеного плана
+        /// </summary>
+        /// <param name="specid"></param>
+        /// <returns></returns>
+        public static List<int> GetStudyPlanDisciplinesId(int studyplanId)
+        {
+            var query = (from s in context.StudyPlan_Disciplines
+                         join q in context.StudyPlan on s.StudyPlanId equals q.StudyPlanId
+                         where q.StudyPlanId == studyplanId
+                         select s.StudyPlan_DisciplinesId).ToList();
 
             return query;
         }
@@ -670,7 +830,7 @@ namespace TimeTable.Classes
         /// Функция удаления строки из сущности
         /// </summary>
         /// <param name="studyPlan"></param>
-        public static void RemoveRowStudyPlan_Disciplines(int id)
+        public static void RemoveRowStudyPlan_Disciplines(int? id)
         {
             var row = context.StudyPlan_Disciplines.Find(id);
             if (row != null)
