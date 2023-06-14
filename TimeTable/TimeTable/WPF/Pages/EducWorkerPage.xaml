@@ -59,7 +59,9 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Расписание">
-                    <Grid Background="#FFE5E5E5"/>
+                    <Grid Background="#FFE5E5E5">
+                        <Frame Margin="20,0,20,0" x:Name="Timetable_Frame" NavigationUIVisibility="Hidden"/>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Отчеты">
                     <Grid Background="#FFE5E5E5"/>

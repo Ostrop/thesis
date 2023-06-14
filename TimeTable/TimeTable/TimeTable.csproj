@@ -169,6 +169,9 @@
     <Compile Include="WPF\Pages\PageTeachers.xaml.cs">
       <DependentUpon>PageTeachers.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Pages\PageTimetable.xaml.cs">
+      <DependentUpon>PageTimetable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Windows\AddEntityWindow.xaml.cs">
       <DependentUpon>AddEntityWindow.xaml</DependentUpon>
     </Compile>
@@ -210,6 +213,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Pages\PageTeachers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Pages\PageTimetable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -29,6 +29,7 @@ namespace TimeTable.WPF.Pages
             SelectEntity.SelectedIndex = 0;
             window = (Application.Current.MainWindow as MainWindow);
             StudyPlan_Frame.Navigate(new PageStudyPlan());
+            Timetable_Frame.Navigate(new PageTimetable());
         }
         /// <summary>
         /// Обработчик выбора вкладок
