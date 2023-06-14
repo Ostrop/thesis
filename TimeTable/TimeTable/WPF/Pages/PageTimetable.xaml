@@ -8,21 +8,66 @@
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="Страница расписания">
-
+    <Page.Resources>
+        <Style x:Key="CenteredHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="95" />
+        </Style>
+    </Page.Resources>
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
-            <TextBlock Text=""/>
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="20">
+            <TextBlock FontSize="15" VerticalAlignment="Center" Text="Вывод расписания: "/>
+            <ComboBox FontSize="15" SelectionChanged="SelectEntity_SelectionChanged" x:Name="SelectEntity" Margin="20,10,20,10" HorizontalAlignment="Left">
+                <TextBlock>По преподавателям</TextBlock>
+                <TextBlock>По группам</TextBlock>
+            </ComboBox>
+            <StackPanel x:Name="ChooseSP" Orientation="Horizontal" Visibility="Hidden">
+                <TextBlock Margin="40 0 20 0" VerticalAlignment="Center" FontSize="15" x:Name="ToChooseTB"/>
+                <ComboBox Text="{Binding SearchText}" DropDownOpened="ComboBox_DropDownOpened" IsEditable="True" VerticalAlignment="Center" FontSize="15" x:Name="ToChooseCB">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ComboBoxItem">
+                                        <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Выбор недели: " Margin="40 0 20 0"/>
+                <DatePicker HorizontalAlignment="Left" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
+            </StackPanel>
         </DockPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0">
-            
+
+        <DataGrid Grid.Row="1" Margin="20" CanUserAddRows="False" x:Name="Timetable_DataGrid" SelectionChanged="Timetable_SelectionChanged" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Время" Binding="{Binding Time}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn x:Name="MondayTimetable" Header="Понедельник" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+                <DataGridTemplateColumn x:Name="TuesdayTimetable" Header="Вторник" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+                <DataGridTemplateColumn x:Name="WednesdayTimetable" Header="Среда" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+                <DataGridTemplateColumn x:Name="ThursdayTimetable" Header="Четверг" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+                <DataGridTemplateColumn x:Name="FridayTimetable" Header="Пятница" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+                <DataGridTemplateColumn x:Name="SaturdayTimetable" Header="Суббота" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </Page>

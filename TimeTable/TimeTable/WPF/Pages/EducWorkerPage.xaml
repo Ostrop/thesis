@@ -12,7 +12,7 @@
 
     <Grid>
         <materialDesign:Card Background="#FFE5E5E5">
-            <TabControl x:Name="MainTabItem" Style="{StaticResource MaterialDesignFilledTabControl}" SelectionChanged="TabControl_SelectionChanged">
+            <TabControl x:Name="MainTabItem" Style="{StaticResource MaterialDesignFilledTabControl}">
                 <TabItem Header="Главная страница">
                     <TabItem.Content>
                         <Grid>
@@ -38,7 +38,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Top" Grid.RowSpan="2">
-                                <ComboBox SelectionChanged="SelectEntity_SelectionChanged" x:Name="SelectEntity" Margin="40,10,20,10" HorizontalAlignment="Left">
+                                <ComboBox FontSize="15" SelectionChanged="SelectEntity_SelectionChanged" x:Name="SelectEntity" Margin="40,10,20,10" HorizontalAlignment="Left">
                                     <TextBlock>Преподаватели</TextBlock>
                                     <TextBlock>Дисциплины</TextBlock>
                                     <TextBlock>Специальности</TextBlock>

@@ -313,6 +313,14 @@ namespace TimeTable.Classes
             // Сохранение изменений в базе данных
             context.SaveChanges();
         }
+        public static List<string> GetAllTeachers()
+        {
+            List<string> teachersNames = new List<string>();
+            foreach (var teacher in context.Employees)
+                if (teacher.Post == "Преподаватель")
+                    teachersNames.Add($"{teacher.Surname} {teacher.Name[0]}. {teacher.Patronymic[0]}.");
+            return teachersNames;
+        }
         /// <summary>
         /// Получение учебного плана по неделям
         /// </summary>
@@ -402,7 +410,6 @@ namespace TimeTable.Classes
                 int semesterNumber = _studyPlan.SemesterNumber;
                 int? course = _studyPlan.Course;
 
-                //////////////////////////////////////////////////////////////////////////////////////////
                 if (asother == true)
                 {
                     var studyPlanItem = _studyPlan.StudyPlan_Disciplines.ToList();

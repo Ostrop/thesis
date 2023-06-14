@@ -32,14 +32,6 @@ namespace TimeTable.WPF.Pages
             Timetable_Frame.Navigate(new PageTimetable());
         }
         /// <summary>
-        /// Обработчик выбора вкладок
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-        /// <summary>
         /// Обработчик вкладки Выйти
         /// </summary>
         /// <param name="sender"></param>

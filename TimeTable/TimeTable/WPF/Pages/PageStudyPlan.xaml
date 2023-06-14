@@ -108,7 +108,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <DataGrid CellEditEnding="StudyPlan_DataGrid_CellEditEnding" PreviewKeyUp="StudyPlan_DataGrid_PreviewKeyUp" CanUserAddRows="False" IsEnabled="False" Grid.Row="0" x:Name="StudyPlan_DataGrid" SelectionChanged="StudyPlan_SelectionChanged" AutoGenerateColumns="False" ItemsSource="{Binding generalStudyPlan}">
+            <DataGrid CellEditEnding="StudyPlan_DataGrid_CellEditEnding" CanUserAddRows="False" IsEnabled="False" Grid.Row="0" x:Name="StudyPlan_DataGrid" SelectionChanged="StudyPlan_SelectionChanged" AutoGenerateColumns="False" ItemsSource="{Binding generalStudyPlan}">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
