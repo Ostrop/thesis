@@ -12,18 +12,12 @@ namespace TimeTable.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class StudyPlan_DisciplinesByWeek
+    public partial class sysdiagrams
     {
-        public int StudyPlan_DisciplinesByWeekId { get; set; }
-        public int StudyPlan_DisciplinesId { get; set; }
-        public Nullable<int> HoursOfLectures { get; set; }
-        public Nullable<int> HoursOfLaboratory { get; set; }
-        public Nullable<int> HoursOfLaboratoryWithComputers { get; set; }
-        public Nullable<System.DateTime> MondayOfWeek { get; set; }
-        public Nullable<int> DisciplineId { get; set; }
-        public Nullable<int> TotalNumberOfHours { get; set; }
-        public Nullable<int> StudyPlanId { get; set; }
-    
-        public virtual StudyPlan_Disciplines StudyPlan_Disciplines { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

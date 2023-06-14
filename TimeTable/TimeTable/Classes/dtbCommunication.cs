@@ -267,7 +267,7 @@ namespace TimeTable.Classes
                 List<StudyPlan_DisciplinesByWeek> studyPlan_DisciplinesByWeeksTo = context.StudyPlan_DisciplinesByWeek.Where(sp => sp.StudyPlanId == studyplanid).ToList();
 
                 foreach (var studyplan_dicsfrom in studyPlan_Disciplinescollection)
-                {
+                {   
                     List<StudyPlan_DisciplinesByWeek> studyPlan_DisciplinesByWeekcollection = studyplan_dicsfrom.StudyPlan_DisciplinesByWeek.ToList();
                     foreach (var studyPlan_DisciplinesByWeek in studyPlan_DisciplinesByWeekcollection)
                     {

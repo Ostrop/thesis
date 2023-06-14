@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f7a4b9e17fe042dc948001210d98f1b9" Name="Diagram1">
+      <Diagram DiagramId="4786c79ce00d4fae85039d32181b211a" Name="Diagram1">
         <EntityTypeShape EntityType="TimetableModel.Audiences" Width="1.5" PointX="4.5" PointY="13" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.Availability" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.Disciplines" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
@@ -16,6 +16,7 @@
         <EntityTypeShape EntityType="TimetableModel.StudyPlan" Width="1.5" PointX="3.75" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.StudyPlan_Disciplines" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="TimetableModel.StudyPlan_DisciplinesByWeek" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TimetableModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="TimetableModel.FK_Audiences_Groups" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Employees_Availability" ManuallyRouted="false" />
         <AssociationConnector Association="TimetableModel.FK_Disciplines_Employees_Disciplines" ManuallyRouted="false" />
