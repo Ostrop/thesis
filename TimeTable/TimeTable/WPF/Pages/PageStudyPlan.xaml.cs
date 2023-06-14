@@ -154,7 +154,7 @@ namespace TimeTable.WPF.Pages
                 selectedRow.Background = Brushes.LightBlue;
                 Specialities_TabControl.IsEnabled = false;
                 StudyPlan_DataGrid.IsEnabled = true;
-                IndividualSP.IsEnabled = true;
+                IndividualCB.IsEnabled = true;
                 GeneralSP.IsEnabled = true;
                 EditButtons.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
@@ -285,6 +285,7 @@ namespace TimeTable.WPF.Pages
                 DeleteButton.IsEnabled = false;
                 GeneralSP.IsEnabled = false;
                 WeekDatePicker.Text = string.Empty;
+                IndividualCB.IsEnabled = false;
                 WeekDatePicker.SelectedDate = null;
                 GeneralCB.IsChecked = true;
                 AmountHoursTB.Visibility = Visibility.Hidden;
@@ -335,6 +336,7 @@ namespace TimeTable.WPF.Pages
             EditButtons.IsEnabled = false;
             DeleteButton.IsEnabled = false;
             GeneralSP.IsEnabled = false;
+            IndividualCB.IsEnabled = false;
             WeekDatePicker.Text = string.Empty;
             WeekDatePicker.SelectedDate = null;
             GeneralCB.IsChecked = true;
@@ -349,7 +351,17 @@ namespace TimeTable.WPF.Pages
         {
             dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, false, deletedstudyplan, true);
             dtbCommunication.SaveStudyPlanByWeek(generalStudyPlanByWeek, _studyPlanId, false, true);
-            FillStudyPlan();
+            StudyPlan_DataGrid.ItemsSource = null;
+            Specialities_TabControl.IsEnabled = true;
+            StudyPlan_DataGrid.IsEnabled = false;
+            EditButtons.IsEnabled = false;
+            DeleteButton.IsEnabled = false;
+            GeneralSP.IsEnabled = false;
+            WeekDatePicker.Text = string.Empty;
+            IndividualCB.IsEnabled = false;
+            WeekDatePicker.SelectedDate = null;
+            GeneralCB.IsChecked = true;
+            AmountHoursTB.Visibility = Visibility.Hidden;
             Page_Loaded(null, null);
             window.ShowNotification("План подогнан", TimeSpan.FromSeconds(3), Brushes.LightGreen);
         }

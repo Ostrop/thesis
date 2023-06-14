@@ -16,13 +16,13 @@ namespace TimeTable.Model
     {
         public int StudyPlan_DisciplinesByWeekId { get; set; }
         public int StudyPlan_DisciplinesId { get; set; }
+        public Nullable<int> DisciplineId { get; set; }
+        public Nullable<int> TotalNumberOfHours { get; set; }
+        public Nullable<int> StudyPlanId { get; set; }
         public Nullable<int> HoursOfLectures { get; set; }
         public Nullable<int> HoursOfLaboratory { get; set; }
         public Nullable<int> HoursOfLaboratoryWithComputers { get; set; }
         public Nullable<System.DateTime> MondayOfWeek { get; set; }
-        public Nullable<int> DisciplineId { get; set; }
-        public Nullable<int> TotalNumberOfHours { get; set; }
-        public Nullable<int> StudyPlanId { get; set; }
     
         public virtual StudyPlan_Disciplines StudyPlan_Disciplines { get; set; }
     }

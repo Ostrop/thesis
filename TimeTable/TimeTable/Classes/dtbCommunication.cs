@@ -241,12 +241,12 @@ namespace TimeTable.Classes
 
             if (individual == true && asother == false)
             {
-                var dtbscollection = context.StudyPlan_DisciplinesByWeek.ToList();
+                var dtbscollection = context.StudyPlan_DisciplinesByWeek.Where(sp=> sp.StudyPlanId == studyplanid).ToList();
 
                 // Обновление записей
                 foreach (var item in generalStudyPlanByWeek)
                 {
-                    var studyPlanItem = dtbscollection.FirstOrDefault(x => x.StudyPlan_DisciplinesByWeekId == item.StudyPlan_DisciplinesByWeekId);
+                    var studyPlanItem = dtbscollection.FirstOrDefault(x => x.DisciplineId == item.DisciplineId && x.MondayOfWeek == item.MondayOfWeek);
                     if (studyPlanItem != null)
                     {
                         // Обновление существующей записи
@@ -262,13 +262,9 @@ namespace TimeTable.Classes
                 int specialityId = _studyPlan.SpecialityId;
                 int semesterNumber = _studyPlan.SemesterNumber;
                 int? course = _studyPlan.Course;
-                StudyPlan StudyPlanFrom = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course && sp.StudyPlanId != studyplanid).FirstOrDefault();
+                StudyPlan StudyPlanFrom = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course && sp.StudyPlanId != studyplanid).Include(sp=>sp.StudyPlan_Disciplines).FirstOrDefault();
                 List<StudyPlan_Disciplines> studyPlan_Disciplinescollection = StudyPlanFrom.StudyPlan_Disciplines.ToList();
-                List<StudyPlan_Disciplines> studyplan_disciplinesTo = _studyPlan.StudyPlan_Disciplines.ToList();
-                List<StudyPlan_DisciplinesByWeek> studyPlan_DisciplinesByWeeksTo = new List<StudyPlan_DisciplinesByWeek>();
-                foreach (var item in studyplan_disciplinesTo)
-                    studyPlan_DisciplinesByWeeksTo.AddRange(item.StudyPlan_DisciplinesByWeek.ToList());
-                //studyPlan_DisciplinesByWeeksTo.Count = 0
+                List<StudyPlan_DisciplinesByWeek> studyPlan_DisciplinesByWeeksTo = context.StudyPlan_DisciplinesByWeek.Where(sp => sp.StudyPlanId == studyplanid).ToList();
 
                 foreach (var studyplan_dicsfrom in studyPlan_Disciplinescollection)
                 {
@@ -284,6 +280,7 @@ namespace TimeTable.Classes
                             studyPlanToChange.HoursOfLaboratory = studyPlanItem.HoursOfLaboratory;
                             studyPlanToChange.HoursOfLaboratoryWithComputers = studyPlanItem.HoursOfLaboratoryWithComputers;
                         }
+                        SaveChanges();
                     }
                 }
             }
@@ -355,13 +352,14 @@ namespace TimeTable.Classes
         /// </summary>
         public static void SaveStudyPlan(ObservableCollection<GeneralStudyPlan> generalStudyPlan, int studyplanid, bool? individual, ObservableCollection<GeneralStudyPlan> deleted, bool asother)
         {
-            var dtbscollection = context.StudyPlan_Disciplines.ToList();
             var _studyPlan = context.StudyPlan.FirstOrDefault(sp => sp.StudyPlanId == studyplanid);
             if (individual == true && asother == false)
             {
                 var studyPlanToClear = _studyPlan.StudyPlan_Disciplines.ToList();
                 foreach (var item in studyPlanToClear)
                     context.StudyPlan_Disciplines.Remove(item);
+                SaveChanges();
+                var dtbscollection = context.StudyPlan_Disciplines.ToList();
                 // Добавление или обновление записей
                 foreach (var item in generalStudyPlan)
                 {
@@ -399,16 +397,19 @@ namespace TimeTable.Classes
             }
             else
             {
+                var dtbscollection = context.StudyPlan_Disciplines.ToList();
                 int specialityId = _studyPlan.SpecialityId;
                 int semesterNumber = _studyPlan.SemesterNumber;
                 int? course = _studyPlan.Course;
+
+                //////////////////////////////////////////////////////////////////////////////////////////
                 if (asother == true)
                 {
                     var studyPlanItem = _studyPlan.StudyPlan_Disciplines.ToList();
                     foreach (var item in studyPlanItem)
                         context.StudyPlan_Disciplines.Remove(item);
 
-                    var fromstudyplan = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course).Include(sd => sd.StudyPlan_Disciplines).FirstOrDefault();
+                    var fromstudyplan = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course && sp.StudyPlanId != studyplanid).Include(sd => sd.StudyPlan_Disciplines).FirstOrDefault();
                     // Добавление записей
                     foreach (var item in fromstudyplan.StudyPlan_Disciplines)
                     {

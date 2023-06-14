@@ -98,9 +98,9 @@
             <TextBlock FontSize="15" Text="Выбор недели: " Margin="40 0 20 0"/>
             <DatePicker IsEnabled="False" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
         </StackPanel>
-        <StackPanel IsEnabled="False" Visibility="Hidden" x:Name="IndividualSP" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 20 60 0">
+        <StackPanel Visibility="Hidden" x:Name="IndividualSP" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 20 60 0">
             <TextBlock FontSize="15" Text="Индивидуальный:" Margin="0 0 15 0"/>
-            <CheckBox x:Name="IndividualCB" PreviewMouseDown="IndividualCB_PreviewMouseDown"/>
+            <CheckBox IsEnabled="False" x:Name="IndividualCB" PreviewMouseDown="IndividualCB_PreviewMouseDown"/>
         </StackPanel>
         <Grid Grid.Column="1" Grid.Row="1" Margin="20 20 20 0">
             <Grid.RowDefinitions>
