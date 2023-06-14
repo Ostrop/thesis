@@ -64,7 +64,7 @@ namespace TimeTable.WPF.Pages
 
             // Открываем новую страницу
             navigationService.Navigate(new PageStudyPlan());
-            window.ShowNotification("Перезагрузка вкладки выполнена.", TimeSpan.FromSeconds(3), Brushes.LightGreen);
+            window.ShowNotification("Перезагрузка вкладки выполнена", TimeSpan.FromSeconds(3), Brushes.LightGreen);
         }
         /// <summary>
         /// Обработчик наведения курсора на выделенную строку
@@ -318,7 +318,7 @@ namespace TimeTable.WPF.Pages
                 generalStudyPlanByWeekbuf.Add(newItem);
             }
             dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, IndividualCB.IsChecked, deletedstudyplan, false);
-            dtbCommunication.SaveStudyPlanByWeek(generalStudyPlanByWeekbuf, _studyPlanId, IndividualCB.IsChecked);
+            dtbCommunication.SaveStudyPlanByWeek(generalStudyPlanByWeekbuf, _studyPlanId, IndividualCB.IsChecked, false);
             return true;
         }
 
@@ -347,7 +347,9 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void AsOtherButton_Click(object sender, RoutedEventArgs e)
         {
-            dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, IndividualCB.IsChecked, deletedstudyplan, true);
+            dtbCommunication.SaveStudyPlan(generalStudyPlan, _studyPlanId, false, deletedstudyplan, true);
+            dtbCommunication.SaveStudyPlanByWeek(generalStudyPlanByWeek, _studyPlanId, false, true);
+            FillStudyPlan();
             Page_Loaded(null, null);
             window.ShowNotification("План подогнан", TimeSpan.FromSeconds(3), Brushes.LightGreen);
         }
