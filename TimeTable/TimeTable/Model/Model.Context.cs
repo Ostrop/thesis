@@ -92,6 +92,32 @@ namespace TimeTable.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SearchByAllFields", tableNameParameter, searchTextParameter);
         }
     
+        public virtual ObjectResult<SearchGroupsOfTeacher_Result> SearchGroupsOfTeacher(string searchTerm, Nullable<int> teacherId)
+        {
+            var searchTermParameter = searchTerm != null ?
+                new ObjectParameter("SearchTerm", searchTerm) :
+                new ObjectParameter("SearchTerm", typeof(string));
+    
+            var teacherIdParameter = teacherId.HasValue ?
+                new ObjectParameter("TeacherId", teacherId) :
+                new ObjectParameter("TeacherId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SearchGroupsOfTeacher_Result>("SearchGroupsOfTeacher", searchTermParameter, teacherIdParameter);
+        }
+    
+        public virtual ObjectResult<SearchGroupsWithOutTeacher_Result> SearchGroupsWithOutTeacher(string searchTerm, Nullable<int> disciplineId)
+        {
+            var searchTermParameter = searchTerm != null ?
+                new ObjectParameter("SearchTerm", searchTerm) :
+                new ObjectParameter("SearchTerm", typeof(string));
+    
+            var disciplineIdParameter = disciplineId.HasValue ?
+                new ObjectParameter("DisciplineId", disciplineId) :
+                new ObjectParameter("DisciplineId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SearchGroupsWithOutTeacher_Result>("SearchGroupsWithOutTeacher", searchTermParameter, disciplineIdParameter);
+        }
+    
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
             var diagramnameParameter = diagramname != null ?

@@ -29,8 +29,12 @@ namespace TimeTable.WPF.Pages
         DataGridRow SelectedRow = null;
         DataGridRow TeachersSelectedDisciplinesRow = null;
         DataGridRow SelectedDisciplinesRow = null;
+        DataGridRow SelectedGroupRow = null;
+        DataGridRow SelectedTeacherGroupRow = null;
         GetUnassignedDisciplinesByTeacher_Result selectedDiscipline;
         GetAssignedDisciplinesByTeacher_Result _selectedDiscipline;
+        SearchGroupsWithOutTeacher_Result _selectedGroup;
+        SearchGroupsOfTeacher_Result _selectedTeacherGroup;
         ObservableCollection<TimetableWeek> timetableWeek = new ObservableCollection<TimetableWeek>();
         ObservableCollection<TimetableWeek> timetableYear = new ObservableCollection<TimetableWeek>();
         MainWindow window;
@@ -46,7 +50,7 @@ namespace TimeTable.WPF.Pages
             foreach (var teacher in _teachers)
             {
                 string fullName = $"{teacher.Surname} {teacher.Name} {teacher.Patronymic}";
-                teachers.Add(new Teacher { Id = teacher.EmployeeId, Name = fullName });
+                teachers.Add(new Teacher(teacher.EmployeeId, fullName));
             }
             Teachers_DataGrid.ItemsSource = teachers;
             GridColumn2.Visibility = Visibility.Hidden;
@@ -172,6 +176,7 @@ namespace TimeTable.WPF.Pages
                 selectedRow.Background = Brushes.LightBlue;
                 FillPage();
                 FillScheduleWeek();
+                FillPageDisciplines();
                 WeekDatePicker.SelectedDate = DateTime.Now;
             }
         }
@@ -201,17 +206,17 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void Save_YearSchedule_ButtonClick(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
-            dtbCommunication.SaveYearSchedule(timetableYear, current_employee.EmployeeId, mondayofweek);
-            window.ShowNotification("Изменения сохранены", TimeSpan.FromSeconds(3), Brushes.LightGreen);
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Обработка исключения
-            //    // Вывод ошибки, логирование, откат изменений и т.д.
-            //    window.ShowNotification("Произошла ошибка: " + ex.Message, TimeSpan.FromSeconds(5), Brushes.IndianRed);
-            //}
+            try
+            {
+                dtbCommunication.SaveYearSchedule(timetableYear, current_employee.EmployeeId, mondayofweek);
+                window.ShowNotification("Изменения сохранены", TimeSpan.FromSeconds(3), Brushes.LightGreen);
+            }
+            catch (Exception ex)
+            {
+                // Обработка исключения
+                // Вывод ошибки, логирование, откат изменений и т.д.
+                window.ShowNotification("Произошла ошибка: " + ex.Message, TimeSpan.FromSeconds(5), Brushes.IndianRed);
+            }
         }
         /// <summary>
         /// Заполнение таблицы Доступность (неделя)
@@ -226,6 +231,14 @@ namespace TimeTable.WPF.Pages
             timetableWeek.Add(new TimetableWeek("14:50 - 16:20", availabilities.Where(a => a.SessionNumber == 4).ToList()));
             timetableWeek.Add(new TimetableWeek("16:30 - 18:00", availabilities.Where(a => a.SessionNumber == 5).ToList()));
             TimetableWeek_DataGrid.ItemsSource = timetableWeek;
+        }
+        /// <summary>
+        /// Заполнение таблицы Доступность (неделя)
+        /// </summary>
+        private void FillPageDisciplines()
+        {
+            Groups_DataGrid.ItemsSource = dtbCommunication.GetFreeDisciplines(SearchTBDGroupWithoutTeacher.Text, current_employee.EmployeeId);
+            TeacherGroups_DataGrid.ItemsSource = dtbCommunication.GetTeachersDisciplines(SearchTBTeachersGroups.Text, current_employee.EmployeeId);
         }
         /// <summary>
         /// Заполнение таблицы Доступность (день)
@@ -284,6 +297,22 @@ namespace TimeTable.WPF.Pages
                 Teachers_Disciplines_DataGrid.ItemsSource = dtbCommunication.GetAssignedDisciplinesByTeacher(current_employee.EmployeeId, SearchTBTeachers.Text);
         }
         /// <summary>
+        /// Обработчик поисковых строк
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchBoxGroups_TextChanged(object sender, EventArgs e)
+        {
+            if (current_employee == null)
+                return;
+            SelectedDisciplinesRow = null;
+            TextBox textBox = (TextBox)sender;
+            if (textBox == SearchTBDGroupWithoutTeacher)
+                Groups_DataGrid.ItemsSource = dtbCommunication.GetFreeDisciplines(SearchTBDGroupWithoutTeacher.Text, current_employee.EmployeeId);
+            else
+                TeacherGroups_DataGrid.ItemsSource = dtbCommunication.GetTeachersDisciplines(SearchTBTeachersGroups.Text, current_employee.EmployeeId);
+        }
+        /// <summary>
         /// Обработчик окрашивания выбранной строки
         /// </summary>
         /// <param name="sender"></param>
@@ -321,6 +350,85 @@ namespace TimeTable.WPF.Pages
 
                 // Обновляем переменную текущей выбранной строки
                 SelectedDisciplinesRow = selectedRow;
+                selectedRow.Background = Brushes.LightBlue;
+            }
+        }
+        /// <summary>
+        /// Обработчик окрашивания выбранной строки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Groups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Проверяем, что в DataGrid есть выбранный элемент
+            if (sender is DataGrid dataGrid && dataGrid.SelectedItem != null)
+            {
+
+                // Получаем выбранную строку
+                DataGridRow selectedRow = (DataGridRow)Groups_DataGrid.ItemContainerGenerator.ContainerFromItem(Groups_DataGrid.SelectedItem);
+                // Окрашиваем выбранную строку
+                SelectedGroupRow = selectedRow;
+                selectedRow.Background = Brushes.LightBlue;
+
+
+                // Снимаем выделение с предыдущей выбранной строки
+                if (SelectedGroupRow != null)
+                {
+                    SelectedGroupRow.Background = Brushes.Transparent;
+                }
+                _selectedGroup = (SearchGroupsWithOutTeacher_Result)Groups_DataGrid.SelectedItem;
+                dataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
+                foreach (DataGridColumn column in Groups_DataGrid.Columns)
+                {
+                    if (column.GetCellContent(selectedRow) != null)
+                    {
+                        DataGridCell cell = column.GetCellContent(selectedRow).Parent as DataGridCell;
+                        cell.IsSelected = false; // Снять выделение для каждой ячейки в строке
+                    }
+                }
+                dataGrid.SelectionUnit = DataGridSelectionUnit.FullRow;
+
+                // Обновляем переменную текущей выбранной строки
+                SelectedGroupRow = selectedRow;
+                selectedRow.Background = Brushes.LightBlue;
+            }
+        }
+        /// <summary>
+        /// Обработчик окрашивания выбранной строки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TeacherGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Проверяем, что в DataGrid есть выбранный элемент
+            if (sender is DataGrid dataGrid && TeacherGroups_DataGrid.SelectedItem != null)
+            {
+
+                // Получаем выбранную строку
+                DataGridRow selectedRow = (DataGridRow)TeacherGroups_DataGrid.ItemContainerGenerator.ContainerFromItem(TeacherGroups_DataGrid.SelectedItem);
+                // Окрашиваем выбранную строку
+                selectedRow.Background = Brushes.LightBlue;
+
+
+                // Снимаем выделение с предыдущей выбранной строки
+                if (SelectedTeacherGroupRow != null)
+                {
+                    SelectedTeacherGroupRow.Background = Brushes.Transparent;
+                }
+                _selectedTeacherGroup = (SearchGroupsOfTeacher_Result)TeacherGroups_DataGrid.SelectedItem;
+                dataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
+                foreach (DataGridColumn column in TeacherGroups_DataGrid.Columns)
+                {
+                    if (column.GetCellContent(selectedRow) != null)
+                    {
+                        DataGridCell cell = column.GetCellContent(selectedRow).Parent as DataGridCell;
+                        cell.IsSelected = false; // Снять выделение для каждой ячейки в строке
+                    }
+                }
+                dataGrid.SelectionUnit = DataGridSelectionUnit.FullRow;
+
+                // Обновляем переменную текущей выбранной строки
+                SelectedTeacherGroupRow = selectedRow;
                 selectedRow.Background = Brushes.LightBlue;
             }
         }
@@ -373,6 +481,9 @@ namespace TimeTable.WPF.Pages
         /// <param name="e"></param>
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            TabControl tb = sender as TabControl;
+            if (tb.SelectedIndex == 3)
+                FillPageDisciplines();
         }
 
         /// <summary>
@@ -393,6 +504,44 @@ namespace TimeTable.WPF.Pages
             dtbCommunication.AddEmployees_Disciplines(current_employee.EmployeeId, selectedDiscipline.DisciplineId);
             dtbCommunication.SaveChanges();
             Teachers_Disciplines_DataGrid.ItemsSource = dtbCommunication.GetAssignedDisciplinesByTeacher(current_employee.EmployeeId, SearchTBTeachers.Text);
+        }
+        /// <summary>
+        /// Обработчик стрелочки вправо
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToTeacherGroups_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedGroupRow == null)
+            {
+                window.ShowNotification("Выберите строку", TimeSpan.FromSeconds(3), Brushes.IndianRed);
+                return;
+            }
+            SelectedGroupRow.Visibility = Visibility.Collapsed;
+            SelectedGroupRow = null;
+            SelectedTeacherGroupRow = null;
+            dtbCommunication.AddTeacherToStudyPlan_Disciplines(current_employee.EmployeeId, _selectedGroup.StudyPlan_DisciplineId);
+            dtbCommunication.SaveChanges();
+            TeacherGroups_DataGrid.ItemsSource = dtbCommunication.GetTeachersDisciplines(SearchTBTeachersGroups.Text, current_employee.EmployeeId);
+        }
+        /// <summary>
+        /// Обработчик стрелочки вправо
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FromTeacherGroups_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedTeacherGroupRow == null)
+            {
+                window.ShowNotification("Выберите строку", TimeSpan.FromSeconds(3), Brushes.IndianRed);
+                return;
+            }
+            SelectedTeacherGroupRow.Visibility = Visibility.Collapsed;
+            SelectedTeacherGroupRow = null;
+            SelectedGroupRow = null;
+            dtbCommunication.RemoveTeacherFromStudyPlan_Disciplines(_selectedTeacherGroup.StudyPlan_DisciplineId);
+            dtbCommunication.SaveChanges();
+            Groups_DataGrid.ItemsSource = dtbCommunication.GetFreeDisciplines(SearchTBDGroupWithoutTeacher.Text, current_employee.EmployeeId);
         }
         /// <summary>
         /// Обработчик кнопки "Добавить"

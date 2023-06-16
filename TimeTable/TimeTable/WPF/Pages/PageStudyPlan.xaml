@@ -96,7 +96,7 @@
             <TextBlock FontSize="15" Text="Общий:" Margin="0 0 15 0"/>
             <CheckBox PreviewMouseDown="GeneralCB_PreviewMouseDown" x:Name="GeneralCB" Unchecked="GeneralCB_Checked" Checked="GeneralCB_Checked"/>
             <TextBlock FontSize="15" Text="Выбор недели: " Margin="40 0 20 0"/>
-            <DatePicker IsEnabled="False" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
+            <DatePicker FontSize="15" IsEnabled="False" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
         </StackPanel>
         <StackPanel Visibility="Hidden" x:Name="IndividualSP" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 20 60 0">
             <TextBlock FontSize="15" Text="Индивидуальный:" Margin="0 0 15 0"/>

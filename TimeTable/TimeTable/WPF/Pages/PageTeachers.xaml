@@ -63,11 +63,11 @@
                             <Grid Grid.Column="0">
                                 <DockPanel Margin="20 20 0 20">
                                     <TextBlock Margin="0, 0, 60, 0" VerticalAlignment="Bottom" FontSize="15" Text="Все предметы:"/>
-                                    <TextBlock FontSize="15" Text="Поиск: "/>
-                                    <TextBox x:Name="SearchTB" TextChanged="SearchBox_TextChanged" Width="150" VerticalAlignment="Top"/>
-                                    <Button Margin="0, 0, 10, 0" HorizontalAlignment="Right" Click="ToTeacher_Click">
+                                    <Button DockPanel.Dock="Right" Margin="0, 0, 10, 0" HorizontalAlignment="Right" Click="ToTeacher_Click">
                                         <Image Source="/Resources/СтрелкаВправо.png" Stretch="Uniform"/>
                                     </Button>
+                                    <TextBox DockPanel.Dock="Right" Margin="0 0 20 0" x:Name="SearchTB" TextChanged="SearchBox_TextChanged" Width="150" VerticalAlignment="Top"/>
+                                    <TextBlock DockPanel.Dock="Right" FontSize="15" Text="Поиск: " HorizontalAlignment="Right"/>
                                 </DockPanel>
                             </Grid>
                             <DataGrid Margin="0, 0, 10, 0" Grid.Column="0" Grid.Row="1" IsReadOnly="True" x:Name="Disciplines_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="Disciplines_SelectionChanged">
@@ -80,14 +80,13 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                             <Grid Grid.Column="1" Margin="0 20 20 20">
-
                                 <DockPanel>
                                     <Button Margin="10, 0, 15, 0" HorizontalAlignment="Left" Click="FromTeacher_Click">
                                         <Image Source="/Resources/СтрелкаВлево.png" Stretch="Uniform"/>
                                     </Button>
                                     <TextBlock Margin="15, 0, 60, 0" VerticalAlignment="Bottom" FontSize="15" Text="Ведомые предметы:"/>
-                                    <TextBlock  FontSize="15" Text="Поиск: "/>
-                                    <TextBox x:Name="SearchTBTeachers" TextChanged="SearchBox_TextChanged" Width="150" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                    <TextBox DockPanel.Dock="Right" HorizontalAlignment="Right" x:Name="SearchTBTeachers" TextChanged="SearchBox_TextChanged" Width="150" VerticalAlignment="Top"/>
+                                    <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" FontSize="15" Text="Поиск: "/>
                                 </DockPanel>
                             </Grid>
                             <DataGrid Margin="10, 0, 0, 0" Grid.Column="1" Grid.Row="1" IsReadOnly="True" x:Name="Teachers_Disciplines_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="Teachers_Disciplines_SelectionChanged">
@@ -106,7 +105,7 @@
                     <TabItem.Content>
                         <Grid Margin="0 15 0 0">
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -215,17 +214,21 @@
                 <TabItem Header="Доступность (день)">
                     <TabItem.Content>
                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="2">
                                 <TextBlock FontSize="15" Text="Выбор недели: " Margin="20"/>
                                 <DatePicker x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"  ToolTip="Несохранённые данные при изменении будут утеряны"/>
                             </StackPanel>
-                            <DataGrid Grid.Row="1" SelectionChanged="TimetableWeek_DataGrid_SelectionChanged" AutoGenerateColumns="False" x:Name="TimetableYear_DataGrid" IsReadOnly="True" ItemsSource="{Binding timetableYear}" CanUserAddRows="False">
+                            <DataGrid Grid.Row="1" SelectionChanged="TimetableWeek_DataGrid_SelectionChanged" AutoGenerateColumns="False" x:Name="TimetableYear_DataGrid" IsReadOnly="True" ItemsSource="{Binding timetableYear}" CanUserAddRows="False" Grid.ColumnSpan="2">
                                 <DataGrid.Resources>
                                     <Style x:Key="TimetableButtonStyle" TargetType="Button">
                                         <Style.Triggers>
@@ -315,7 +318,7 @@
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="20">
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="20,20,20,20" Grid.ColumnSpan="2">
                                 <materialDesign:PackIcon Kind="CheckBold" VerticalAlignment="Center" Background="LightGreen"/>
                                 <Label Content=" - Предпочтение" VerticalAlignment="Center"/>
                                 <materialDesign:PackIcon Kind="Cancel" VerticalAlignment="Center" Margin="20 0 0 0" Background="IndianRed"/>
@@ -323,14 +326,57 @@
                                 <materialDesign:PackIcon Kind="Minus" VerticalAlignment="Center" Margin="20 0 0 0" Background="LightYellow"/>
                                 <Label Content=" - Допустимо" VerticalAlignment="Center"/>
                             </StackPanel>
-                            <Button Grid.Row="3" Content="Сохранить" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0 20 0 40" Click="Save_YearSchedule_ButtonClick"/>
+                            <Button Grid.ColumnSpan="2" Grid.Row="3" Content="Сохранить" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin=" 0,0,0,40" Click="Save_YearSchedule_ButtonClick"/>
                         </Grid>
                     </TabItem.Content>
                 </TabItem>
                 <TabItem Header="Группы">
                     <TabItem.Content>
                         <Grid>
-
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <DockPanel Grid.Column="0" Margin="20 20 0 20">
+                                <TextBlock Margin="0, 0, 0, 0" VerticalAlignment="Bottom" FontSize="15" Text="Свободные группы:"/>
+                                <Button DockPanel.Dock="Right" Margin="0, 0, 10, 0" HorizontalAlignment="Right" Click="ToTeacherGroups_Click">
+                                    <Image Source="/Resources/СтрелкаВправо.png" Stretch="Uniform"/>
+                                </Button>
+                                <TextBox DockPanel.Dock="Right" x:Name="SearchTBDGroupWithoutTeacher" TextChanged="SearchBoxGroups_TextChanged" Width="150" VerticalAlignment="Top" Margin="0 0 20 0"/>
+                                <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" FontSize="15" Text="Поиск: "/>
+                            </DockPanel>
+                            <DockPanel Grid.Column="1" Grid.Row="0" Margin="0 20 20 20">
+                                <Button Margin="10, 0, 15, 0" HorizontalAlignment="Left" Click="FromTeacherGroups_Click">
+                                    <Image Source="/Resources/СтрелкаВлево.png" Stretch="Uniform"/>
+                                </Button>
+                                <TextBlock Margin="15, 0, 0, 0" VerticalAlignment="Bottom" FontSize="15" Text="Группы преподавателя:" DockPanel.Dock="Left"/>
+                                <TextBox x:Name="SearchTBTeachersGroups" DockPanel.Dock="Right" TextChanged="SearchBoxGroups_TextChanged" Width="150" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 0 20 0"/>
+                                <TextBlock HorizontalAlignment="Right" DockPanel.Dock="Right" FontSize="15" Text="Поиск: "/>
+                            </DockPanel>
+                            <DataGrid Margin="0, 0, 10, 0" SelectionMode="Single" Grid.Column="0" Grid.Row="1" IsReadOnly="True" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="Groups_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Id" Visibility="Collapsed" Binding="{Binding StudyPlan_DisciplineId}"/>
+                                    <DataGridTextColumn Header="Id1" Visibility="Collapsed" Binding="{Binding DisciplineId}"/>
+                                    <DataGridTextColumn Header="Наименование дисциплины" Binding="{Binding NameOfDiscipline}" />
+                                    <DataGridTextColumn Header="Номер группы" Binding="{Binding GroupName}" />
+                                    <DataGridTextColumn Header="Семестры" Binding="{Binding SemesterNumber}" />
+                                    <DataGridTextColumn Header="Часов" Binding="{Binding TotalNumberOfHours}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid Margin="10, 0, 0, 0" SelectionMode="Single" Grid.Column="1" Grid.Row="1" IsReadOnly="True" x:Name="TeacherGroups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="TeacherGroups_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Id" Visibility="Collapsed" Binding="{Binding StudyPlan_DisciplineId}"/>
+                                    <DataGridTextColumn Header="Id1" Visibility="Collapsed" Binding="{Binding DisciplineId}"/>
+                                    <DataGridTextColumn Header="Наименование дисциплины" Binding="{Binding NameOfDiscipline}" />
+                                    <DataGridTextColumn Header="Номер группы" Binding="{Binding GroupName}" />
+                                    <DataGridTextColumn Header="Семестры" Binding="{Binding SemesterNumber}" />
+                                    <DataGridTextColumn Header="Часов" Binding="{Binding TotalNumberOfHours}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </TabItem.Content>
                 </TabItem>

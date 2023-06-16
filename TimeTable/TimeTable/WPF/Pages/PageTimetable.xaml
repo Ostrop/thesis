@@ -28,26 +28,9 @@
             </ComboBox>
             <StackPanel x:Name="ChooseSP" Orientation="Horizontal" Visibility="Hidden">
                 <TextBlock Margin="40 0 20 0" VerticalAlignment="Center" FontSize="15" x:Name="ToChooseTB"/>
-                <ComboBox Text="{Binding SearchText}" DropDownOpened="ComboBox_DropDownOpened" IsEditable="True" VerticalAlignment="Center" FontSize="15" x:Name="ToChooseCB">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                    <ComboBox.ItemContainerStyle>
-                        <Style TargetType="ComboBoxItem">
-                            <Setter Property="Control.Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ComboBoxItem">
-                                        <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ComboBox.ItemContainerStyle>
-                </ComboBox>
+                <ComboBox MinWidth="120" ItemsSource="{Binding}" IsEditable="True" VerticalAlignment="Center" FontSize="15" x:Name="ToChooseCB"/>
                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Выбор недели: " Margin="40 0 20 0"/>
-                <DatePicker HorizontalAlignment="Left" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
+                <DatePicker FontSize="15" HorizontalAlignment="Left" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
             </StackPanel>
         </DockPanel>
 

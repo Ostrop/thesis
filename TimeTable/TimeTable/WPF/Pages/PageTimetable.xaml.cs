@@ -48,7 +48,8 @@ namespace TimeTable.WPF.Pages
                     ToChooseCB.DataContext = dtbCommunication.GetAllTeachers();
                     break;
                 case 1:
-
+                    ToChooseTB.Text = "Выбор группы";
+                    ToChooseCB.DataContext = dtbCommunication.GetAllGroups();
                     break;
             }
         }

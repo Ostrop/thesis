@@ -21,8 +21,8 @@
                                 <Button MinHeight="40" Content="Учебный план" Margin="20" Click="StudyPlane_ButtonClick"/>
                                 <Button MinHeight="40" Content="Расписание" Margin="20" Click="Schedule_ButtonClick"/>
                                 <Button MinHeight="40" Content="Отчеты" Margin="20" Click="Reports_ButtonClick"/>
-                                <Button MinHeight="40" HorizontalAlignment="Right" Content="Выход" Margin="20" Click="Escape"/>
                             </StackPanel>
+                            <Button MinHeight="40" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Выход" Margin="0 0 60 40" Click="Escape"/>
                         </Grid>
                     </TabItem.Content>
                 </TabItem>
@@ -64,10 +64,11 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Отчеты">
-                    <Grid Background="#FFE5E5E5"/>
+                    <Grid Background="#FFE5E5E5">
+                        
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Выход" PreviewMouseDown="Escape">
-                    <Grid Background="#FFE5E5E5"/>
                 </TabItem>
             </TabControl>
         </materialDesign:Card>

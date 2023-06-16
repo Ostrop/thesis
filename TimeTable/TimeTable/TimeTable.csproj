@@ -123,6 +123,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Model\SearchGroupsOfTeacher_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SearchGroupsWithOutTeacher_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Sessions.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

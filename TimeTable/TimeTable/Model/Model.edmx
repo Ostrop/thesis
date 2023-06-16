@@ -303,6 +303,14 @@
           <Parameter Name="tableName" Type="nvarchar" Mode="In" />
           <Parameter Name="searchText" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="SearchGroupsOfTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SearchTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="TeacherId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SearchGroupsWithOutTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SearchTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="DisciplineId" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
           <Parameter Name="owner_id" Type="int" Mode="In" />
@@ -779,6 +787,14 @@
             <Parameter Name="tableName" Mode="In" Type="String" />
             <Parameter Name="searchText" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="SearchGroupsOfTeacher" ReturnType="Collection(TimetableModel.SearchGroupsOfTeacher_Result)">
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+            <Parameter Name="TeacherId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SearchGroupsWithOutTeacher" ReturnType="Collection(TimetableModel.SearchGroupsWithOutTeacher_Result)">
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+            <Parameter Name="DisciplineId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -833,6 +849,22 @@
           <Property Type="String" Name="AbbreviatedName" Nullable="true" MaxLength="20" />
           <Property Type="Boolean" Name="Practice" Nullable="true" />
           <Property Type="Boolean" Name="Exam" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SearchGroupsOfTeacher_Result">
+          <Property Type="Int32" Name="StudyPlan_DisciplineId" Nullable="false" />
+          <Property Type="Int32" Name="DisciplineId" Nullable="false" />
+          <Property Type="String" Name="NameOfDiscipline" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="GroupName" Nullable="false" MaxLength="37" />
+          <Property Type="Int32" Name="TotalNumberOfHours" Nullable="true" />
+          <Property Type="String" Name="SemesterNumber" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="SearchGroupsWithOutTeacher_Result">
+          <Property Type="Int32" Name="StudyPlan_DisciplineId" Nullable="false" />
+          <Property Type="Int32" Name="DisciplineId" Nullable="false" />
+          <Property Type="String" Name="NameOfDiscipline" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="GroupName" Nullable="false" MaxLength="37" />
+          <Property Type="Int32" Name="TotalNumberOfHours" Nullable="true" />
+          <Property Type="String" Name="SemesterNumber" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1028,6 +1060,30 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SearchByAllFields" FunctionName="Хранилище TimetableModel.SearchByAllFields" />
+          <FunctionImportMapping FunctionImportName="SearchGroupsOfTeacher" FunctionName="Хранилище TimetableModel.SearchGroupsOfTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.SearchGroupsOfTeacher_Result">
+                <ScalarProperty Name="StudyPlan_DisciplineId" ColumnName="StudyPlan_DisciplineId" />
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="TotalNumberOfHours" ColumnName="TotalNumberOfHours" />
+                <ScalarProperty Name="SemesterNumber" ColumnName="SemesterNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SearchGroupsWithOutTeacher" FunctionName="Хранилище TimetableModel.SearchGroupsWithOutTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TimetableModel.SearchGroupsWithOutTeacher_Result">
+                <ScalarProperty Name="StudyPlan_DisciplineId" ColumnName="StudyPlan_DisciplineId" />
+                <ScalarProperty Name="DisciplineId" ColumnName="DisciplineId" />
+                <ScalarProperty Name="NameOfDiscipline" ColumnName="NameOfDiscipline" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="TotalNumberOfHours" ColumnName="TotalNumberOfHours" />
+                <ScalarProperty Name="SemesterNumber" ColumnName="SemesterNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище TimetableModel.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище TimetableModel.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище TimetableModel.sp_dropdiagram" />

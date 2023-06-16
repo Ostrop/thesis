@@ -53,6 +53,46 @@ namespace TimeTable.Classes
             }
         }
         /// <summary>
+        /// Метод удаления преподавателя из группы
+        /// </summary>
+        public static void RemoveTeacherFromStudyPlan_Disciplines(int studyplan_disciid)
+        {
+            var studyplan_disci = context.StudyPlan_Disciplines.Where(sp => sp.StudyPlan_DisciplinesId == studyplan_disciid).FirstOrDefault();
+            studyplan_disci.EmployeeId = null;
+        }
+        /// <summary>
+        /// Метод закрепления преподавателя к группе в учебном плане
+        /// </summary>
+        /// <param name="studypla_disciid"></param>
+        /// <param name="teacherid"></param>
+        public static void AddTeacherToStudyPlan_Disciplines(int teacherid, int studyplan_disciid)
+        {
+            var studyplan_disci = context.StudyPlan_Disciplines.Where(sp => sp.StudyPlan_DisciplinesId == studyplan_disciid).FirstOrDefault();
+            studyplan_disci.EmployeeId = teacherid;
+        }
+        /// <summary>
+        /// Метод получения дисциплин групп, у которых нет преподавателей
+        /// </summary>
+        /// <returns></returns>
+        public static List<SearchGroupsWithOutTeacher_Result> GetFreeDisciplines(string searchterm, int teacherid)
+        {
+            List<SearchGroupsWithOutTeacher_Result> buf = new List<SearchGroupsWithOutTeacher_Result>();
+            List<int> ids;
+            ids = context.Employees_Disciplines.Where(e => e.EmployeeId == teacherid).Select(e => e.DisciplineId).ToList();
+            foreach (var item in ids)
+                buf.AddRange(context.SearchGroupsWithOutTeacher(searchterm, item).ToList());
+            return buf;
+        }
+        /// <summary>
+        /// Метод получения дисциплин групп, у которых нет преподавателей
+        /// </summary>
+        /// <returns></returns>
+        public static List<SearchGroupsOfTeacher_Result> GetTeachersDisciplines(string searchterm, int teacherid)
+        {
+            var result = context.SearchGroupsOfTeacher(searchterm, teacherid).ToList();
+            return result;
+        }
+        /// <summary>
         /// Метод сохранений недельного предпочтения преподавателя
         /// </summary>
         /// <param name="dataGrid"></param>
@@ -241,7 +281,7 @@ namespace TimeTable.Classes
 
             if (individual == true && asother == false)
             {
-                var dtbscollection = context.StudyPlan_DisciplinesByWeek.Where(sp=> sp.StudyPlanId == studyplanid).ToList();
+                var dtbscollection = context.StudyPlan_DisciplinesByWeek.Where(sp => sp.StudyPlanId == studyplanid).ToList();
 
                 // Обновление записей
                 foreach (var item in generalStudyPlanByWeek)
@@ -262,12 +302,12 @@ namespace TimeTable.Classes
                 int specialityId = _studyPlan.SpecialityId;
                 int semesterNumber = _studyPlan.SemesterNumber;
                 int? course = _studyPlan.Course;
-                StudyPlan StudyPlanFrom = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course && sp.StudyPlanId != studyplanid).Include(sp=>sp.StudyPlan_Disciplines).FirstOrDefault();
+                StudyPlan StudyPlanFrom = context.StudyPlan.Where(sp => sp.IsIndividual == false && sp.SpecialityId == specialityId && sp.SemesterNumber == semesterNumber && sp.Course == course && sp.StudyPlanId != studyplanid).Include(sp => sp.StudyPlan_Disciplines).FirstOrDefault();
                 List<StudyPlan_Disciplines> studyPlan_Disciplinescollection = StudyPlanFrom.StudyPlan_Disciplines.ToList();
                 List<StudyPlan_DisciplinesByWeek> studyPlan_DisciplinesByWeeksTo = context.StudyPlan_DisciplinesByWeek.Where(sp => sp.StudyPlanId == studyplanid).ToList();
 
                 foreach (var studyplan_dicsfrom in studyPlan_Disciplinescollection)
-                {   
+                {
                     List<StudyPlan_DisciplinesByWeek> studyPlan_DisciplinesByWeekcollection = studyplan_dicsfrom.StudyPlan_DisciplinesByWeek.ToList();
                     foreach (var studyPlan_DisciplinesByWeek in studyPlan_DisciplinesByWeekcollection)
                     {
@@ -313,13 +353,28 @@ namespace TimeTable.Classes
             // Сохранение изменений в базе данных
             context.SaveChanges();
         }
-        public static List<string> GetAllTeachers()
+        /// <summary>
+        /// Метод получения ФИО всех преподавателей
+        /// </summary>
+        /// <returns></returns>
+        public static List<Teacher> GetAllTeachers()
         {
-            List<string> teachersNames = new List<string>();
+            List<Teacher> teachers = new List<Teacher>();
             foreach (var teacher in context.Employees)
                 if (teacher.Post == "Преподаватель")
-                    teachersNames.Add($"{teacher.Surname} {teacher.Name[0]}. {teacher.Patronymic[0]}.");
-            return teachersNames;
+                    teachers.Add(new Teacher(teacher.EmployeeId, $"{teacher.Surname} {teacher.Name[0]}. {teacher.Patronymic[0]}."));
+            return teachers;
+        }
+        /// <summary>
+        /// Метод получения всех групп
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetAllGroups()
+        {
+            List<string> groups = new List<string>();
+            foreach (var group in context.Groups)
+                groups.Add($"{group.Course}{group.Specialities.SpecialityNumber}/{group.GroupNumber}");
+            return groups;
         }
         /// <summary>
         /// Получение учебного плана по неделям
