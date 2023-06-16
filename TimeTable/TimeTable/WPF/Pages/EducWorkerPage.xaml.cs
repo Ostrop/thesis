@@ -78,6 +78,12 @@ namespace TimeTable.WPF.Pages
                 case 2:
                     BookFrame.Navigate(new PageSpecialities());
                     break;
+                case 3:
+                    BookFrame.Navigate(new PageGroups());
+                    break;
+                case 4:
+                    BookFrame.Navigate(new PageAudiences());
+                    break;
             }
         }
         /// <summary>

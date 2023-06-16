@@ -65,7 +65,10 @@
                 </TabItem>
                 <TabItem Header="Отчеты">
                     <Grid Background="#FFE5E5E5">
-                        
+                        <StackPanel Orientation="Vertical" Margin="40,40,40,40">
+                            <Button Margin="20" Content="Составить отчёт расписания по группам"/>
+                            <Button Margin="20" Content="Составить отчёт расписания по преподавателям"/>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Выход" PreviewMouseDown="Escape">

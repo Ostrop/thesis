@@ -125,7 +125,7 @@ namespace TimeTable.WPF.Windows
             switch (current_employe.Post)
             {
                 case "Преподаватель":
-                    //contentFrame.Navigate(new TeacherPage());
+                    contentFrame.Navigate(new TeacherPage());
                     break;
                 case "Админ":
                     contentFrame.Navigate(new AdminPage());

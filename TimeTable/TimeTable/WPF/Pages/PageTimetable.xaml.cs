@@ -23,7 +23,7 @@ namespace TimeTable.WPF.Pages
     public partial class PageTimetable : Page
     {
         MainWindow window;
-
+        List<TimetableWeek> week = new List<TimetableWeek>();
         public PageTimetable()
         {
             InitializeComponent();
@@ -46,12 +46,36 @@ namespace TimeTable.WPF.Pages
                 case 0:
                     ToChooseTB.Text = "Выбор преподавателя:";
                     ToChooseCB.DataContext = dtbCommunication.GetAllTeachers();
+                    ToChooseCB.DisplayMemberPath = "Name";
+                    //week.Clear();
+                    //week.Add(new TimetableWeek("9:00 - 10:30", "12919/1\nДМ\n100", "-", "12919/2\nДМ\n100", "12919/1\nДМ\n100", "-", "12919/1\nДМ\n100"));
+                    //week.Add(new TimetableWeek("10:45 - 12:15", "12919/1\nДМ\n100", "12919/3\nДМ\n100", "12919/3\nДМ\n100", "-", "-", "-"));
+                    //week.Add(new TimetableWeek("13:05 - 14:35", "12919/3\nДМ\n100", "12919/4\nДМ\n100", "12919/4\nДМ\n100", "12919/4\nДМ\n100", "-", "-"));
+                    //week.Add(new TimetableWeek("14:50 - 16:20", "12919/5\nДМ\n100", "12919/2\nДМ\n100", "12919/2\nДМ\n100", "12919/5\nДМ\n100", "-", "-"));
+                    //week.Add(new TimetableWeek("16:30 - 18:00", "12919/5\nДМ\n100", "12919/2\nДМ\n100", "-", "-", "-", "-"));
+                    //week.Add(new TimetableWeek("9:00 - 10:30", "Иванов И.И.\nДМ\n100", "Кузнецов Д.А.\nАСД\n110", "Кузнецов Д.А.\nАСД\n110", "Иванов И.И.\nДМ\n100", "Кузнецов Д.А.\nАСД\n110", "Иванов И.И.\nДМ\n100"));
+                    //week.Add(new TimetableWeek("10:45 - 12:15", "Смирнова А.И.\nС++\n101", "Смирнова А.И.\nС++\n101", "Смирнова А.И.\nС++\n101", "Соколова А.Д.\nМат. логика\n115", "Соколова А.Д.\nМат. логика\n115", "Соколова А.Д.\nМат. логика\n115"));
+                    //week.Add(new TimetableWeek("13:05 - 14:35", "Павлов А.С.\nJava\n101", "Павлов А.С.\nJava\n101", "Павлов А.С.\nJava\n101", "Морозов Д.П.\nМоб. разработка\n103", "Морозов Д.П.\nМоб. разработка\n103", "Морозов Д.П.\nМоб. разработка\n103"));
+                    //week.Add(new TimetableWeek("14:50 - 16:20", "Соколов И.В.\nСетевое прогр.\n115", "Соколов И.В.\nСетевое прогр.\n115", "Соколов И.В.\nСетевое прогр.\n115", "-", "-", "-"));
+                    //week.Add(new TimetableWeek("16:30 - 18:00", "-", "-", "-", "-", "-", "-"));
+                    //Timetable_DataGrid.ItemsSource = week;
                     break;
                 case 1:
                     ToChooseTB.Text = "Выбор группы";
+                    ToChooseCB.DisplayMemberPath = "";
+                    //week.Clear();
                     ToChooseCB.DataContext = dtbCommunication.GetAllGroups();
+                    //Timetable_DataGrid.ItemsSource = week;
                     break;
             }
+        }
+        /// <summary>
+        /// Обработчик стрелочки вправо
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GetTimetableFromDate(object sender, RoutedEventArgs e)
+        {
         }
 
         /// <summary>

@@ -126,6 +126,16 @@ namespace TimeTable.Classes
             Friday = availability.FirstOrDefault(a => a.Date == new DateTime(2000, 01, 07))?.Rule;
             Saturday = availability.FirstOrDefault(a => a.Date == new DateTime(2000, 01, 08))?.Rule;
         }
+        public TimetableWeek(string time, string mon, string tue, string wedn, string thurs, string friday, string saturday)
+        {
+            Time = time;
+            Monday = mon;
+            Tuesday = tue;
+            Wednesday = wedn;
+            Thursday = thurs;
+            Friday = friday;
+            Saturday = saturday;
+        }
 
         public TimetableWeek(string time, List<Availability> availability, DateTime startDate)
         {

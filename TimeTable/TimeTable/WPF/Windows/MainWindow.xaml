@@ -6,8 +6,10 @@
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
+        
+    mc:Ignorable="d"
         Loaded="Window_Loaded"
+        Icon="/Resources/ico.ico"
         Title="АСР Протокол" Height="720" Width="1280">
     <Grid Cursor="">
         <Grid.RowDefinitions>
@@ -16,8 +18,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Margin="50 20 50 20" >
-                <TextBlock  x:Name="DateTimeBox" FontSize="20" HorizontalAlignment="Left" Margin="0 0 30 0"/>
-                <TextBlock x:Name="UserNameTextBlock" FontSize="20" HorizontalAlignment="Right"/>
+            <TextBlock  x:Name="DateTimeBox" FontSize="20" HorizontalAlignment="Left" Margin="0 0 30 0"/>
+            <TextBlock x:Name="UserNameTextBlock" FontSize="20" HorizontalAlignment="Right"/>
             <Button Width="Auto" x:Name="AuthorizationButton" Click="AuthorizationButton_Click" Content="Войти в кабинет" HorizontalAlignment="Right"/>
         </Grid>
         <Frame Grid.Row="1" x:Name="contentFrame" NavigationUIVisibility="Hidden"/>

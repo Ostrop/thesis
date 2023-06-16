@@ -32,9 +32,10 @@
                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Выбор недели: " Margin="40 0 20 0"/>
                 <DatePicker FontSize="15" HorizontalAlignment="Left" x:Name="WeekDatePicker" SelectedDateChanged="WeekDatePicker_SelectedDateChanged"/>
             </StackPanel>
+            <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="Составить расписание" Click="GetTimetableFromDate"/>
         </DockPanel>
 
-        <DataGrid Grid.Row="1" Margin="20" CanUserAddRows="False" x:Name="Timetable_DataGrid" SelectionChanged="Timetable_SelectionChanged" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" Margin="20 20 20 0" CanUserAddRows="False" x:Name="Timetable_DataGrid" SelectionChanged="Timetable_SelectionChanged" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Время" Binding="{Binding Time}">
                     <DataGridTextColumn.ElementStyle>
@@ -44,12 +45,12 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn x:Name="MondayTimetable" Header="Понедельник" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
-                <DataGridTemplateColumn x:Name="TuesdayTimetable" Header="Вторник" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
-                <DataGridTemplateColumn x:Name="WednesdayTimetable" Header="Среда" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
-                <DataGridTemplateColumn x:Name="ThursdayTimetable" Header="Четверг" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
-                <DataGridTemplateColumn x:Name="FridayTimetable" Header="Пятница" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
-                <DataGridTemplateColumn x:Name="SaturdayTimetable" Header="Суббота" HeaderStyle="{StaticResource CenteredHeaderStyle}"/>
+                <DataGridTextColumn x:Name="MondayTimetable" Header="Понедельник" HeaderStyle="{StaticResource CenteredHeaderStyle}" Binding="{Binding Monday}"/>
+                <DataGridTextColumn x:Name="TuesdayTimetable" Header="Вторник" HeaderStyle="{StaticResource CenteredHeaderStyle}" Binding="{Binding Tuesday}"/>
+                <DataGridTextColumn x:Name="WednesdayTimetable" Header="Среда" HeaderStyle="{StaticResource CenteredHeaderStyle}" Binding="{Binding Wednesday}"/>
+                <DataGridTextColumn x:Name="ThursdayTimetable" Header="Четверг" HeaderStyle="{StaticResource CenteredHeaderStyle}" Binding="{Binding Thursday}"/>
+                <DataGridTextColumn x:Name="FridayTimetable" Header="Пятница" HeaderStyle="{StaticResource CenteredHeaderStyle}" Binding="{Binding Friday}"/>
+                <DataGridTextColumn x:Name="SaturdayTimetable" Header="Суббота" HeaderStyle="{StaticResource CenteredHeaderStyle}" Binding="{Binding Saturday}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

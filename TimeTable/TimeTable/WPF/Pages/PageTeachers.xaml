@@ -62,7 +62,7 @@
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
                                 <DockPanel Margin="20 20 0 20">
-                                    <TextBlock Margin="0, 0, 60, 0" VerticalAlignment="Bottom" FontSize="15" Text="Все предметы:"/>
+                                    <TextBlock Margin="0, 0, 0, 0" VerticalAlignment="Bottom" FontSize="15" Text="Все предметы:"/>
                                     <Button DockPanel.Dock="Right" Margin="0, 0, 10, 0" HorizontalAlignment="Right" Click="ToTeacher_Click">
                                         <Image Source="/Resources/СтрелкаВправо.png" Stretch="Uniform"/>
                                     </Button>
@@ -84,7 +84,7 @@
                                     <Button Margin="10, 0, 15, 0" HorizontalAlignment="Left" Click="FromTeacher_Click">
                                         <Image Source="/Resources/СтрелкаВлево.png" Stretch="Uniform"/>
                                     </Button>
-                                    <TextBlock Margin="15, 0, 60, 0" VerticalAlignment="Bottom" FontSize="15" Text="Ведомые предметы:"/>
+                                    <TextBlock Margin="15, 0, 0, 0" VerticalAlignment="Bottom" FontSize="15" Text="Ведомые предметы:"/>
                                     <TextBox DockPanel.Dock="Right" HorizontalAlignment="Right" x:Name="SearchTBTeachers" TextChanged="SearchBox_TextChanged" Width="150" VerticalAlignment="Top"/>
                                     <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" FontSize="15" Text="Поиск: "/>
                                 </DockPanel>
@@ -357,7 +357,7 @@
                                 <TextBox x:Name="SearchTBTeachersGroups" DockPanel.Dock="Right" TextChanged="SearchBoxGroups_TextChanged" Width="150" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 0 20 0"/>
                                 <TextBlock HorizontalAlignment="Right" DockPanel.Dock="Right" FontSize="15" Text="Поиск: "/>
                             </DockPanel>
-                            <DataGrid Margin="0, 0, 10, 0" SelectionMode="Single" Grid.Column="0" Grid.Row="1" IsReadOnly="True" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="Groups_SelectionChanged">
+                            <DataGrid ItemsSource="{Binding SearchGroupsWithOutTeacher_Result}"  Margin="0, 0, 10, 0" SelectionMode="Single" Grid.Column="0" Grid.Row="1" IsReadOnly="True" x:Name="Groups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="Groups_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Id" Visibility="Collapsed" Binding="{Binding StudyPlan_DisciplineId}"/>
                                     <DataGridTextColumn Header="Id1" Visibility="Collapsed" Binding="{Binding DisciplineId}"/>
@@ -367,7 +367,7 @@
                                     <DataGridTextColumn Header="Часов" Binding="{Binding TotalNumberOfHours}" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <DataGrid Margin="10, 0, 0, 0" SelectionMode="Single" Grid.Column="1" Grid.Row="1" IsReadOnly="True" x:Name="TeacherGroups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="TeacherGroups_SelectionChanged">
+                            <DataGrid ItemsSource="{Binding SearchGroupsOfTeacher_Result}"  Margin="10, 0, 0, 0" SelectionMode="Single" Grid.Column="1" Grid.Row="1" IsReadOnly="True" x:Name="TeacherGroups_DataGrid" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="TeacherGroups_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Id" Visibility="Collapsed" Binding="{Binding StudyPlan_DisciplineId}"/>
                                     <DataGridTextColumn Header="Id1" Visibility="Collapsed" Binding="{Binding DisciplineId}"/>

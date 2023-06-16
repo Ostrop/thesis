@@ -1,0 +1,44 @@
+﻿<Page x:Class="TimeTable.WPF.Pages.PageGroups"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TimeTable.WPF.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Title="PageGroups">
+
+
+    <Grid Background="#ffdadada">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="70, 20, 70, 20" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
+            <TextBlock  FontSize="15" Text="Поиск: "/>
+            <TextBox x:Name="SearchTBSpecialities" TextChanged="SearchSpecialities_TextChanged" Width="200" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
+        </StackPanel>
+        <DataGrid Margin="20, 0, 20, 0" Grid.Column="0" Grid.Row="1" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="Specialities_SelectionChanged" x:Name="Specialities_dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseLeftButtonDown" Handler="DataGridRow_MouseLeftButtonDown" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Visibility="Collapsed" IsReadOnly="True" Header="ID группы" Binding="{Binding GroupId}"/>
+                <DataGridTextColumn Header="Курс" Binding="{Binding Course}" />
+                <DataGridTextColumn Header="Номер специальности" Binding="{Binding SpecialityNumber}" />
+                <DataGridTextColumn Header="Номер группы" Binding="{Binding GroupNumber}" />
+                <DataGridTextColumn Header="Дата возникновения" Binding="{Binding Date, StringFormat=\{0:yyyy\}}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="20" HorizontalAlignment="Center" Content="Сохранить" Click="SaveButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Добавить" Click="AddButton_Click" />
+            <Button Margin="20" HorizontalAlignment="Center" Content="Удалить" Click="DeleteButton_Click" />
+            <Button HorizontalAlignment="Center" Content="Обновить" Click="ReloadButton_Click" />
+        </StackPanel>
+    </Grid>
+</Page>

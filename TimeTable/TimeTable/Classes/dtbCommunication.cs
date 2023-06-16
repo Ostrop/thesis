@@ -6,12 +6,16 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using TimeTable.Model;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TimeTable.Classes
 {
@@ -51,6 +55,121 @@ namespace TimeTable.Classes
             {
                 return null;
             }
+        }
+        public static void GenerateSchedule(DateTime date)
+        {
+            // Получение данных из таблицы Учебный план _ Дисциплины по неделям
+            var studyPlanDisciplinesByWeeks = context.StudyPlan_DisciplinesByWeek.ToList();
+
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    foreach (var studyPlanDisciplineByWeek in context.StudyPlan_DisciplinesByWeek.Where(sp =>sp.MondayOfWeek == date))
+            //    {
+            //        int? totalSessionsPerWeekLectures = studyPlanDisciplineByWeek.HoursOfLectures;
+            //        int? totalSessionsPerWeekLaboratory = studyPlanDisciplineByWeek.HoursOfLaboratory;
+            //        int? totalSessionsLaboratoryWithComputers = studyPlanDisciplineByWeek.HoursOfLaboratoryWithComputers;
+
+            //    }
+            //    date = date.AddDays(7);
+            //}
+
+            //foreach (var studyPlanDisciplineByWeek in studyPlanDisciplinesByWeeks)
+            //{
+            //    // Определение количества занятий в неделю для дисциплины
+            //    int? totalSessionsPerWeek = studyPlanDisciplineByWeek.HoursOfLectures + studyPlanDisciplineByWeek.HoursOfLaboratory;
+
+            //    // Поиск аудиторий для лекций (где оба булевых столбца равны false)
+            //    var lectureAudiences = context.Audiences
+            //        .Where(a => a.Computers == false && a.Laboratory == false)
+            //        .ToList();
+
+            //    // Поиск аудиторий для лабораторных занятий (где столбец Laboratory равен true)
+            //    var labAudiences = context.Audiences
+            //        .Where(a => a.Laboratory == true)
+            //        .ToList();
+
+            //    // Поиск аудиторий для лабораторных занятий с компьютерами (где столбец Computers равен true)
+            //    var labAudiencesWithComputers = context.Audiences
+            //        .Where(a => a.Laboratory == true && a.Computers == true)
+            //        .ToList();
+
+            //    // Генерация занятий для каждого дня недели
+            //    for (int dayOfWeek = 1; dayOfWeek <= 5; dayOfWeek++) // Понедельник - Пятница
+            //    {
+            //        DateTime currentDate = studyPlanDisciplineByWeek.MondayOfWeek.AddDays(dayOfWeek - 1);
+
+            //        for (int sessionNumber = 1; sessionNumber <= totalSessionsPerWeek; sessionNumber++)
+            //        {
+            //            // Создание новой записи занятия
+            //            var session = new Sessions
+            //            {
+            //                Date = currentDate,
+            //                SessionNumber = sessionNumber,
+            //                GroupId = studyPlanDisciplineByWeek.GroupId
+            //            };
+
+            //            // Определение аудитории в зависимости от типа занятия
+            //            if (sessionNumber <= studyPlanDisciplineByWeek.HoursOfLectures)
+            //            {
+            //                // Лекционное занятие
+            //                var lectureAudience = lectureAudiences.FirstOrDefault();
+            //                if (lectureAudience == null)
+            //                {
+            //                    Console.WriteLine("Недостаточно аудиторий для лекций.");
+            //                    break;
+            //                }
+            //                session.AudienceId = lectureAudience.AudienceId;
+            //                lectureAudiences.Remove(lectureAudience); // Удаление использованной аудитории из списка
+            //            }
+            //            else
+            //            {
+            //                // Лабораторное занятие
+            //                if (studyPlanDisciplineByWeek.HoursOfLaboratoryWithComputers > 0)
+            //                {
+            //                    // Лабораторное занятие с компьютерами
+            //                    var labAudienceWithComputers = labAudiencesWithComputers.FirstOrDefault();
+            //                    if (labAudienceWithComputers == null)
+            //                    {
+            //                        Console.WriteLine("Недостаточно аудиторий для лабораторных занятий с компьютерами.");
+            //                        break;
+            //                    }
+            //                    session.AudienceId = labAudienceWithComputers.AudienceId;
+            //                    labAudiencesWithComputers.Remove(labAudienceWithComputers); // Удаление использованной аудитории из списка
+            //                }
+            //                else
+            //                {
+            //                    // Лабораторное занятие без компьютеров
+            //                    var labAudience = labAudiences.FirstOrDefault();
+            //                    if (labAudience == null)
+            //                    {
+            //                        Console.WriteLine("Недостаточно аудиторий для лабораторных занятий.");
+            //                        break;
+            //                    }
+            //                    session.AudienceId = labAudience.AudienceId;
+            //                    labAudiences.Remove(labAudience); // Удаление использованной аудитории из списка
+            //                }
+            //            }
+
+            //            // Добавление записи занятия в базу данных
+            //            context.Sessions.Add(session);
+            //            context.SaveChanges();
+            //        }
+            //    }
+            //}
+        }
+        public static List<Group> GetGroupsWithSpecialityNumber()
+        {
+            var query = (from g in context.Groups
+                         join s in context.Specialities on g.SpecialityId equals s.SpecialityId
+                         select new Group
+                         {
+                             GroupId = g.GroupId,
+                             Course = g.Course,
+                             SpecialityNumber = s.SpecialityNumber,
+                             GroupNumber = g.GroupNumber,
+                             Date = g.BeginDate
+                         }).ToList();
+            return query;
         }
         /// <summary>
         /// Метод удаления преподавателя из группы

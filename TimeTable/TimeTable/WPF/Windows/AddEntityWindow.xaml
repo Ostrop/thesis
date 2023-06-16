@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeTable.WPF.Windows"
         mc:Ignorable="d"
+        Icon="/Resources/ico.ico"
         Title="Добавление новой строки в " Height="350" Width="465">
     <StackPanel Orientation="Vertical">
     <Grid x:Name="MainGrid" Margin="20">
